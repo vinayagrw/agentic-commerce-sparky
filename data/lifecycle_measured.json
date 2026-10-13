@@ -1,0 +1,45 @@
+{
+ "generated_by": "scripts/record_lifecycle.py",
+ "generated_at": "2026-09-16T22:23:39Z",
+ "search_svc": "http://127.0.0.1:8801",
+ "drift": {
+  "endpoint": "POST /drift",
+  "stream": "seasonal",
+  "window": 150,
+  "n_windows": 6,
+  "mmd2": 0.0471,
+  "p_value": 0.0033,
+  "alert": true,
+  "n_perm": 300,
+  "window_size": 150,
+  "est_ndcg10_now": 0.4497,
+  "est_ndcg10_reference": 0.6811,
+  "caveat": "The seasonal stream is a constructed query set, not observed production traffic.",
+  "seconds": 5.4
+ },
+ "reranker_off_gate": {
+  "endpoint": "POST /eval/compare",
+  "champion": "v4",
+  "candidate": "v2",
+  "candidate_note": "worse candidate (reranker off) \u2014 demo toggle",
+  "n_queries": 200,
+  "ndcg10_champion": 0.6068,
+  "ndcg10_candidate": 0.5725,
+  "delta": -0.03428,
+  "ci95": [
+   -0.05562,
+   -0.01453
+  ],
+  "gate_passed": false,
+  "checks": {
+   "ndcg_ci_lower_ge_floor": false,
+   "p95_latency_le_max": true
+  },
+  "thresholds": {
+   "ndcg_delta_ci_lower_ge": -0.005,
+   "p95_ms_le": 150.0
+  },
+  "method": "paired per-query deltas on identical ESCI queries; percentile bootstrap, 1000 resamples, seed 20260915",
+  "seconds": 40.7
+ }
+}

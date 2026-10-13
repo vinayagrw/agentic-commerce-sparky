@@ -1,0 +1,38 @@
+# Vertex AI CustomJob for technique 13: RLVR with a programmatic verifier (GRPO)
+# Submit with ONE command from this directory:
+#     gcloud ai custom-jobs create --region=us-central1 \
+#         --display-name=sota-13-rlvr-verifier --config=job.yaml
+#
+# Prerequisites: a container image in Artifact Registry built from requirements.txt, and the
+# ESCI parquet files in GCS at gs://<bucket>/sparky/data (scripts/fetch_data.py produces them).
+workerPoolSpecs:
+  - machineSpec:
+      machineType: a3-highgpu-2g
+      acceleratorType: NVIDIA_H100_80GB
+      acceleratorCount: 2
+    replicaCount: 1
+    diskSpec:
+      bootDiskType: pd-ssd
+      bootDiskSizeGb: 500
+    containerSpec:
+      imageUri: us-central1-docker.pkg.dev/PROJECT_ID/sparky/sota-13:latest
+      command: ["python", "13_rlvr_verifier/train_rlvr.py"]
+      args:
+        - "--model"
+        - "azureml://.../tail-rewriter-lora"
+        - "--num-generations"
+        - "8"
+        - "--max-steps"
+        - "500"
+        - "--output-dir"
+        - "/gcs/BUCKET/sparky/out/sota-13-rlvr-verifier/results.json"
+      env:
+        - name: SPARKY_DATA_DIR
+          value: "/gcs/BUCKET/sparky/data"
+        - name: MLFLOW_EXPERIMENT_NAME
+          value: "sparky-sota-13"
+
+baseOutputDirectory:
+  outputUriPrefix: gs://BUCKET/sparky/out/sota-13-rlvr-verifier
+
+# SKU: 2x NVIDIA H100 80GB - one rollout (vLLM) + one trainer (Azure Standard_NC80adis_H100_v5 / GCP a3-highgpu-2g)

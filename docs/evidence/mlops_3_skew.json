@@ -1,0 +1,59 @@
+{
+ "capability": 3,
+ "slug": "skew",
+ "generated_at": "2026-09-29T20:26:11Z",
+ "version": null,
+ "psi_threshold": 0.2,
+ "features": [
+  {
+   "feature": "price",
+   "n": 3548,
+   "train_mean": 18.266,
+   "serve_mean": 17.934,
+   "psi": 0.0014,
+   "ks": 0.0107,
+   "rows_changed": "10.1%"
+  },
+  {
+   "feature": "stock_4108",
+   "n": 3548,
+   "train_mean": 17.264,
+   "serve_mean": 16.25,
+   "psi": 0.011,
+   "ks": 0.0349,
+   "rows_changed": "56.5%"
+  },
+  {
+   "feature": "stock_2231",
+   "n": 3548,
+   "train_mean": 16.348,
+   "serve_mean": 15.577,
+   "psi": 0.006,
+   "ks": 0.0282,
+   "rows_changed": "51.1%"
+  },
+  {
+   "feature": "stock_5360",
+   "n": 3548,
+   "train_mean": 16.316,
+   "serve_mean": 15.533,
+   "psi": 0.0083,
+   "ks": 0.0287,
+   "rows_changed": "52.5%"
+  },
+  {
+   "feature": "promo (serving-only)",
+   "n": 3548,
+   "train_mean": "absent in training",
+   "serve_mean": "10.1% rows",
+   "psi": "n/a",
+   "ks": "n/a",
+   "rows_changed": "not a training feature"
+  }
+ ],
+ "flagged": [],
+ "approval_id": null,
+ "promo_share_serving": 0.1015,
+ "training": "data/products.parquet (what the index and eval were built on)",
+ "serving": "data/commerce.db cs_price/cs_inventory (what shop-mcp serves, overrides applied)"
+}

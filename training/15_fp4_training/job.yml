@@ -1,0 +1,42 @@
+# Azure ML job for technique 15: FP4 (NVFP4) continued pre-training spike
+# Submit with ONE command from this directory:
+#     az ml job create -f job.yml --resource-group <rg> --workspace-name <ws>
+#
+# Prerequisites: `az extension add -n ml`, an AML compute cluster named below, and the ESCI
+# parquet files registered as the data asset `sparky_esci` (scripts/fetch_data.py produces them).
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+experiment_name: sparky-sota-15
+display_name: sota-15-fp4-training
+description: >-
+  FP4 (NVFP4) continued pre-training spike. See README.md for the GPU SKU, the cost arithmetic and the expected result.
+
+# `code` is the whole training/ tree so that common/ and this directory ship together.
+code: ../
+command: >-
+  python 15_fp4_training/train_fp4.py
+  --precision nvfp4 --control-run-id <fp8-run-id>
+  --output-dir ${{outputs.model}}
+
+environment:
+  image: nvcr.io/nvidia/pytorch:25.08-py3   # NGC image ships Transformer Engine
+  conda_file: null
+
+inputs:
+  esci:
+    type: uri_folder
+    path: azureml:sparky_esci@latest
+    mode: ro_mount
+
+outputs:
+  model:
+    type: uri_folder
+
+environment_variables:
+  SPARKY_DATA_DIR: ${{inputs.esci}}
+  MLFLOW_EXPERIMENT_NAME: sparky-sota-15
+
+compute: azureml:gpu-15
+resources:
+  instance_count: 1
+  # SKU: 8x NVIDIA B200 (Blackwell, native NVFP4). Azure ND B200 v6 / GCP A4 [VERIFY region + quota; lead times are the real constraint]
+  # set the cluster's vm_size to Standard_ND96isr_B200_v6

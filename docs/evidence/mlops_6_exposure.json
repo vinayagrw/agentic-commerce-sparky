@@ -1,0 +1,48 @@
+{
+ "capability": 6,
+ "slug": "exposure",
+ "generated_at": "2026-09-29T20:27:02Z",
+ "mode": "rrf_rerank",
+ "n_queries": 200,
+ "k": 10,
+ "sponsored_exposure_live": 0.0464,
+ "sponsored_exposure_relevance_matched": 0.0458,
+ "exposure_gap": 0.0006,
+ "exposure_gap_ci95": [
+  -0.0015,
+  0.0027
+ ],
+ "sponsored_slot_share": 0.0505,
+ "catalog_sponsored_rate": 0.0539,
+ "mean_gain_sponsored": 1.416,
+ "mean_gain_organic": 1.639,
+ "n_sponsored_slots": 101,
+ "brand_hhi": 0.0021,
+ "top5_brand_exposure": 0.0513,
+ "top_brands": [
+  [
+   "Burt's Bees Baby",
+   0.0154
+  ],
+  [
+   "Unbranded",
+   0.0098
+  ],
+  [
+   "Bose",
+   0.0093
+  ],
+  [
+   "Beats",
+   0.009
+  ],
+  [
+   "Gerber",
+   0.0078
+  ]
+ ],
+ "skew_detected": false,
+ "baseline": "same live top-k re-ordered by ESCI gain (unjudged = 0); position weight 1/log2(r+1)",
+ "not_measured": "1P vs 3P seller exposure: products.parquet has no seller/1P-3P field",
+ "sponsored_flag": "synthetic ad placement on ESCI products (products.parquet sponsored/ad_id)"
+}

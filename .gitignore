@@ -1,0 +1,76 @@
+node_modules/
+dist/
+.vite/
+*.log
+.env
+.env.*
+.venv/
+__pycache__/
+**/__pycache__/
+.pytest_cache/
+# technique scripts write their run output here; the scripts are the deliverable, not the output
+training/*/out/
+serving/*/out/
+data/raw/
+data/index/
+data/uploads/
+# technique 8 index variants: keep manifest.json + contexts.json (lineage), drop the rebuilt index
+data/variants/*/emb.npy
+data/variants/*/bm25/
+data/*.sqlite
+data/*.db
+.DS_Store
+
+# ---- generated artefacts: this repo tracks source only ----
+# Everything below is produced by `make dev`, `make e2e`, `make coverage` or an index build.
+# A clone rebuilds it; see README "Running from a clone".
+
+# Playwright run output (one directory per agent run)
+.e2e-results*/
+
+# Screenshots and the labelled recording. `make e2e` regenerates docs/ui/ via
+# web/e2e/screenshots.spec.ts. e2e-results.json is kept: bff/src/guide/specResults.ts
+# reads it at runtime to show real pass/fail state in the Guide.
+docs/ui/
+docs/recording/*
+!docs/recording/e2e-results.json
+
+# Built frontend
+web/dist/
+
+# Retrieval indexes and embeddings (rebuilt by scripts/build_index.py)
+data/embeddings.npy
+data/faiss.index
+data/bm25/
+data/products.parquet
+
+# Append-only runtime logs and run captures. Every unit test that touches these
+# uses a tmp_path fixture, so none of them is a test input.
+data/agui_runs/
+data/traces/
+data/policy_events.jsonl
+data/token_ledger.jsonl
+data/online_feedback.jsonl
+data/online_sessions.jsonl
+data/assist_state.json
+
+# SQLite sidecars and ad-hoc backups
+data/*.db-shm
+data/*.db-wal
+data/.ops-backup-*
+data/.e2e-registry-backup-*.json
+data/commerce (1).db*
+
+# B03 headline-beat evidence: VERBATIM live agent transcripts. They quote the client by name,
+# and redacting a transcript would stop it being verbatim, so they are kept out of the public
+# repo rather than edited. They remain in the working tree as the evidence for that beat.
+docs/evidence/B03_headline_beat_candidates.md
+docs/evidence/B03_headline_beat_candidates.json
+
+# Signing keys. `ops_mcp.signing.ensure_key()` generates an EC keypair on first use, so a clone
+# makes its own; publishing a private key would be wrong even for a demo one. v4.sig was produced
+# by the key that is NOT published, so it could never be verified from a clone -- excluded rather
+# than shipped as an unverifiable signature. The ML-BOM (v4.cdx.json) and model card are content,
+# not signatures, so they stay.
+data/ops_keys/
+data/model_artifacts/*.sig

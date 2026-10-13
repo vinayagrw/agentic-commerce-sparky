@@ -1,0 +1,60 @@
+# Technique 17 - research replication agent task spec (SOTA playbook §17).
+# Rubric style follows the PaperBench hierarchy (Starace et al., ICML 2025, arXiv 2504.01848).
+# PUBLIC DATA ONLY. No real retailer data, no proprietary catalogue, ever (§17 AC3 / US-17.2).
+
+task_id: repl-muvera-2026-09
+paper:
+  title: "MUVERA: Multi-Vector Retrieval via Fixed Dimensional Encodings"
+  source: arXiv
+  url: "https://arxiv.org/abs/2405.19504"
+scope: >-
+  Reproduce the fixed-dimensional-encoding construction and measure recall against a
+  single-vector baseline on one public BEIR dataset. The deliverable is a runnable scaffold a
+  human engineer can judge, NOT a verdict on the paper.
+
+data: public_only          # BEIR subset mirrored into the sandbox
+autonomy_tier: T1          # sandboxed, no egress beyond the package mirror
+budget:
+  usd_hard_cap: 150
+  wall_clock_h: 8
+  gpu: {type: L4, count: 1}
+
+deliverables:
+  - src/
+  - env.lock
+  - README_repro.md
+  - results.json
+  - deviations.md
+  - rubric_self_assessment.json
+
+forbidden:
+  - copying the authors' released code verbatim
+  - internet access beyond the package mirror
+  - any real retailer or proprietary dataset
+  - reporting a numeric result that was not produced by a command in README_repro.md
+
+rubric:                    # weights sum to 1.0; every leaf is pass/fail, graded by a human sample + calibrated judge
+  - node: code_development
+    weight: 0.4
+    children: [fde_partitioning_impl, repetition_and_projection, doc_query_asymmetry, rescoring_stage]
+  - node: execution
+    weight: 0.3
+    children: [runs_end_to_end_from_readme, env_reproducible, seeds_logged]
+  - node: result_match
+    weight: 0.3
+    children: [recall_at_100_within_2pts_of_paper, speedup_direction_matches, deviations_explained]
+
+grading:
+  grader: llm_judge_rubric_v2
+  human_calibration_sample: 0.2
+  kappa_min: 0.6
+
+decision_thresholds:
+  discard_lt: 0.3
+  engineer_handoff_gte: 0.5
+
+honesty:
+  # §17 Risks: "treating agent-reported 'reproduced' as fact".
+  agent_self_score_is_advisory: true
+  human_grader_required: true
+  publishable_claim: 'a scaffold quality score - never "the paper replicates"'

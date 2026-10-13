@@ -1,0 +1,36 @@
+# Vertex AI CustomJob for technique 15: FP4 (NVFP4) continued pre-training spike
+# Submit with ONE command from this directory:
+#     gcloud ai custom-jobs create --region=us-central1 \
+#         --display-name=sota-15-fp4-training --config=job.yaml
+#
+# Prerequisites: a container image in Artifact Registry built from requirements.txt, and the
+# ESCI parquet files in GCS at gs://<bucket>/sparky/data (scripts/fetch_data.py produces them).
+workerPoolSpecs:
+  - machineSpec:
+      machineType: a4-highgpu-8g
+      acceleratorType: NVIDIA_B200
+      acceleratorCount: 8
+    replicaCount: 1
+    diskSpec:
+      bootDiskType: pd-ssd
+      bootDiskSizeGb: 500
+    containerSpec:
+      imageUri: us-central1-docker.pkg.dev/PROJECT_ID/sparky/sota-15:latest
+      command: ["python", "15_fp4_training/train_fp4.py"]
+      args:
+        - "--precision"
+        - "nvfp4"
+        - "--control-run-id"
+        - "<fp8-run-id>"
+        - "--output-dir"
+        - "/gcs/BUCKET/sparky/out/sota-15-fp4-training/results.json"
+      env:
+        - name: SPARKY_DATA_DIR
+          value: "/gcs/BUCKET/sparky/data"
+        - name: MLFLOW_EXPERIMENT_NAME
+          value: "sparky-sota-15"
+
+baseOutputDirectory:
+  outputUriPrefix: gs://BUCKET/sparky/out/sota-15-fp4-training
+
+# SKU: 8x NVIDIA B200 (Blackwell, native NVFP4). Azure ND B200 v6 / GCP A4 [VERIFY region + quota; lead times are the real constraint]

@@ -1,0 +1,42 @@
+# Azure ML job for technique 17: Research replication agent
+# Submit with ONE command from this directory:
+#     az ml job create -f job.yml --resource-group <rg> --workspace-name <ws>
+#
+# Prerequisites: `az extension add -n ml`, an AML compute cluster named below, and the ESCI
+# parquet files registered as the data asset `sparky_esci` (scripts/fetch_data.py produces them).
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+experiment_name: sparky-sota-17
+display_name: sota-17-research-replication-agent
+description: >-
+  Research replication agent. See README.md for the GPU SKU, the cost arithmetic and the expected result.
+
+# `code` is the whole training/ tree so that common/ and this directory ship together.
+code: ../
+command: >-
+  python 17_research_replication_agent/replicate.py
+  --spec task_spec.yaml --backend claude
+  --output-dir ${{outputs.model}}
+
+environment:
+  image: mcr.microsoft.com/azureml/curated/acpt-pytorch-2.2-cuda12.1:latest
+  conda_file: null
+
+inputs:
+  esci:
+    type: uri_folder
+    path: azureml:sparky_esci@latest
+    mode: ro_mount
+
+outputs:
+  model:
+    type: uri_folder
+
+environment_variables:
+  SPARKY_DATA_DIR: ${{inputs.esci}}
+  MLFLOW_EXPERIMENT_NAME: sparky-sota-17
+
+compute: azureml:gpu-17
+resources:
+  instance_count: 1
+  # SKU: 1x NVIDIA L4 (GCP g2-standard-8) / 1x A10 (Azure Standard_NV36ads_A10_v5) in a T1 sandbox with egress limited to a package mirror
+  # set the cluster's vm_size to Standard_NV36ads_A10_v5

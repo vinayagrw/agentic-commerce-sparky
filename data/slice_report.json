@@ -1,0 +1,748 @@
+{
+  "generated_at": "2026-09-16T22:27:03Z",
+  "script": "scripts/slice_report.py",
+  "split": "test",
+  "n_total": 1008,
+  "metric": "engine.ndcg10 (exponential gain, @10); query selection engine.eval_qids (test split, max gain > 0)",
+  "bootstrap": {
+    "type": "percentile",
+    "resamples": 2000,
+    "seed": 20260916
+  },
+  "modes": {
+    "bm25": "BM25 only",
+    "vector": "dense bge-small FAISS",
+    "rrf": "hybrid RRF k=60 (no rerank)",
+    "rrf_rerank": "hybrid RRF + cross-encoder top-50 (production path)"
+  },
+  "classifier": {
+    "module": "services/search-svc/query_types.py",
+    "function": "classify",
+    "rules": [
+      {
+        "priority": 1,
+        "class": "non_product",
+        "rule": "starts with a question word (how/what/why/can/does/is/...) or ends with '?'"
+      },
+      {
+        "priority": 2,
+        "class": "compatibility",
+        "rule": "'compatible', 'fits', 'works with', 'replacement', 'refill', or 'for <known device/brand>'"
+      },
+      {
+        "priority": 3,
+        "class": "model_number",
+        "rule": "a token mixing letters+digits (not a number+unit like 20oz/144hz, not an ordinal) or a bare 4+ digit run not followed by a unit"
+      },
+      {
+        "priority": 4,
+        "class": "abbreviation",
+        "rule": "a known acronym token (usb, hdmi, led, spf, bpa, ...) or a symbol (& + # % $ / \" ')"
+      },
+      {
+        "priority": 5,
+        "class": "use_case",
+        "rule": "'gift(s)', 'ideas', 'essentials', or 'for [a|my|...] <person/pet/activity/place/occasion>'"
+      },
+      {
+        "priority": 6,
+        "class": "attribute",
+        "rule": ">=1 number+unit (20 ounce, 144 hz, 8 panel, 2 pack) or >=2 colour/material/size/style words"
+      },
+      {
+        "priority": 7,
+        "class": "product_type",
+        "rule": "1-2 tokens and no rule above fired"
+      },
+      {
+        "priority": 8,
+        "class": "other",
+        "rule": "fallback (typically brand + product or 3+ word descriptive queries)"
+      }
+    ]
+  },
+  "class_distribution": {
+    "non_product": 0,
+    "compatibility": 11,
+    "model_number": 31,
+    "abbreviation": 47,
+    "use_case": 71,
+    "attribute": 70,
+    "product_type": 231,
+    "other": 547,
+    "ALL": 1008
+  },
+  "per_slice": {
+    "compatibility": {
+      "bm25": {
+        "n": 11,
+        "mean": 0.7517,
+        "ci95": [
+          0.5924,
+          0.8964
+        ]
+      },
+      "vector": {
+        "n": 11,
+        "mean": 0.8422,
+        "ci95": [
+          0.7511,
+          0.9186
+        ]
+      },
+      "rrf": {
+        "n": 11,
+        "mean": 0.8329,
+        "ci95": [
+          0.743,
+          0.9208
+        ]
+      },
+      "rrf_rerank": {
+        "n": 11,
+        "mean": 0.83,
+        "ci95": [
+          0.7394,
+          0.9102
+        ]
+      }
+    },
+    "model_number": {
+      "bm25": {
+        "n": 31,
+        "mean": 0.6319,
+        "ci95": [
+          0.5205,
+          0.7331
+        ]
+      },
+      "vector": {
+        "n": 31,
+        "mean": 0.6582,
+        "ci95": [
+          0.5536,
+          0.7534
+        ]
+      },
+      "rrf": {
+        "n": 31,
+        "mean": 0.6632,
+        "ci95": [
+          0.5555,
+          0.7676
+        ]
+      },
+      "rrf_rerank": {
+        "n": 31,
+        "mean": 0.7493,
+        "ci95": [
+          0.664,
+          0.8271
+        ]
+      }
+    },
+    "abbreviation": {
+      "bm25": {
+        "n": 47,
+        "mean": 0.6128,
+        "ci95": [
+          0.5225,
+          0.7022
+        ]
+      },
+      "vector": {
+        "n": 47,
+        "mean": 0.6752,
+        "ci95": [
+          0.5975,
+          0.7482
+        ]
+      },
+      "rrf": {
+        "n": 47,
+        "mean": 0.6736,
+        "ci95": [
+          0.5868,
+          0.7561
+        ]
+      },
+      "rrf_rerank": {
+        "n": 47,
+        "mean": 0.7244,
+        "ci95": [
+          0.6466,
+          0.7978
+        ]
+      }
+    },
+    "use_case": {
+      "bm25": {
+        "n": 71,
+        "mean": 0.5221,
+        "ci95": [
+          0.4515,
+          0.5915
+        ]
+      },
+      "vector": {
+        "n": 71,
+        "mean": 0.5538,
+        "ci95": [
+          0.4881,
+          0.6183
+        ]
+      },
+      "rrf": {
+        "n": 71,
+        "mean": 0.5557,
+        "ci95": [
+          0.4876,
+          0.6228
+        ]
+      },
+      "rrf_rerank": {
+        "n": 71,
+        "mean": 0.5924,
+        "ci95": [
+          0.5247,
+          0.6568
+        ]
+      }
+    },
+    "attribute": {
+      "bm25": {
+        "n": 70,
+        "mean": 0.472,
+        "ci95": [
+          0.4021,
+          0.5467
+        ]
+      },
+      "vector": {
+        "n": 70,
+        "mean": 0.5119,
+        "ci95": [
+          0.4455,
+          0.5828
+        ]
+      },
+      "rrf": {
+        "n": 70,
+        "mean": 0.5286,
+        "ci95": [
+          0.4601,
+          0.6003
+        ]
+      },
+      "rrf_rerank": {
+        "n": 70,
+        "mean": 0.5959,
+        "ci95": [
+          0.5277,
+          0.6669
+        ]
+      }
+    },
+    "product_type": {
+      "bm25": {
+        "n": 231,
+        "mean": 0.5531,
+        "ci95": [
+          0.509,
+          0.5984
+        ]
+      },
+      "vector": {
+        "n": 231,
+        "mean": 0.5912,
+        "ci95": [
+          0.5494,
+          0.6317
+        ]
+      },
+      "rrf": {
+        "n": 231,
+        "mean": 0.6072,
+        "ci95": [
+          0.5654,
+          0.6499
+        ]
+      },
+      "rrf_rerank": {
+        "n": 231,
+        "mean": 0.641,
+        "ci95": [
+          0.6008,
+          0.6812
+        ]
+      }
+    },
+    "other": {
+      "bm25": {
+        "n": 547,
+        "mean": 0.5938,
+        "ci95": [
+          0.5684,
+          0.6186
+        ]
+      },
+      "vector": {
+        "n": 547,
+        "mean": 0.6223,
+        "ci95": [
+          0.5972,
+          0.6462
+        ]
+      },
+      "rrf": {
+        "n": 547,
+        "mean": 0.6357,
+        "ci95": [
+          0.611,
+          0.659
+        ]
+      },
+      "rrf_rerank": {
+        "n": 547,
+        "mean": 0.6578,
+        "ci95": [
+          0.633,
+          0.681
+        ]
+      }
+    },
+    "ALL": {
+      "bm25": {
+        "n": 1008,
+        "mean": 0.5747,
+        "ci95": [
+          0.5558,
+          0.5948
+        ]
+      },
+      "vector": {
+        "n": 1008,
+        "mean": 0.6086,
+        "ci95": [
+          0.5906,
+          0.6267
+        ]
+      },
+      "rrf": {
+        "n": 1008,
+        "mean": 0.6209,
+        "ci95": [
+          0.6021,
+          0.6391
+        ]
+      },
+      "rrf_rerank": {
+        "n": 1008,
+        "mean": 0.6528,
+        "ci95": [
+          0.6353,
+          0.6713
+        ]
+      }
+    }
+  },
+  "paired_deltas": {
+    "compatibility": {
+      "rrf_minus_bm25": {
+        "n": 11,
+        "mean_delta": 0.0813,
+        "ci95": [
+          0.0101,
+          0.1704
+        ],
+        "wins": 6,
+        "losses": 0,
+        "ties": 5,
+        "significant": true
+      },
+      "rrf_rerank_minus_bm25": {
+        "n": 11,
+        "mean_delta": 0.0783,
+        "ci95": [
+          -0.002,
+          0.1749
+        ],
+        "wins": 4,
+        "losses": 4,
+        "ties": 3,
+        "significant": false
+      }
+    },
+    "model_number": {
+      "rrf_minus_bm25": {
+        "n": 31,
+        "mean_delta": 0.0314,
+        "ci95": [
+          -0.0088,
+          0.0718
+        ],
+        "wins": 15,
+        "losses": 7,
+        "ties": 9,
+        "significant": false
+      },
+      "rrf_rerank_minus_bm25": {
+        "n": 31,
+        "mean_delta": 0.1174,
+        "ci95": [
+          0.0705,
+          0.1605
+        ],
+        "wins": 22,
+        "losses": 4,
+        "ties": 5,
+        "significant": true
+      }
+    },
+    "abbreviation": {
+      "rrf_minus_bm25": {
+        "n": 47,
+        "mean_delta": 0.0608,
+        "ci95": [
+          0.0311,
+          0.0929
+        ],
+        "wins": 28,
+        "losses": 11,
+        "ties": 8,
+        "significant": true
+      },
+      "rrf_rerank_minus_bm25": {
+        "n": 47,
+        "mean_delta": 0.1116,
+        "ci95": [
+          0.0683,
+          0.153
+        ],
+        "wins": 31,
+        "losses": 9,
+        "ties": 7,
+        "significant": true
+      }
+    },
+    "use_case": {
+      "rrf_minus_bm25": {
+        "n": 71,
+        "mean_delta": 0.0336,
+        "ci95": [
+          0.0068,
+          0.061
+        ],
+        "wins": 38,
+        "losses": 25,
+        "ties": 8,
+        "significant": true
+      },
+      "rrf_rerank_minus_bm25": {
+        "n": 71,
+        "mean_delta": 0.0703,
+        "ci95": [
+          0.0293,
+          0.1135
+        ],
+        "wins": 43,
+        "losses": 21,
+        "ties": 7,
+        "significant": true
+      }
+    },
+    "attribute": {
+      "rrf_minus_bm25": {
+        "n": 70,
+        "mean_delta": 0.0566,
+        "ci95": [
+          0.0306,
+          0.0855
+        ],
+        "wins": 44,
+        "losses": 18,
+        "ties": 8,
+        "significant": true
+      },
+      "rrf_rerank_minus_bm25": {
+        "n": 70,
+        "mean_delta": 0.124,
+        "ci95": [
+          0.079,
+          0.1724
+        ],
+        "wins": 50,
+        "losses": 15,
+        "ties": 5,
+        "significant": true
+      }
+    },
+    "product_type": {
+      "rrf_minus_bm25": {
+        "n": 231,
+        "mean_delta": 0.0541,
+        "ci95": [
+          0.0352,
+          0.0749
+        ],
+        "wins": 110,
+        "losses": 60,
+        "ties": 61,
+        "significant": true
+      },
+      "rrf_rerank_minus_bm25": {
+        "n": 231,
+        "mean_delta": 0.0879,
+        "ci95": [
+          0.0601,
+          0.1152
+        ],
+        "wins": 119,
+        "losses": 60,
+        "ties": 52,
+        "significant": true
+      }
+    },
+    "other": {
+      "rrf_minus_bm25": {
+        "n": 547,
+        "mean_delta": 0.042,
+        "ci95": [
+          0.0312,
+          0.0528
+        ],
+        "wins": 303,
+        "losses": 158,
+        "ties": 86,
+        "significant": true
+      },
+      "rrf_rerank_minus_bm25": {
+        "n": 547,
+        "mean_delta": 0.064,
+        "ci95": [
+          0.0483,
+          0.0797
+        ],
+        "wins": 301,
+        "losses": 168,
+        "ties": 78,
+        "significant": true
+      }
+    },
+    "ALL": {
+      "rrf_minus_bm25": {
+        "n": 1008,
+        "mean_delta": 0.0462,
+        "ci95": [
+          0.0382,
+          0.055
+        ],
+        "wins": 544,
+        "losses": 279,
+        "ties": 185,
+        "significant": true
+      },
+      "rrf_rerank_minus_bm25": {
+        "n": 1008,
+        "mean_delta": 0.0781,
+        "ci95": [
+          0.0663,
+          0.0905
+        ],
+        "wins": 570,
+        "losses": 281,
+        "ties": 157,
+        "significant": true
+      }
+    }
+  },
+  "worst_slice": {
+    "slice": "use_case",
+    "criterion": "lowest rrf_rerank mean NDCG@10 among slices with n >= 30",
+    "eligible": [
+      "model_number",
+      "abbreviation",
+      "use_case",
+      "attribute",
+      "product_type",
+      "other"
+    ],
+    "rrf_rerank": {
+      "n": 71,
+      "mean": 0.5924,
+      "ci95": [
+        0.5247,
+        0.6568
+      ]
+    },
+    "rrf": {
+      "n": 71,
+      "mean": 0.5557,
+      "ci95": [
+        0.4876,
+        0.6228
+      ]
+    }
+  },
+  "fix": {
+    "slice": "use_case",
+    "applied": true,
+    "description": "Purpose-clause-aware lexical query for use_case queries: the BM25 leg gets a rewritten query built from the product head phrase (text before 'for ...', gift/idea words removed); dense retrieval and the cross-encoder keep the original query. Gated on query_types.classify == 'use_case'; variant selected on the dev split.",
+    "code_ref": {
+      "file": "services/search-svc/slice_fixes.py",
+      "symbol": "use_case_rank",
+      "variant": "head_only"
+    },
+    "tuning": {
+      "split": "dev",
+      "n": 41,
+      "selection": "highest mean NDCG@10 on dev slice",
+      "arms": {
+        "baseline": {
+          "n": 41,
+          "mean": 0.5748,
+          "ci95": [
+            0.4814,
+            0.6649
+          ]
+        },
+        "head_only": {
+          "n": 41,
+          "mean": 0.5697,
+          "ci95": [
+            0.4751,
+            0.6598
+          ],
+          "paired_vs_baseline": {
+            "n": 41,
+            "mean_delta": -0.0051,
+            "ci95": [
+              -0.0187,
+              0.0071
+            ],
+            "wins": 7,
+            "losses": 6,
+            "ties": 28,
+            "significant": false
+          }
+        },
+        "head_boost": {
+          "n": 41,
+          "mean": 0.569,
+          "ci95": [
+            0.474,
+            0.6604
+          ],
+          "paired_vs_baseline": {
+            "n": 41,
+            "mean_delta": -0.0058,
+            "ci95": [
+              -0.0177,
+              0.0047
+            ],
+            "wins": 4,
+            "losses": 5,
+            "ties": 32,
+            "significant": false
+          }
+        }
+      },
+      "chosen_variant": "head_only"
+    },
+    "mode": "rrf_rerank (production path)",
+    "before": {
+      "n": 71,
+      "mean": 0.5924,
+      "ci95": [
+        0.5247,
+        0.6568
+      ]
+    },
+    "after": {
+      "n": 71,
+      "mean": 0.59,
+      "ci95": [
+        0.5213,
+        0.6529
+      ]
+    },
+    "delta": -0.0024,
+    "ci95": [
+      -0.0138,
+      0.0084
+    ],
+    "n": 71,
+    "paired": {
+      "n": 71,
+      "mean_delta": -0.0024,
+      "ci95": [
+        -0.0138,
+        0.0084
+      ],
+      "wins": 14,
+      "losses": 11,
+      "ties": 46,
+      "significant": false
+    },
+    "verdict": "no significant change (CI includes 0)"
+  },
+  "regression_check": {
+    "all_queries": {
+      "before": {
+        "n": 1008,
+        "mean": 0.6528,
+        "ci95": [
+          0.6353,
+          0.6713
+        ]
+      },
+      "after": {
+        "n": 1008,
+        "mean": 0.6527,
+        "ci95": [
+          0.6352,
+          0.6713
+        ]
+      },
+      "paired": {
+        "n": 1008,
+        "mean_delta": -0.0002,
+        "ci95": [
+          -0.0009,
+          0.0006
+        ],
+        "wins": 14,
+        "losses": 11,
+        "ties": 983,
+        "significant": false
+      }
+    },
+    "non_target_queries": {
+      "paired": {
+        "n": 937,
+        "mean_delta": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "wins": 0,
+        "losses": 0,
+        "ties": 937,
+        "significant": false
+      },
+      "note": "fix is gated on the classifier; non-target queries were re-run through the fix path"
+    },
+    "verdict": "no significant regression"
+  },
+  "runtime_seconds": {
+    "baseline": 3.3,
+    "total": 166.2
+  },
+  "caveats": [
+    "The query-type classifier is a hand-written rule set; it has NOT been validated against human labels and its precision/recall per class is unknown. Rules were written after eyeballing class samples of the test and dev query strings (no relevance labels were used).",
+    "Slices are imbalanced; small slices (e.g. compatibility, non_product) have wide CIs or are empty.",
+    "CIs are percentile bootstraps over queries only; they ignore uncertainty in the ESCI judgments.",
+    "Worst slice was chosen on the test set, so the choice of slice is test-informed; the fix itself uses no test labels (see fix.tuning).",
+    "Paired-delta bootstraps for different slices are computed independently; no multiple-comparison correction."
+  ]
+}

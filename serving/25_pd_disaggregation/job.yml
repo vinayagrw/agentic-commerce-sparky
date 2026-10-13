@@ -1,0 +1,41 @@
+# Azure ML job for technique 25: Prefill/decode disaggregation + KV tiering
+# Submit with ONE command from this directory:
+#     az ml job create -f job.yml --resource-group <rg> --workspace-name <ws>
+#
+# Prerequisites: `az extension add -n ml`, an AML compute cluster named below, and the ESCI
+# parquet files registered as the data asset `sparky_esci` (scripts/fetch_data.py produces them).
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+experiment_name: sparky-sota-25
+display_name: sota-25-pd-disaggregation
+description: >-
+  Prefill/decode disaggregation + KV tiering. See README.md for the GPU SKU, the cost arithmetic and the expected result.
+
+# `code` is the repo root, so that serving/ and training/common/ (the shared ESCI data module) both ship with the job.
+code: ../../
+command: >-
+  python serving/25_pd_disaggregation/run_pd.py
+  --up --model /models/sparky-answer-70b-fp8
+
+environment:
+  image: vllm/vllm-openai:v0.11.0
+  conda_file: null
+
+inputs:
+  esci:
+    type: uri_folder
+    path: azureml:sparky_esci@latest
+    mode: ro_mount
+
+outputs:
+  model:
+    type: uri_folder
+
+environment_variables:
+  SPARKY_DATA_DIR: ${{inputs.esci}}
+  MLFLOW_EXPERIMENT_NAME: sparky-sota-25
+
+compute: azureml:gpu-25
+resources:
+  instance_count: 1
+  # SKU: 2x 8-GPU H100 80GB nodes with RDMA (Azure ND96isr_H100_v5 InfiniBand / GCP a3-highgpu-8g GPUDirect-RDMA): 1 prefill pool + 1 decode pool
+  # set the cluster's vm_size to Standard_ND96isr_H100_v5

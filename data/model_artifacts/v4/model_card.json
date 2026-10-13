@@ -1,0 +1,21 @@
+{
+  "config_hash": "26613e38b495",
+  "metrics": {
+    "test_mrr": 0.7938,
+    "test_ndcg10": 0.6068,
+    "test_ndcg10_delta_ci_low": -0.00208,
+    "test_ndcg10_delta_vs_v3": -0.00064,
+    "test_p95_ms": 103.0
+  },
+  "mlflow": {
+    "model_version": 4,
+    "registered_model": "sparky-search-ranker",
+    "run_id": "ae5bd7babb574e8b95926282adf98472",
+    "tracking_uri": "sqlite:///data/mlflow.db"
+  },
+  "name": "sparky-search-ranker",
+  "note": "adjust_rrf_weights for alr-9cb3edee (rem-af15f71f, apr-54032951)",
+  "parent": "v3",
+  "training_data": "Amazon ESCI Shopping Queries (Apache-2.0), US subset",
+  "version": "v4"
+}

@@ -1,0 +1,37 @@
+# Vertex AI CustomJob for technique 14: On-policy distillation (GKD, reverse KL)
+# Submit with ONE command from this directory:
+#     gcloud ai custom-jobs create --region=us-central1 \
+#         --display-name=sota-14-on-policy-distillation --config=job.yaml
+#
+# Prerequisites: a container image in Artifact Registry built from requirements.txt, and the
+# ESCI parquet files in GCS at gs://<bucket>/sparky/data (scripts/fetch_data.py produces them).
+workerPoolSpecs:
+  - machineSpec:
+      machineType: a3-highgpu-2g
+      acceleratorType: NVIDIA_H100_80GB
+      acceleratorCount: 2
+    replicaCount: 1
+    diskSpec:
+      bootDiskType: pd-ssd
+      bootDiskSizeGb: 500
+    containerSpec:
+      imageUri: us-central1-docker.pkg.dev/PROJECT_ID/sparky/sota-14:latest
+      command: ["python", "14_on_policy_distillation/distill.py"]
+      args:
+        - "--teacher"
+        - "azureml://.../tail-rewriter-lora"
+        - "--student"
+        - "Qwen/Qwen3-0.6B"
+        - "--teacher-license-ok"
+        - "--output-dir"
+        - "/gcs/BUCKET/sparky/out/sota-14-on-policy-distillation/results.json"
+      env:
+        - name: SPARKY_DATA_DIR
+          value: "/gcs/BUCKET/sparky/data"
+        - name: MLFLOW_EXPERIMENT_NAME
+          value: "sparky-sota-14"
+
+baseOutputDirectory:
+  outputUriPrefix: gs://BUCKET/sparky/out/sota-14-on-policy-distillation
+
+# SKU: 2x NVIDIA H100 80GB - teacher scoring pool + student trainer (Azure Standard_NC80adis_H100_v5 / GCP a3-highgpu-2g)

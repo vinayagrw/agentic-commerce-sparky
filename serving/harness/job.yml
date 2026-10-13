@@ -1,0 +1,42 @@
+# Azure ML job for technique harness: Serving benchmark harness (shared by 23/24/25)
+# Submit with ONE command from this directory:
+#     az ml job create -f job.yml --resource-group <rg> --workspace-name <ws>
+#
+# Prerequisites: `az extension add -n ml`, an AML compute cluster named below, and the ESCI
+# parquet files registered as the data asset `sparky_esci` (scripts/fetch_data.py produces them).
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+experiment_name: sparky-sota-harness
+display_name: sota-harness-harness
+description: >-
+  Serving benchmark harness (shared by 23/24/25). See README.md for the GPU SKU, the cost arithmetic and the expected result.
+
+# `code` is the repo root, so that serving/ and training/common/ (the shared ESCI data module) both ship with the job.
+code: ../../
+command: >-
+  python serving/harness/bench.py
+  --base-url http://localhost:8000 --model /models/qu-rewriter-8b --n 500
+  --out ${{outputs.model}}
+
+environment:
+  image: vllm/vllm-openai:v0.11.0
+  conda_file: null
+
+inputs:
+  esci:
+    type: uri_folder
+    path: azureml:sparky_esci@latest
+    mode: ro_mount
+
+outputs:
+  model:
+    type: uri_folder
+
+environment_variables:
+  SPARKY_DATA_DIR: ${{inputs.esci}}
+  MLFLOW_EXPERIMENT_NAME: sparky-sota-harness
+
+compute: azureml:gpu-harness
+resources:
+  instance_count: 1
+  # SKU: none - CPU load-generator client; it runs beside the endpoint under test
+  # set the cluster's vm_size to Standard_D8s_v5

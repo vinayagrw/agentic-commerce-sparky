@@ -1,0 +1,31 @@
+[project]
+name = "policy-mcp"
+version = "0.1.0"
+description = "Sparky Next policy proxy: the only MCP server the Claude CLI sees. Enforces capability, guard and tier policy before forwarding to shop-mcp / ops-mcp."
+requires-python = ">=3.11,<3.13"
+dependencies = [
+    "mcp>=1.9,<2",
+    "httpx>=0.27",
+    "shop-mcp",
+    "ops-mcp",
+]
+
+[tool.uv.sources]
+shop-mcp = { path = "../shop-mcp", editable = true }
+ops-mcp = { path = "../ops-mcp", editable = true }
+
+[project.scripts]
+policy-mcp = "policy_mcp.server:main"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/policy_mcp"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

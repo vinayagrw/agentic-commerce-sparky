@@ -1,0 +1,22 @@
+# LMCache KV tier for technique 25 (SOTA playbook §25).
+# Mounted into the vLLM workers via LMCACHE_CONFIG_FILE.
+# Sizes are in GB and must be sized to the node SKU, not copied blindly.
+
+chunk_size: 256
+
+# GPU -> CPU RAM
+local_cpu: true
+max_local_cpu_size: 120          # GB of pinned host RAM; must fit the node's memory limit
+
+# CPU -> local NVMe
+local_disk: "file:///nvme/lmcache/"
+max_local_disk_size: 800         # GB
+
+# NVMe -> shared remote tier, for cross-replica reuse of a returning session's KV.
+# §25 Risks: this tier can hold conversation KV derived from shopper text. It therefore needs
+# encryption in transit and at rest, and a retention TTL, before it carries production traffic.
+remote_url: "redis://kv-tier.sparky.svc:6379"
+remote_serde: "naive"
+
+# Enable only after the interconnect is verified; see run_pd.py --check-interconnect.
+enable_nixl: false

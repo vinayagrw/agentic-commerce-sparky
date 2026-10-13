@@ -1,0 +1,152 @@
+[
+  {
+    "id": 11,
+    "name": "LoRA / QLoRA tail-query rewriter",
+    "dir": "training/11_lora_qlora",
+    "entrypoint": "training/11_lora_qlora/train_lora.py",
+    "cloud": {
+      "azure": "az ml job create -f training/11_lora_qlora/job.yml --resource-group <rg> --workspace-name <ws>",
+      "gcp": "gcloud ai custom-jobs create --region=us-central1 --display-name=sota-11-lora-qlora --config=training/11_lora_qlora/job.yaml"
+    },
+    "gpu_sku": "1x NVIDIA A100 80GB (Azure Standard_NC24ads_A100_v4 / GCP a2-ultragpu-1g)",
+    "est_cost_usd": "4 GPU-h x R(A100 80GB $/GPU-hr, from the cloud pricing page); worked example at an illustrative $3/GPU-hr = $12. Hours basis: playbook \u00a711 Cost and effort: \"One 8B QLoRA run is hours on a single A100/H100-class GPU\"",
+    "expected_result": "Expect a LoRA adapter to be a viable delivery vehicle for this task rather than full fine-tuning, and expect the run to finish in hours on one A100/H100-class GPU. Expect the G3 gate to need BOTH a task metric and a general-capability regression suite, because LoRA's published trade-off is that it \"learns less and forgets less\" than full fine-tuning.",
+    "citation": "LoRA, Hu et al., arXiv:2106.09685 (2021). QLoRA, Dettmers et al., NeurIPS 2023, arXiv:2305.14314. \"LoRA Learns Less and Forgets Less\", TMLR 2024, arXiv:2405.09673. Prior deployment of a Llama-3-8B LoRA tail rewriter at Instacart is recorded in the playbook (\u00a711, Maturity and evidence). No number in this README is a measurement of a production retailer's model.",
+    "status": "script-ready-not-executed"
+  },
+  {
+    "id": 12,
+    "name": "DPO preference tuning of the Sparky rewriter",
+    "dir": "training/12_dpo",
+    "entrypoint": "training/12_dpo/train_dpo.py",
+    "cloud": {
+      "azure": "az ml job create -f training/12_dpo/job.yml --resource-group <rg> --workspace-name <ws>",
+      "gcp": "gcloud ai custom-jobs create --region=us-central1 --display-name=sota-12-dpo --config=training/12_dpo/job.yaml"
+    },
+    "gpu_sku": "1x NVIDIA A100 80GB (Azure Standard_NC24ads_A100_v4 / GCP a2-ultragpu-1g)",
+    "est_cost_usd": "3 GPU-h x R(A100 80GB $/GPU-hr, from the cloud pricing page); worked example at an illustrative $3/GPU-hr = $9. Hours basis: playbook \u00a712 Cost and effort: \"M. Training is cheap (LoRA). Preference data and judge calibration are the effort.\"",
+    "expected_result": "Expect DPO to move tone/format/preference behaviour, and expect it NOT to fix factual errors - the playbook and the DPO literature both route factual correctness to retrieval or to a verifier (technique 13). Expect the dominant failure mode to be length exploitation, which is why the harness reports pairs dropped by the length guard. The playbook's own acceptance criterion - win rate >=55% against the SFT model with a 95% CI lower bound above 50% - is a **target to be measured**, not a result.",
+    "citation": "DPO, Rafailov et al., NeurIPS 2023, arXiv:2305.18290. SimPO, NeurIPS 2024, arXiv:2405.14734. The >=55% win-rate figure is the playbook's \u00a712 AC1 target and is explicitly marked as a proposal there.",
+    "status": "script-ready-not-executed"
+  },
+  {
+    "id": 13,
+    "name": "RLVR with a programmatic verifier (GRPO)",
+    "dir": "training/13_rlvr_verifier",
+    "entrypoint": "training/13_rlvr_verifier/train_rlvr.py",
+    "cloud": {
+      "azure": "az ml job create -f training/13_rlvr_verifier/job.yml --resource-group <rg> --workspace-name <ws>",
+      "gcp": "gcloud ai custom-jobs create --region=us-central1 --display-name=sota-13-rlvr-verifier --config=training/13_rlvr_verifier/job.yaml"
+    },
+    "gpu_sku": "2x NVIDIA H100 80GB - one rollout (vLLM) + one trainer (Azure Standard_NC80adis_H100_v5 / GCP a3-highgpu-2g)",
+    "est_cost_usd": "24 GPU-h x R(H100 80GB $/GPU-hr, from the cloud pricing page); worked example at an illustrative $6/GPU-hr = $144. Hours basis: playbook \u00a713 Cost and effort: \"L. Rollout GPU plus trainer plus verifier engineering.\" 2 GPUs x 12 h",
+    "expected_result": "Expect RLVR to sharpen a capability the SFT model already has - schema validity, unit normalisation, evidence grounding - rather than to add knowledge; that is the consistent finding in the RLVR literature and the reason the playbook warns against \"expecting new knowledge from RL\". Expect the binding constraint to be verifier quality: a weak verifier is rewarded by degenerate outputs, which is why `verifier.py` carries an F1 term and an evidence -grounding term and asserts that the honest answer outscores every hack in its self-test. Expect a human reward-hacking audit before G3. The playbook's \"schema-valid rate from ~96% to over 99.5%\" is marked `[PROPOSAL target]` there and is not claimed here.",
+    "citation": "GRPO in DeepSeekMath, arXiv:2402.03300. DeepSeek-R1, arXiv:2501.12948 (Nature 2025). DAPO, arXiv:2503.14476. On the limits: \"Does RL really incentivise reasoning beyond the base model?\", arXiv:2504.13837.",
+    "status": "script-ready-not-executed"
+  },
+  {
+    "id": 14,
+    "name": "On-policy distillation (GKD, reverse KL)",
+    "dir": "training/14_on_policy_distillation",
+    "entrypoint": "training/14_on_policy_distillation/distill.py",
+    "cloud": {
+      "azure": "az ml job create -f training/14_on_policy_distillation/job.yml --resource-group <rg> --workspace-name <ws>",
+      "gcp": "gcloud ai custom-jobs create --region=us-central1 --display-name=sota-14-on-policy-distillation --config=training/14_on_policy_distillation/job.yaml"
+    },
+    "gpu_sku": "2x NVIDIA H100 80GB - teacher scoring pool + student trainer (Azure Standard_NC80adis_H100_v5 / GCP a3-highgpu-2g)",
+    "est_cost_usd": "20 GPU-h x R(H100 80GB $/GPU-hr, from the cloud pricing page); worked example at an illustrative $6/GPU-hr = $120. Hours basis: playbook \u00a714 Cost and effort: \"M-L. Cheaper than RL per point of quality, but needs a teacher scoring pool.\" 2 GPUs x 10 h",
+    "expected_result": "Expect on-policy distillation to beat offline distillation on the student's own error distribution, because offline training never shows the student the states it actually reaches - this is the exposure-bias argument the GKD paper makes. Expect the economics, not the quality, to decide the run: \u00a714 US-14.2 requires a break-even calculation (`breakeven_requests = training_cost / (teacher_cost_per_req - student_cost_per_req)`) attached to the request, and the script prints that contract with no numbers filled in, because they are FinOps inputs.",
+    "citation": "GKD / on-policy distillation, Agarwal et al., ICLR 2024, arXiv:2306.13649. Thinking Machines Lab, \"On-Policy Distillation\", Oct 2025 (vendor blog). A large US retailer's existing 7B->BERT-base offline distillation on 170M pairs is recorded in the playbook (\u00a714, Maturity and evidence).",
+    "status": "script-ready-not-executed"
+  },
+  {
+    "id": 15,
+    "name": "FP4 (NVFP4) continued pre-training spike",
+    "dir": "training/15_fp4_training",
+    "entrypoint": "training/15_fp4_training/train_fp4.py",
+    "cloud": {
+      "azure": "az ml job create -f training/15_fp4_training/job.yml --resource-group <rg> --workspace-name <ws>",
+      "gcp": "gcloud ai custom-jobs create --region=us-central1 --display-name=sota-15-fp4-training --config=training/15_fp4_training/job.yaml"
+    },
+    "gpu_sku": "8x NVIDIA B200 (Blackwell, native NVFP4). Azure ND B200 v6 / GCP A4 [VERIFY region + quota; lead times are the real constraint]",
+    "est_cost_usd": "48 GPU-h x R(B200 (Blackwell) $/GPU-hr, from the cloud pricing page); worked example at an illustrative $10/GPU-hr = $480. Hours basis: playbook \u00a715 retailer example: a 1B-token continued-pre-training spike. 8 GPUs x 6 h. Doubles because the FP8 control run is mandatory",
+    "expected_result": "Expect this to be a **feasibility spike whose likely outcome is \"defer\"**, not a deliverable. The only large-scale evidence today is vendor-reported at 12B scale, the recipes are version-sensitive, optimizer states stay FP32/BF16 so the run is not 4-bit end to end, and the playbook places FP4 in the Assess ring and explicitly outside 90-day scope. Expect the decision criterion to be a loss curve within ~1% of the FP8 control at equal tokens AND a downstream eval delta inside the CI - loss alone is not sufficient. Expect FP4 to bring **no** benefit to techniques 11-14; QLoRA's NF4 is a storage quantisation and a different thing.",
+    "citation": "NVIDIA, \"Pretraining LLMs with NVFP4\", arXiv:2509.25149 - a 12B model trained on 10T tokens tracking the FP8 baseline; vendor-reported. TetraJet-v2, arXiv:2510.27527. FP8 as the mainstream default: DeepSeek-V3, arXiv:2412.19437. The +-1% loss-gap criterion is the playbook's \u00a715 AC1 acceptance criterion, not an observed result.",
+    "status": "script-ready-not-executed"
+  },
+  {
+    "id": 17,
+    "name": "Research replication agent",
+    "dir": "training/17_research_replication_agent",
+    "entrypoint": "training/17_research_replication_agent/replicate.py",
+    "cloud": {
+      "azure": "az ml job create -f training/17_research_replication_agent/job.yml --resource-group <rg> --workspace-name <ws>",
+      "gcp": "gcloud ai custom-jobs create --region=us-central1 --display-name=sota-17-research-replication-agent --config=training/17_research_replication_agent/job.yaml"
+    },
+    "gpu_sku": "1x NVIDIA L4 (GCP g2-standard-8) / 1x A10 (Azure Standard_NV36ads_A10_v5) in a T1 sandbox with egress limited to a package mirror",
+    "est_cost_usd": "8 GPU-h x R(L4 / A10 $/GPU-hr, from the cloud pricing page); worked example at an illustrative $1/GPU-hr = $8. Hours basis: task_spec.yaml budget.wall_clock_h = 8, gpu {type: L4, count: 1}; usd_hard_cap 150 is the binding cap",
+    "expected_result": "Expect a scaffold, not a replication. The strongest published evidence is that 2025 frontier agents reached a 21.0% replication score on PaperBench, below the ML PhD baseline, with the characteristic failure being a plausible method description attached to a codebase that does not run correctly. Expect most runs to land under the playbook's 0.5 engineer-handoff threshold. Expect the value to be engineer-hours saved on scaffolding, and expect any agent self-report of \"reproduced\" to be treated as unverified until the human grader signs it.",
+    "citation": "PaperBench, Starace et al. (OpenAI), ICML 2025, arXiv:2504.01848 - best agent 21.0% replication score. The rubric hierarchy and the 0.3/0.5 decision thresholds follow the playbook's \u00a717 spec.",
+    "status": "script-ready-not-executed"
+  },
+  {
+    "id": "harness",
+    "name": "Serving benchmark harness (shared by 23/24/25)",
+    "dir": "serving/harness",
+    "entrypoint": "serving/harness/bench.py",
+    "cloud": {
+      "azure": "az ml job create -f serving/harness/job.yml --resource-group <rg> --workspace-name <ws>",
+      "gcp": "gcloud ai custom-jobs create --region=us-central1 --display-name=sota-harness --config=serving/harness/job.yaml"
+    },
+    "gpu_sku": "none - CPU load-generator client; it runs beside the endpoint under test",
+    "est_cost_usd": "0 GPU-h (CPU-only client); the GPU cost belongs to the endpoint it measures",
+    "expected_result": "Expect the harness to be the single place a serving number is allowed to originate in this project. Expect the structural prefix ratio it reports in `--smoke` (shared prefix tokens / (prefix + query tokens)) to be a **ceiling** on prefix reuse for this prompt layout, never a cache hit rate - the hit rate is only ever read from `vllm:prefix_cache_hits / vllm:prefix_cache_queries`.",
+    "citation": "vLLM Prometheus metric names checked against vLLM stable docs; the parser is unit-tested in `--smoke` against a recorded exposition string.",
+    "status": "script-ready-not-executed"
+  },
+  {
+    "id": 23,
+    "name": "PagedAttention + automatic prefix caching (vLLM)",
+    "dir": "serving/23_prefix_caching",
+    "entrypoint": "serving/23_prefix_caching/serve_prefix_cache.py",
+    "cloud": {
+      "azure": "az ml job create -f serving/23_prefix_caching/job.yml --resource-group <rg> --workspace-name <ws>",
+      "gcp": "gcloud ai custom-jobs create --region=us-central1 --display-name=sota-23-prefix-caching --config=serving/23_prefix_caching/job.yaml"
+    },
+    "gpu_sku": "1x NVIDIA L4 (GCP g2-standard-8) / 1x A10 (Azure Standard_NV36ads_A10_v5) for the 8B FP8 tail-QU rewriter",
+    "est_cost_usd": "4 GPU-h x R(L4 / A10 $/GPU-hr, from the cloud pricing page); worked example at an illustrative $1/GPU-hr = $4. Hours basis: playbook \u00a723 Cost and effort: \"S. Config + prompt restructuring, 1-2 weeks incl. load tests.\" 1 GPU x 4 h of load testing",
+    "expected_result": "Expect large throughput gains over naive serving and a TTFT drop roughly proportional to the share of prompt tokens that are shared prefix - PagedAttention's published result is 2-4x throughput over prior systems at the same latency. Expect the gain to be workload-shaped: it comes from the shared prefix, so it evaporates on unique long documents. Expect prompt-layout regressions, not engine problems, to be the usual cause of a hit-rate drop, which is why the lint rule and a hit-rate alert both exist. The playbook's \"prefix hit ~95%, p99 fits 60 ms on L4 FP8\" for UC1 is marked `[PROPOSAL, benchmark in PoC]` there and is not claimed here.",
+    "citation": "vLLM PagedAttention, Kwon et al., SOSP 2023, arXiv:2309.06180 - 2-4x throughput against prior systems. SGLang RadixAttention, NeurIPS 2024, arXiv:2312.07104. Automatic prefix caching is on by default in the vLLM V1 engine.",
+    "status": "script-ready-not-executed"
+  },
+  {
+    "id": 24,
+    "name": "EAGLE-3 speculative decoding (vLLM)",
+    "dir": "serving/24_eagle3_speculative",
+    "entrypoint": "serving/24_eagle3_speculative/bench_eagle3.py",
+    "cloud": {
+      "azure": "az ml job create -f serving/24_eagle3_speculative/job.yml --resource-group <rg> --workspace-name <ws>",
+      "gcp": "gcloud ai custom-jobs create --region=us-central1 --display-name=sota-24-eagle3-speculative --config=serving/24_eagle3_speculative/job.yaml"
+    },
+    "gpu_sku": "8x NVIDIA H100 80GB (Azure Standard_ND96isr_H100_v5 / GCP a3-highgpu-8g); the 70B FP8 target uses TP=4, the draft head TP=1",
+    "est_cost_usd": "128 GPU-h x R(H100 80GB $/GPU-hr, from the cloud pricing page); worked example at an illustrative $6/GPU-hr = $768. Hours basis: playbook \u00a724 Cost and effort: \"M. 2-4 weeks incl. draft training (few GPU-days) and batch sweeps.\" draft train 8 GPUs x 12 h = 96, k/batch sweep 8 GPUs x 4 h = 32",
+    "expected_result": "Expect a meaningful inter-token-latency reduction at low-to-moderate batch and expect the gain to SHRINK as batch rises - published OSS measurements on H100 show 1.81x throughput at batch 2 falling to 1.38x at batch 64. Expect the gain to be sensitive to domain shift, so expect to retrain the draft head after every target fine-tune. Expect output distribution to be unchanged; if greedy outputs differ, something is wrong, not faster. Do not assume any published speedup transfers to production retail traffic - that is exactly what the sweep is for.",
+    "citation": "EAGLE-3, Li et al., NeurIPS 2025, arXiv:2503.01840. The 1.81x @ batch 2 / 1.38x @ batch 64 figures are SGLang project-reported on H100; P-EAGLE's 1.05-1.69x over EAGLE-3 on B200 is vendor/OSS-reported (vLLM blog, 2026-03-13). All are other people's measurements on other workloads.",
+    "status": "script-ready-not-executed"
+  },
+  {
+    "id": 25,
+    "name": "Prefill/decode disaggregation + KV tiering",
+    "dir": "serving/25_pd_disaggregation",
+    "entrypoint": "serving/25_pd_disaggregation/run_pd.py",
+    "cloud": {
+      "azure": "az ml job create -f serving/25_pd_disaggregation/job.yml --resource-group <rg> --workspace-name <ws>",
+      "gcp": "gcloud ai custom-jobs create --region=us-central1 --display-name=sota-25-pd-disaggregation --config=serving/25_pd_disaggregation/job.yaml"
+    },
+    "gpu_sku": "2x 8-GPU H100 80GB nodes with RDMA (Azure ND96isr_H100_v5 InfiniBand / GCP a3-highgpu-8g GPUDirect-RDMA): 1 prefill pool + 1 decode pool",
+    "est_cost_usd": "128 GPU-h x R(H100 80GB $/GPU-hr, from the cloud pricing page); worked example at an illustrative $6/GPU-hr = $768. Hours basis: playbook \u00a725 Cost and effort: \"L. 8-12 weeks incl. RDMA capacity, tuning and failure-mode testing.\" a replayed-peak load-test campaign of 16 GPUs x 8 h",
+    "expected_result": "Expect roughly 1.5-2x goodput under SLOs **for long-prompt workloads**, and expect a net loss on short prompts - the split only pays when prefill genuinely stalls decode. Expect the adoption gate to be the playbook's own AC1: >=1.5x goodput against an aggregated baseline at the same TTFT/ITL SLOs on replayed peak traffic, or do not adopt. Expect the real constraints to be RDMA SKU availability and quota lead time, plus the ops complexity of pinning llm-d/Dynamo/vLLM versions together. Expect a privacy review: the remote KV tier can hold state derived from shopper text and needs encryption plus a retention TTL.",
+    "citation": "DistServe, OSDI 2024, arXiv:2401.09670. Mooncake, FAST 2025, arXiv:2407.00079. LMCache, arXiv:2510.09665. The ~1.5-2x goodput range for long-prompt workloads is the playbook's \u00a725 summary of that literature; the >=1.5x adoption gate is the playbook's \u00a725 AC1 target.",
+    "status": "script-ready-not-executed"
+  }
+]

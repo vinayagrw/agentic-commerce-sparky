@@ -1,0 +1,12 @@
+# Pinned for reproducibility. Versions resolved 2026-09-15; re-pin before each run.
+numpy==2.2.6
+pandas==2.3.3
+pyarrow==21.0.0
+PyYAML==6.0.3
+torch==2.8.0
+transformers==4.57.1
+datasets==4.2.0
+accelerate==1.10.1
+mlflow==3.4.0
+# transformer-engine ships in the NVIDIA NGC PyTorch image; do NOT pip-install it blind.
+# transformer_engine[pytorch]==2.9.0   # must match the CUDA/driver in the base image

@@ -1,0 +1,355 @@
+/*
+ * Compass design tokens.
+ *
+ * Rules (read before adding a token):
+ *  1. Every token is DEFINED ONCE on bare :root (light palette + comfortable density).
+ *  2. Dark overrides ONLY redefine colour tokens, twice, identically:
+ *       @media (prefers-color-scheme: dark) :root:not([data-theme="light"])   <- system dark
+ *       :root[data-theme="dark"]                                              <- explicit toggle
+ *     Keep the two blocks in sync (they are generated from the same list below).
+ *  3. Density ONLY redefines type + space tokens under :root[data-density="presenter"].
+ *  4. Components never hard-code a hex. Use the Tailwind utilities exposed by @theme inline
+ *     (bg-surface, text-fg-muted, border-line, text-bad ...) or var(--token) in CSS.
+ *  5. Brand blue (--accent) and yellow (--highlight) are ACCENTS. Neutrals carry the UI.
+ */
+
+:root {
+  /* ---- neutrals ---- */
+  --canvas: #f6f7f9;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-sunken: #eff1f4;
+  --surface-hover: #f1f3f6;
+  --fg: #111318;
+  --fg-muted: #555b67;
+  --fg-subtle: #646a76;
+  --line: #e3e6eb;
+  --line-strong: #cdd2da;
+
+  /* ---- accents (brand) ---- */
+  --accent: #0071dc;
+  --accent-hover: #005cb4;
+  --accent-fg: #ffffff;
+  --accent-soft: #e8f2fd;
+  --accent-soft-fg: #004f9a;
+  --highlight: #ffc220;
+  --highlight-fg: #1d1600;
+  --highlight-soft: #fff6dc;
+
+  /* ---- semantic ---- */
+  --ok: #13703f;
+  --ok-soft: #e6f4ec;
+  --warn: #8f5800;
+  --warn-soft: #fcf1dc;
+  --bad: #c42338;
+  /* Text drawn ON --bad. White only works on the light palette's darker red; the dark
+     palette's #ff5d72 gives white 2.97:1, so it pairs with dark ink instead (cf. --accent-fg). */
+  --bad-fg: #ffffff;
+  --bad-soft: #fdebed;
+  --bad-strong: #9d1426;
+  --info: #0b66c3;
+  --info-soft: #e7f0fb;
+
+  --focus: #0071dc;
+  --code-bg: #0f1218;
+  --code-fg: #e3e7ee;
+  --overlay: rgb(10 12 16 / 0.45);
+
+  /* ---- type ---- */
+  --font-ui: "Geist", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-data: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --root-size: 16px; /* rem base: density switches this and every rem-based token follows */
+  --fs-2xs: 0.6875rem; /* 11 */
+  --fs-xs: 0.75rem; /* 12 */
+  --fs-sm: 0.8125rem; /* 13 */
+  --fs-base: 0.875rem; /* 14 */
+  --fs-md: 1rem; /* 16 */
+  --fs-lg: 1.125rem; /* 18 */
+  --fs-xl: 1.375rem; /* 22 */
+  --fs-2xl: 1.75rem; /* 28 */
+  --fs-3xl: 2.25rem; /* 36 */
+  --fs-display: 3rem; /* 48 */
+
+  /* ---- space / shape ---- */
+  --space: 0.25rem; /* Tailwind's --spacing unit: p-4 = 4 x this */
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 10px;
+  --r-xl: 14px;
+  --shell-top: 3.25rem;
+  --shell-nav: 16.5rem;
+  --shell-inspector: 23rem;
+
+  /* ---- elevation ---- */
+  --elev-xs: 0 1px 0 rgb(16 19 24 / 0.04);
+  --elev-sm: 0 1px 2px rgb(16 19 24 / 0.06), 0 1px 1px rgb(16 19 24 / 0.04);
+  --elev-md: 0 4px 12px -2px rgb(16 19 24 / 0.08), 0 2px 4px rgb(16 19 24 / 0.04);
+  --elev-lg: 0 24px 48px -12px rgb(16 19 24 / 0.22), 0 4px 12px rgb(16 19 24 / 0.06);
+
+  /* ---- motion ---- */
+  --dur-fast: 120ms;
+  --dur-base: 180ms;
+  --dur-slow: 320ms;
+  --motion-ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --motion-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* ---- chart palette (read by components/charts) ---- */
+  --chart-1: var(--accent);
+  --chart-2: #7a8599;
+  --chart-3: var(--ok);
+  --chart-4: var(--highlight);
+  --chart-5: var(--bad);
+  --chart-grid: var(--line);
+  --chart-axis: var(--fg-subtle);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --canvas: #0a0b0d;
+    --surface: #111317;
+    --surface-raised: #171a1f;
+    --surface-sunken: #0d0e11;
+    --surface-hover: #1b1e24;
+    --fg: #eceef2;
+    --fg-muted: #a3a8b3;
+    --fg-subtle: #8f95a1;
+    --line: #23262d;
+    --line-strong: #343842;
+    --accent: #4a9eff;
+    --accent-hover: #74b4ff;
+    --accent-fg: #03111f;
+    --accent-soft: rgb(74 158 255 / 0.14);
+    --accent-soft-fg: #9ccaff;
+    --highlight: #ffc220;
+    --highlight-fg: #1d1600;
+    --highlight-soft: rgb(255 194 32 / 0.13);
+    --ok: #45c486;
+    --ok-soft: rgb(69 196 134 / 0.13);
+    --warn: #e7a93f;
+    --warn-soft: rgb(231 169 63 / 0.13);
+    --bad: #ff5d72;
+    --bad-fg: #1f0a0e;
+    --bad-soft: rgb(255 93 114 / 0.13);
+    --bad-strong: #ff8a99;
+    --info: #5aa8ff;
+    --info-soft: rgb(90 168 255 / 0.13);
+    --focus: #74b4ff;
+    --code-bg: #07080a;
+    --code-fg: #e3e7ee;
+    --overlay: rgb(0 0 0 / 0.6);
+    --chart-2: #8a93a3;
+    --elev-xs: 0 1px 0 rgb(0 0 0 / 0.3);
+    --elev-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+    --elev-md: 0 6px 16px -4px rgb(0 0 0 / 0.5);
+    --elev-lg: 0 24px 48px -12px rgb(0 0 0 / 0.7);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --canvas: #0a0b0d;
+  --surface: #111317;
+  --surface-raised: #171a1f;
+  --surface-sunken: #0d0e11;
+  --surface-hover: #1b1e24;
+  --fg: #eceef2;
+  --fg-muted: #a3a8b3;
+  --fg-subtle: #8f95a1;
+  --line: #23262d;
+  --line-strong: #343842;
+  --accent: #4a9eff;
+  --accent-hover: #74b4ff;
+  --accent-fg: #03111f;
+  --accent-soft: rgb(74 158 255 / 0.14);
+  --accent-soft-fg: #9ccaff;
+  --highlight: #ffc220;
+  --highlight-fg: #1d1600;
+  --highlight-soft: rgb(255 194 32 / 0.13);
+  --ok: #45c486;
+  --ok-soft: rgb(69 196 134 / 0.13);
+  --warn: #e7a93f;
+  --warn-soft: rgb(231 169 63 / 0.13);
+  --bad: #ff5d72;
+  --bad-fg: #1f0a0e;
+  --bad-soft: rgb(255 93 114 / 0.13);
+  --bad-strong: #ff8a99;
+  --info: #5aa8ff;
+  --info-soft: rgb(90 168 255 / 0.13);
+  --focus: #74b4ff;
+  --code-bg: #07080a;
+  --code-fg: #e3e7ee;
+  --overlay: rgb(0 0 0 / 0.6);
+  --chart-2: #8a93a3;
+  --elev-xs: 0 1px 0 rgb(0 0 0 / 0.3);
+  --elev-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --elev-md: 0 6px 16px -4px rgb(0 0 0 / 0.5);
+  --elev-lg: 0 24px 48px -12px rgb(0 0 0 / 0.7);
+  color-scheme: dark;
+}
+
+/*
+ * Presenter density: for a projector at the back of a room. Not "a bit bigger": the rem
+ * base goes from 16px to 22px (x1.375) AND the small end of the scale is lifted harder,
+ * so nothing on screen is under ~18px physical. Shell columns are in rem so they follow.
+ */
+:root[data-density="presenter"] {
+  --root-size: 22px;
+  --fs-2xs: 0.8125rem; /* 17.9 */
+  --fs-xs: 0.875rem; /* 19.25 */
+  --fs-sm: 0.9375rem; /* 20.6 */
+  --fs-base: 1rem; /* 22 */
+  --fs-md: 1.125rem; /* 24.75 */
+  --fs-lg: 1.3125rem; /* 28.9 */
+  --fs-xl: 1.625rem; /* 35.75 */
+  --fs-2xl: 2rem; /* 44 */
+  --fs-3xl: 2.5rem; /* 55 */
+  --fs-display: 3.25rem; /* 71.5 */
+  --space: 0.28rem;
+  --shell-top: 3.5rem;
+  --shell-nav: 17rem;
+  --shell-inspector: 22rem;
+  --r-lg: 12px;
+  --r-xl: 16px;
+}
+
+/* Tailwind v4: expose tokens as utilities. `inline` so utilities resolve the live variable. */
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-surface-hover: var(--surface-hover);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-fg: var(--accent-fg);
+  --color-bad-fg: var(--bad-fg);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-soft-fg: var(--accent-soft-fg);
+  --color-highlight: var(--highlight);
+  --color-highlight-fg: var(--highlight-fg);
+  --color-highlight-soft: var(--highlight-soft);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+  --color-bad-strong: var(--bad-strong);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-focus: var(--focus);
+  --color-code-bg: var(--code-bg);
+  --color-code-fg: var(--code-fg);
+  --color-overlay: var(--overlay);
+
+  --font-sans: var(--font-ui);
+  --font-mono: var(--font-data);
+
+  --text-2xs: var(--fs-2xs);
+  --text-2xs--line-height: 1.35;
+  --text-xs: var(--fs-xs);
+  --text-xs--line-height: 1.4;
+  --text-sm: var(--fs-sm);
+  --text-sm--line-height: 1.45;
+  --text-base: var(--fs-base);
+  --text-base--line-height: 1.5;
+  --text-md: var(--fs-md);
+  --text-md--line-height: 1.45;
+  --text-lg: var(--fs-lg);
+  --text-lg--line-height: 1.35;
+  --text-xl: var(--fs-xl);
+  --text-xl--line-height: 1.25;
+  --text-2xl: var(--fs-2xl);
+  --text-2xl--line-height: 1.15;
+  --text-3xl: var(--fs-3xl);
+  --text-3xl--line-height: 1.1;
+  --text-display: var(--fs-display);
+  --text-display--line-height: 1;
+
+  --spacing: var(--space);
+
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-xl: var(--r-xl);
+
+  --shadow-xs: var(--elev-xs);
+  --shadow-sm: var(--elev-sm);
+  --shadow-md: var(--elev-md);
+  --shadow-lg: var(--elev-lg);
+
+  --ease-out: var(--motion-ease-out);
+  --ease-in-out: var(--motion-ease-in-out);
+}
+
+/* Theme/density switches: dark: variant follows the same two rules as the tokens. */
+@custom-variant dark {
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]) *) {
+      @slot;
+    }
+  }
+  &:where([data-theme="dark"] *) {
+    @slot;
+  }
+}
+@custom-variant presenter (&:where([data-density="presenter"] *));
+
+@layer base {
+  html {
+    font-size: var(--root-size);
+  }
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    margin: 0;
+    background: var(--canvas);
+    color: var(--fg);
+    font-family: var(--font-ui);
+    font-size: var(--fs-base);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "ss01", "cv11";
+    text-rendering: optimizeLegibility;
+  }
+  *,
+  ::before,
+  ::after {
+    border-color: var(--line);
+  }
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: var(--accent-soft);
+    color: var(--fg);
+  }
+  code,
+  kbd,
+  pre {
+    font-family: var(--font-data);
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}

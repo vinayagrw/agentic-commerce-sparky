@@ -1,0 +1,81 @@
+# llm-d values for technique 25 (SOTA playbook §25) - the Kubernetes expression of the same
+# prefill/decode topology that run_pd.py starts with two local processes.
+#
+# VERIFY this against the schema of the llm-d chart version you pin. llm-d, vLLM and the KV
+# connector must be pinned together; version churn across the three is the documented failure
+# mode (§25 Risks).
+#
+#   helm upgrade --install sparky-pd llm-d/llm-d -f llm-d-values.yaml -n sparky
+#
+# Adoption gate before this goes anywhere near production traffic (§25 AC1): replay peak traffic
+# through serving/harness/bench.py against BOTH this deployment and an aggregated baseline, and
+# require >= 1.5x goodput at the same TTFT/ITL SLOs. If it does not clear that bar, do not adopt.
+
+modelArtifacts:
+  uri: "pvc://models/sparky-answer-70b-fp8"
+
+routing:
+  proxy:
+    enabled: true
+  inferencePool:
+    schedulerPlugins:
+      - prefix-cache-scorer          # land a request where its prefix is already warm (§23)
+      - kv-cache-utilization-scorer
+      - pd-profile-handler
+
+prefill:
+  replicas: 2                        # tune the prefill:decode ratio with replayed traffic (§25 step 5)
+  containers:
+    - name: vllm
+      args:
+        - "--tensor-parallel-size=4"
+        - "--enable-prefix-caching"
+        - "--enable-chunked-prefill"
+        - "--max-model-len=16384"
+        - '--kv-transfer-config={"kv_connector":"NixlConnector","kv_role":"kv_producer"}'
+      env:
+        - name: LMCACHE_CONFIG_FILE
+          value: /etc/lmcache/lmcache.yaml
+      resources:
+        limits:
+          nvidia.com/gpu: 4
+          rdma/ib: 1                 # RDMA is a precondition, not an optimisation (§25 AC2)
+      volumeMounts:
+        - {name: lmcache-config, mountPath: /etc/lmcache}
+        - {name: nvme, mountPath: /nvme/lmcache}
+
+decode:
+  replicas: 4
+  containers:
+    - name: vllm
+      args:
+        - "--tensor-parallel-size=4"
+        - "--max-model-len=16384"
+        - '--kv-transfer-config={"kv_connector":"NixlConnector","kv_role":"kv_consumer"}'
+      env:
+        - name: LMCACHE_CONFIG_FILE
+          value: /etc/lmcache/lmcache.yaml
+      resources:
+        limits:
+          nvidia.com/gpu: 4
+          rdma/ib: 1
+      volumeMounts:
+        - {name: lmcache-config, mountPath: /etc/lmcache}
+        - {name: nvme, mountPath: /nvme/lmcache}
+
+volumes:
+  - name: lmcache-config
+    configMap:
+      name: sparky-lmcache          # created from lmcache.yaml in this directory
+  - name: nvme
+    hostPath: {path: /mnt/disks/nvme, type: Directory}
+
+# §25 AC3: keep an aggregated deployment addressable so the proxy can fall back when the
+# interconnect degrades. Canary behind the gateway; never cut over wholesale.
+fallback:
+  aggregatedService: sparky-answer-aggregated
+  enabled: true
+
+autoscaling:
+  prefill: {metric: queue_depth, minReplicas: 1, maxReplicas: 8}
+  decode:  {metric: kv_cache_utilization, minReplicas: 2, maxReplicas: 16}

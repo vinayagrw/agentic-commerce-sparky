@@ -1,0 +1,42 @@
+# Azure ML job for technique 24: EAGLE-3 speculative decoding (vLLM)
+# Submit with ONE command from this directory:
+#     az ml job create -f job.yml --resource-group <rg> --workspace-name <ws>
+#
+# Prerequisites: `az extension add -n ml`, an AML compute cluster named below, and the ESCI
+# parquet files registered as the data asset `sparky_esci` (scripts/fetch_data.py produces them).
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+experiment_name: sparky-sota-24
+display_name: sota-24-eagle3-speculative
+description: >-
+  EAGLE-3 speculative decoding (vLLM). See README.md for the GPU SKU, the cost arithmetic and the expected result.
+
+# `code` is the repo root, so that serving/ and training/common/ (the shared ESCI data module) both ship with the job.
+code: ../../
+command: >-
+  python serving/24_eagle3_speculative/bench_eagle3.py
+  --sweep --k 1 2 3 4 5 --batch 1 8 16 64
+  --out ${{outputs.model}}
+
+environment:
+  image: vllm/vllm-openai:v0.11.0
+  conda_file: null
+
+inputs:
+  esci:
+    type: uri_folder
+    path: azureml:sparky_esci@latest
+    mode: ro_mount
+
+outputs:
+  model:
+    type: uri_folder
+
+environment_variables:
+  SPARKY_DATA_DIR: ${{inputs.esci}}
+  MLFLOW_EXPERIMENT_NAME: sparky-sota-24
+
+compute: azureml:gpu-24
+resources:
+  instance_count: 1
+  # SKU: 8x NVIDIA H100 80GB (Azure Standard_ND96isr_H100_v5 / GCP a3-highgpu-8g); the 70B FP8 target uses TP=4, the draft head TP=1
+  # set the cluster's vm_size to Standard_ND96isr_H100_v5

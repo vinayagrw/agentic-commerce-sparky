@@ -1,0 +1,4 @@
+{
+  "_schema": "each override: {class: '<language>/<operator_family>', approver: '<named person>', reason: '...', expires: ISO-8601}. Blank/anonymous approvers and expired overrides are rejected by ops_mcp.bypass_gate.validate_override.",
+  "overrides": []
+}

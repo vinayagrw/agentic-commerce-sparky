@@ -1,0 +1,141 @@
+<mxfile host="app.diagrams.net" agent="Claude">
+  <diagram id="demo02" name="DEMO02 Agent roles">
+    <mxGraphModel dx="1422" dy="820" grid="1" gridSize="10" guides="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1240" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="banner" value="Sparky Next &#183; two agent planes, one guard and identity model&lt;br&gt;&lt;font style='font-size:16px'&gt;autonomy tiers &#183; T0 observe &#183; T1 recommend &#183; T2 act with approval &#183; T3 act within guardrails&lt;/font&gt;" parent="1" vertex="1" style="rounded=1;arcSize=6;html=1;fillColor=#1A56C4;gradientColor=#4C8BF5;strokeColor=none;fontColor=#FFFFFF;fontSize=26;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=24;shadow=1;">
+          <mxGeometry x="60" y="40" width="1680" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="z_shop_t" value="Shopper plane &#183; customer-facing, AG-UI chat" parent="1" vertex="1" style="text;html=1;align=left;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=18;fontStyle=1;fontColor=#1A3A6B;">
+          <mxGeometry x="60" y="150" width="700" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="z_shop" value="" parent="1" vertex="1" style="rounded=1;arcSize=6;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;strokeWidth=2;opacity=40;">
+          <mxGeometry x="60" y="200" width="1680" height="340" as="geometry" />
+        </mxCell>
+
+        <mxCell id="a_plan" value="&#x1F5FA;&#xFE0F;&lt;br&gt;&lt;font style='font-size:15px'&gt;&lt;b&gt;Planner&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style='font-size:14px' color='#2D6A2F'&gt;&lt;b&gt;T1&lt;/b&gt;&lt;/font&gt;&lt;font style='font-size:13px'&gt; &#183; haiku, no tools&lt;/font&gt;" parent="1" vertex="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=72;fontColor=#1F2933;">
+          <mxGeometry x="100" y="250" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="a_shop" value="&#x1F6D2;&lt;br&gt;&lt;font style='font-size:15px'&gt;&lt;b&gt;Shopper&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style='font-size:14px' color='#2D6A2F'&gt;&lt;b&gt;T1&lt;/b&gt;&lt;/font&gt;&lt;font style='font-size:13px'&gt; &#183; sonnet + 13 tools&lt;/font&gt;" parent="1" vertex="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=72;fontColor=#1F2933;">
+          <mxGeometry x="330" y="250" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="a_crit" value="&#x1F9D0;&lt;br&gt;&lt;font style='font-size:15px'&gt;&lt;b&gt;Critic&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style='font-size:14px' color='#2D6A2F'&gt;&lt;b&gt;T1&lt;/b&gt;&lt;/font&gt;&lt;font style='font-size:13px'&gt; &#183; cart vs ledger&lt;/font&gt;" parent="1" vertex="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=72;fontColor=#1F2933;">
+          <mxGeometry x="560" y="250" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="a_chk" value="&#x1F9FE;&lt;br&gt;&lt;font style='font-size:15px'&gt;&lt;b&gt;Checkout&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style='font-size:14px' color='#B85450'&gt;&lt;b&gt;T2&lt;/b&gt;&lt;/font&gt;&lt;font style='font-size:13px'&gt; &#183; spend mandate&lt;/font&gt;" parent="1" vertex="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=72;fontColor=#1F2933;">
+          <mxGeometry x="790" y="250" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="a_guard" value="&#x1F6E1;&#xFE0F;&lt;br&gt;&lt;font style='font-size:15px'&gt;&lt;b&gt;Guard&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style='font-size:13px'&gt;deterministic, in the tool&lt;/font&gt;" parent="1" vertex="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=72;fontColor=#1F2933;">
+          <mxGeometry x="1020" y="250" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="a_ext" value="&#x1F91D;&lt;br&gt;&lt;font style='font-size:15px'&gt;&lt;b&gt;External agent&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style='font-size:13px'&gt;signed identity, tiered&lt;/font&gt;" parent="1" vertex="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=72;fontColor=#1F2933;">
+          <mxGeometry x="1250" y="250" width="180" height="180" as="geometry" />
+        </mxCell>
+
+        <mxCell id="g_chk" value="&#x1F464; human approves" parent="1" vertex="1" style="rounded=1;arcSize=40;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;strokeWidth=2;fontColor=#7A4A00;fontSize=13;fontStyle=1;">
+          <mxGeometry x="800" y="460" width="160" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="g_guard" value="&#x26D4; blocks" parent="1" vertex="1" style="rounded=1;arcSize=40;html=1;fillColor=#F8CECC;strokeColor=#B85450;strokeWidth=2;fontColor=#7A2E2C;fontSize=13;fontStyle=1;">
+          <mxGeometry x="1030" y="460" width="160" height="44" as="geometry" />
+        </mxCell>
+
+        <mxCell id="z_ops_t" value="Ops Copilot plane &#183; agents running the ML lifecycle" parent="1" vertex="1" style="text;html=1;align=left;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=18;fontStyle=1;fontColor=#5B3A73;">
+          <mxGeometry x="60" y="570" width="700" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="z_ops" value="" parent="1" vertex="1" style="rounded=1;arcSize=6;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;strokeWidth=2;opacity=40;">
+          <mxGeometry x="60" y="620" width="1680" height="340" as="geometry" />
+        </mxCell>
+
+        <mxCell id="o_dq" value="&#x1F9EA;&lt;br&gt;&lt;font style='font-size:15px'&gt;&lt;b&gt;Data Quality&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style='font-size:14px' color='#2D6A2F'&gt;&lt;b&gt;T1&lt;/b&gt;&lt;/font&gt;&lt;font style='font-size:13px'&gt; &#183; Data&lt;/font&gt;" parent="1" vertex="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=72;fontColor=#1F2933;">
+          <mxGeometry x="100" y="670" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="o_lab" value="&#x1F3F7;&#xFE0F;&lt;br&gt;&lt;font style='font-size:15px'&gt;&lt;b&gt;Labeling&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style='font-size:14px' color='#B85450'&gt;&lt;b&gt;T2&lt;/b&gt;&lt;/font&gt;&lt;font style='font-size:13px'&gt; &#183; Data&lt;/font&gt;" parent="1" vertex="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=72;fontColor=#1F2933;">
+          <mxGeometry x="330" y="670" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="o_drift" value="&#x1F4C9;&lt;br&gt;&lt;font style='font-size:15px'&gt;&lt;b&gt;Drift Monitor&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style='font-size:14px' color='#1A56C4'&gt;&lt;b&gt;T0 &#8594; T1&lt;/b&gt;&lt;/font&gt;&lt;font style='font-size:13px'&gt; &#183; Monitor&lt;/font&gt;" parent="1" vertex="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=72;fontColor=#1F2933;">
+          <mxGeometry x="560" y="670" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="o_rem" value="&#x1F527;&lt;br&gt;&lt;font style='font-size:15px'&gt;&lt;b&gt;Remediation&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style='font-size:14px' color='#B85450'&gt;&lt;b&gt;T2&lt;/b&gt;&lt;/font&gt;&lt;font style='font-size:13px'&gt; &#183; Retrain&lt;/font&gt;" parent="1" vertex="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=72;fontColor=#1F2933;">
+          <mxGeometry x="790" y="670" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="o_eval" value="&#x1F6A6;&lt;br&gt;&lt;font style='font-size:15px'&gt;&lt;b&gt;Eval gate&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style='font-size:14px' color='#7A4A00'&gt;&lt;b&gt;T3&lt;/b&gt;&lt;/font&gt;&lt;font style='font-size:13px'&gt; &#183; Validate&lt;/font&gt;" parent="1" vertex="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=72;fontColor=#1F2933;">
+          <mxGeometry x="1020" y="670" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="o_rel" value="&#x1F680;&lt;br&gt;&lt;font style='font-size:15px'&gt;&lt;b&gt;Release&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style='font-size:14px' color='#B85450'&gt;&lt;b&gt;T2 / T3&lt;/b&gt;&lt;/font&gt;&lt;font style='font-size:13px'&gt; &#183; Deploy&lt;/font&gt;" parent="1" vertex="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=72;fontColor=#1F2933;">
+          <mxGeometry x="1250" y="670" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="o_fin" value="&#x1F4B0;&lt;br&gt;&lt;font style='font-size:15px'&gt;&lt;b&gt;FinOps Router&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style='font-size:14px' color='#2D6A2F'&gt;&lt;b&gt;T1&lt;/b&gt;&lt;/font&gt;&lt;font style='font-size:13px'&gt; &#183; Serve&lt;/font&gt;" parent="1" vertex="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=72;fontColor=#1F2933;">
+          <mxGeometry x="1480" y="670" width="180" height="180" as="geometry" />
+        </mxCell>
+
+        <mxCell id="g_lab" value="&#x1F464; reviews low confidence" parent="1" vertex="1" style="rounded=1;arcSize=40;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;strokeWidth=2;fontColor=#7A4A00;fontSize=13;fontStyle=1;">
+          <mxGeometry x="320" y="880" width="200" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="g_rem" value="&#x1F464; approves remediation" parent="1" vertex="1" style="rounded=1;arcSize=40;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;strokeWidth=2;fontColor=#7A4A00;fontSize=13;fontStyle=1;">
+          <mxGeometry x="780" y="880" width="200" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="g_rel" value="&#x1F464; approves promotion" parent="1" vertex="1" style="rounded=1;arcSize=40;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;strokeWidth=2;fontColor=#7A4A00;fontSize=13;fontStyle=1;">
+          <mxGeometry x="1230" y="880" width="180" height="44" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s1" value="goal &#8594; steps" parent="1" source="a_plan" target="a_shop" edge="1" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#E8732A;strokeWidth=4;flowAnimation=1;fontColor=#A8500F;fontSize=13;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="s2" value="cart" parent="1" source="a_shop" target="a_crit" edge="1" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#E8732A;strokeWidth=4;flowAnimation=1;fontColor=#A8500F;fontSize=13;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="s3" value="verdict" parent="1" source="a_crit" target="a_chk" edge="1" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#E8732A;strokeWidth=4;flowAnimation=1;fontColor=#A8500F;fontSize=13;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="s4" value="every tool call passes the guard" parent="1" source="a_guard" target="a_shop" edge="1" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#B85450;strokeWidth=3;dashed=1;flowAnimation=1;fontColor=#7A2E2C;fontSize=13;exitX=1;exitY=0.9;entryX=0.5;entryY=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1200" y="524" />
+              <mxPoint x="420" y="524" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s5" value="signed feed" parent="1" source="a_ext" target="a_guard" edge="1" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#6C8EBF;strokeWidth=3;dashed=1;flowAnimation=1;fontColor=#1A3A6B;fontSize=13;exitX=0;exitY=0.5;entryX=1;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="p1" value="" parent="1" source="o_dq" target="o_lab" edge="1" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#9673A6;strokeWidth=3;flowAnimation=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p2" value="" parent="1" source="o_lab" target="o_drift" edge="1" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#9673A6;strokeWidth=3;flowAnimation=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p3" value="alert" parent="1" source="o_drift" target="o_rem" edge="1" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#E8732A;strokeWidth=4;flowAnimation=1;fontColor=#A8500F;fontSize=13;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p4" value="candidate" parent="1" source="o_rem" target="o_eval" edge="1" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#E8732A;strokeWidth=4;flowAnimation=1;fontColor=#A8500F;fontSize=13;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p5" value="PASS" parent="1" source="o_eval" target="o_rel" edge="1" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#E8732A;strokeWidth=4;flowAnimation=1;fontColor=#A8500F;fontSize=13;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p6" value="serves" parent="1" source="o_rel" target="o_fin" edge="1" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#9673A6;strokeWidth=3;flowAnimation=1;fontColor=#5B3A73;fontSize=13;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p7" value="closed loop: promoted model is watched again" parent="1" source="o_rel" target="o_drift" edge="1" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#9673A6;strokeWidth=3;dashed=1;flowAnimation=1;fontColor=#5B3A73;fontSize=13;exitX=1;exitY=0.9;entryX=0.5;entryY=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1430" y="940" />
+              <mxPoint x="650" y="940" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="legend" value="&lt;b style='font-size:16px'&gt;How to read this&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:14px'&gt;&lt;font color='#E8732A'&gt;&#9644;&#9644;&#9644;&lt;/font&gt; hero path: the beat the room watches&#160;&#160;&lt;font color='#9673A6'&gt;&#9644;&#9644;&#9644;&lt;/font&gt; lifecycle flow&lt;br&gt;&lt;font color='#B85450'&gt;&#9644; &#9644; &#9644;&lt;/font&gt; deterministic block&#160;&#183;&#160;dashed = secondary or return path&lt;br&gt;&#x1F464; amber pill = a human gate: the model cannot pass it by itself&lt;br&gt;Approvals are HTTP-only routes on shop-http / ops-http, never MCP tools,&lt;br&gt;so no agent can approve its own action.&lt;/font&gt;" parent="1" vertex="1" style="rounded=1;arcSize=6;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=16;spacingTop=10;fillColor=#FFFFFF;strokeColor=#9AA7B5;fontColor=#1F2933;fontSize=14;shadow=1;">
+          <mxGeometry x="60" y="1000" width="820" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="tiers" value="&lt;b style='font-size:16px'&gt;Autonomy tiers&lt;/b&gt;&lt;br&gt;&lt;table cellpadding='4' style='font-size:13px;border-collapse:collapse'&gt;&lt;tr style='background:#1A56C4;color:#ffffff'&gt;&lt;td&gt;&lt;b&gt;Tier&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;b&gt;Meaning&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;b&gt;In this demo&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;T0&lt;/td&gt;&lt;td&gt;observe&lt;/td&gt;&lt;td&gt;drift watch, no action&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;T1&lt;/td&gt;&lt;td&gt;recommend&lt;/td&gt;&lt;td&gt;Planner, Shopper, Critic, DQ, FinOps&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;T2&lt;/td&gt;&lt;td&gt;act with approval&lt;/td&gt;&lt;td&gt;mandate, label review, remediation, promote&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;T3&lt;/td&gt;&lt;td&gt;act within guardrails&lt;/td&gt;&lt;td&gt;eval gate, canary auto-rollback&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" parent="1" vertex="1" style="rounded=1;arcSize=6;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=16;spacingTop=10;fillColor=#FFFFFF;strokeColor=#9AA7B5;fontColor=#1F2933;fontSize=14;shadow=1;">
+          <mxGeometry x="920" y="1000" width="820" height="190" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,64 @@
+{
+ "capability": 8,
+ "slug": "slo_budget",
+ "generated_at": "2026-09-29T20:27:30Z",
+ "slos": [
+  {
+   "slo": "search latency <= 150 ms",
+   "objective": 0.95,
+   "source": "data/online_sessions.jsonl ms",
+   "n": 400,
+   "bad": 9,
+   "bad_fraction": 0.0225,
+   "bad_ci95": [
+    0.01188,
+    0.0422
+   ],
+   "burn_rate": 0.45,
+   "short_window_burn": 0.4,
+   "budget_remaining": 0.55,
+   "exhausted": false
+  },
+  {
+   "slo": "agent turn success",
+   "objective": 0.99,
+   "source": "data/token_ledger.jsonl ok",
+   "n": 1535,
+   "bad": 25,
+   "bad_fraction": 0.01629,
+   "bad_ci95": [
+    0.01106,
+    0.02393
+   ],
+   "burn_rate": 1.629,
+   "short_window_burn": 2.0,
+   "budget_remaining": -0.6287,
+   "exhausted": true
+  },
+  {
+   "slo": "agent first token <= 10 s",
+   "objective": 0.95,
+   "source": "data/token_ledger.jsonl first_token_ms",
+   "n": 1510,
+   "bad": 150,
+   "bad_fraction": 0.09934,
+   "bad_ci95": [
+    0.08525,
+    0.11546
+   ],
+   "burn_rate": 1.987,
+   "short_window_burn": 0.8,
+   "budget_remaining": -0.9868,
+   "exhausted": true
+  }
+ ],
+ "exhausted": [
+  "agent turn success",
+  "agent first token <= 10 s"
+ ],
+ "freeze_active": true,
+ "freeze_approval": "apr-f34e7239",
+ "override_approval": "apr-f34e7239",
+ "not_measured": "conversion-rate SLO: no order/conversion events are logged by the demo",
+ "window": "all logged events; short window = last 50"
+}

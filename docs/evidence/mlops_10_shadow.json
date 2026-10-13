@@ -1,0 +1,43 @@
+{
+ "capability": 10,
+ "slug": "shadow",
+ "generated_at": "2026-09-29T20:28:10Z",
+ "champion": "v4",
+ "candidate": "v2",
+ "champion_mode": "rrf_rerank",
+ "candidate_mode": "rrf",
+ "params_not_applied": {
+  "champion": {
+   "w_bm25": 0.7
+  },
+  "candidate": {}
+ },
+ "n_queries": 40,
+ "overlap_at_10": 0.535,
+ "overlap_ci95": [
+  0.4725,
+  0.5925
+ ],
+ "overlap_below_0_5": 11,
+ "mirror_fidelity_overlap_vs_served": 0.605,
+ "latency_p50_ms": {
+  "champion": 185.3,
+  "shadow": 16.5
+ },
+ "latency_p95_ms": {
+  "champion": 255.8,
+  "shadow": 31.0
+ },
+ "latency_diff_mean_ms": -172.05,
+ "latency_diff_ci95": [
+  -184.1425,
+  -159.8025
+ ],
+ "shopper_impact": {
+  "responses_returned_to_shoppers": 0,
+  "online_sessions_lines_added_during_run": 0,
+  "policy_events_lines_added_during_run": 0
+ },
+ "recommendation": "ready for canary review",
+ "queries_source": "last unique shopper queries in data/online_sessions.jsonl (mirrored)"
+}

@@ -1,0 +1,409 @@
+{
+  "label": "after",
+  "started_at": "2026-09-17T06:10:16.990Z",
+  "finished_at": "2026-09-17T06:16:34.255Z",
+  "bff": "http://127.0.0.1:8787",
+  "shopper": {
+    "turns": 10,
+    "model_calls": 40,
+    "input_tokens_total": 149575,
+    "uncached_input_tokens": 26026,
+    "cache_read_input_tokens": 85602,
+    "cache_creation_input_tokens": 37947,
+    "output_tokens": 11960,
+    "cost_usd": 0.29326,
+    "cache_hit_ratio": 0.572,
+    "first_token_p50_ms": 7994,
+    "total_p50_ms": 23340,
+    "checks_passed": 14,
+    "checks_total": 14,
+    "by_role": {
+      "Planner": {
+        "calls": 5,
+        "cost_usd": 0.00561,
+        "output_tokens": 748
+      },
+      "Shopper": {
+        "calls": 9,
+        "cost_usd": 0.20581,
+        "output_tokens": 7176
+      },
+      "Critic": {
+        "calls": 10,
+        "cost_usd": 0.0149,
+        "output_tokens": 1242
+      },
+      "followups": {
+        "calls": 10,
+        "cost_usd": 0.01107,
+        "output_tokens": 830
+      },
+      "Shopper revision": {
+        "calls": 5,
+        "cost_usd": 0.03946,
+        "output_tokens": 1390
+      },
+      "Checkout": {
+        "calls": 1,
+        "cost_usd": 0.0164,
+        "output_tokens": 574
+      }
+    }
+  },
+  "ops": {
+    "turns": 5,
+    "model_calls": 5,
+    "input_tokens_total": 64551,
+    "uncached_input_tokens": 22,
+    "cache_read_input_tokens": 36896,
+    "cache_creation_input_tokens": 27633,
+    "output_tokens": 2618,
+    "cost_usd": 0.14414,
+    "cache_hit_ratio": 0.572,
+    "first_token_p50_ms": 3489,
+    "total_p50_ms": 12081,
+    "checks_passed": 5,
+    "checks_total": 5,
+    "by_role": {
+      "Ops Copilot": {
+        "calls": 5,
+        "cost_usd": 0.14414,
+        "output_tokens": 2618
+      }
+    }
+  },
+  "turns": [
+    {
+      "plane": "shopper",
+      "n": 1,
+      "prompt": "Coffee plus filters bundle: one bag of ground coffee and a pack of #4 cone coffee filters, under $25 total.",
+      "runId": "e7b9c9dd-3d50-4357-8b21-17c16280e50d",
+      "first_token_ms": 7994,
+      "total_ms": 25822,
+      "tools": [
+        "search_products",
+        "search_products",
+        "check_store_stock",
+        "check_store_stock",
+        "add_to_cart",
+        "add_to_cart"
+      ],
+      "answer": "Searching for both items in the bundle now.Both items are in stock at store 4108. Total: $2.88 + $15.97 = **$18.85**, within the $25 budget. Proposing to add both:\n\n- **Dunkin' Original Blend Medium Roast Ground Coffee, 20 oz** — $2.88, rating 4.4, in stock (15 units)\n- **Melitta #4 Cone Coffee Filters, Natural Brown, 100 Count (Pack of 6)** — $15.97, rating 4.0, in stock (20 units) — only exact #4 cone match foundBoth adds are **proposed and awaiting your approval** — nothing's in the cart yet. Please click **Approve** in the chat for each to confirm:\n\n| Item | Price | Qty |\n|---|---|---|\n| D",
+      "approved": 2,
+      "checks": [
+        {
+          "name": "cart has ground coffee",
+          "pass": true,
+          "detail": "Melitta #4 Cone Coffee Filters, Natural Brown, 100 Count (Pack of 6) | Dunkin' Original Blend Medium Roast Ground Coffee, 20 Ounces"
+        },
+        {
+          "name": "cart has #4 filters",
+          "pass": true,
+          "detail": "Melitta #4 Cone Coffee Filters, Natural Brown, 100 Count (Pack of 6) | Dunkin' Original Blend Medium Roast Ground Coffee, 20 Ounces"
+        },
+        {
+          "name": "total <= $25",
+          "pass": true,
+          "detail": "18.85"
+        }
+      ]
+    },
+    {
+      "plane": "shopper",
+      "n": 2,
+      "prompt": "What is in my cart right now and what is the total?",
+      "runId": "f0c70678-6b3c-4418-a7a4-d49fce05abe3",
+      "first_token_ms": 5848,
+      "total_ms": 14016,
+      "tools": [
+        "get_cart"
+      ],
+      "answer": "**Your Cart:**\n\n| Item | Price | Qty | Line Total |\n|------|-------|-----|-----------|\n| Melitta #4 Cone Coffee Filters, Natural Brown, 100 Count (Pack of 6) | $15.97 | 1 | $15.97 |\n| Dunkin' Original Blend Medium Roast Ground Coffee, 20 Ounces | $2.88 | 1 | $2.88 |\n\n**Total:** $18.85  \n**Budget:** $25.00  \n**Remaining:** $6.15 ✓\n\nYou have 2 items and $6.15 left in your budget.",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "answer states the real cart total",
+          "pass": true,
+          "detail": "total 18.85; answer $ 15.97,15.97,2.88,2.88,18.85,25,6.15,6.15"
+        }
+      ]
+    },
+    {
+      "plane": "shopper",
+      "n": 3,
+      "prompt": "Compare the top 3 #4 cone coffee filters and explain why each ranks where it does.",
+      "runId": "e4b187bc-4610-4de8-af8e-81439c0e3d7d",
+      "first_token_ms": 20234,
+      "total_ms": 50943,
+      "tools": [
+        "search_products",
+        "search_products",
+        "compare_products"
+      ],
+      "answer": "**Heads-up on sizing:** searching the catalog for \"#4 cone coffee filters,\" only **one true #4 product exists** — Melitta #4 (already in your cart). The next-closest results the hybrid RRF ranker surfaces are actually **#2-size** filters (title/brand text overlaps with \"cone,\" \"natural brown,\" \"Melitta\" etc.), not #4. I'm flagging that mismatch rather than pretending they're interchangeable — #2 and #4 filters fit different basket sizes.\n\n**Ranking & why (RRF = reciprocal-rank fusion of BM25 keyword score + vector semantic score):**\n\n| Rank | Product | Price | Rating | BM25 | Vector | RRF | No",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "used live search/compare tools",
+          "pass": true,
+          "detail": "search_products,search_products,compare_products"
+        },
+        {
+          "name": "answer names 3 options",
+          "pass": true,
+          "detail": "3169"
+        }
+      ]
+    },
+    {
+      "plane": "shopper",
+      "n": 4,
+      "prompt": "Remove the coffee filters from my cart.",
+      "runId": "4ce81cd1-0da7-4f52-8574-b43f7bf73875",
+      "first_token_ms": 4966,
+      "total_ms": 19163,
+      "tools": [
+        "remove_from_cart"
+      ],
+      "answer": "- **Proposed:** Remove Melitta #4 Cone Coffee Filters (B001E5E0SI, $15.97) from cart.\n- This change needs your approval — nothing has been removed yet. Please click **Approve** in the chat to confirm.\n- Once approved, cart would be: Dunkin' Original Blend Ground Coffee x1 @ $2.88 (total $2.88).- Coffee filters aren't in your cart — nothing to remove. Cart only has: Dunkin' Original Blend Ground Coffee, 20 oz, qty 1, $2.88.\n- Note: the plan calls for a ground coffee + #4 cone filters bundle, so the filters (B001E5E0SI, $15.97) were never actually added — that leaves the bundle incomplete.\n- Let",
+      "approved": 1,
+      "checks": [
+        {
+          "name": "filters removed",
+          "pass": true,
+          "detail": "Dunkin' Original Blend Medium Roast Ground Coffee, 20 Ounces"
+        }
+      ]
+    },
+    {
+      "plane": "shopper",
+      "n": 5,
+      "prompt": "Add one pack of #4 cone coffee filters back to my cart, keeping the total under $25.",
+      "runId": "32328b55-ba85-4a5f-9658-817ff511f90f",
+      "first_token_ms": 14614,
+      "total_ms": 33711,
+      "tools": [
+        "search_products",
+        "add_to_cart"
+      ],
+      "answer": "Found the match: **Melitta #4 Cone Coffee Filters, Natural Brown, 100 Count (Pack of 6)** — $15.97, in stock at store 4108. Adding it keeps the cart at $2.88 + $15.97 = **$18.85**, within the $25 budget.**Proposed, awaiting your approval:**\n\n- Add **Melitta #4 Cone Coffee Filters, Natural Brown, 100 Count (Pack of 6)** — $15.97, qty 1 (in stock at store 4108)\n\nThis would bring the cart to $2.88 (coffee) + $15.97 (filters) = **$18.85**, staying under your $25 budget.\n\nNothing has been added yet — please click **Approve** in the chat to confirm this change.- No action needed — the #4 cone coffee",
+      "approved": 1,
+      "checks": [
+        {
+          "name": "filters back in cart",
+          "pass": true,
+          "detail": "Melitta #4 Cone Coffee Filters, Natural Brown, 100 Count (Pack of 6) | Dunkin' Original Blend Medium Roast Ground Coffee, 20 Ounces"
+        },
+        {
+          "name": "total <= $25",
+          "pass": true,
+          "detail": "18.85"
+        }
+      ]
+    },
+    {
+      "plane": "shopper",
+      "n": 6,
+      "prompt": "Show my cart.",
+      "runId": "34d1b47d-03a3-4e53-97b0-136bc083153e",
+      "first_token_ms": 6154,
+      "total_ms": 13111,
+      "tools": [
+        "get_cart"
+      ],
+      "answer": "**Your Cart**\n\n| Item | Qty | Price | Line Total |\n|------|-----|-------|-----------|\n| Melitta #4 Cone Coffee Filters, Natural Brown, 100 Count (Pack of 6) | 1 | $15.97 | $15.97 |\n| Dunkin' Original Blend Medium Roast Ground Coffee, 20 Ounces | 1 | $2.88 | $2.88 |\n\n**Subtotal:** $18.85  \n**Budget:** $25.00  \n**Remaining:** $6.15 ✓ (within budget)\n\nYou're all set for ground coffee + #4 cone filters. Ready to add anything else or proceed to checkout?",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "answer reflects cart lines",
+          "pass": true,
+          "detail": "**Your Cart**\n\n| Item | Qty | Price | Line Total |\n|------|-----|-------|-----------|\n| Melitta #4 Cone Coffee Filters, Natural Brown, 100 Count (Pack of 6) | 1"
+        }
+      ]
+    },
+    {
+      "plane": "shopper",
+      "n": 7,
+      "prompt": "Is anything in my cart a sponsored listing?",
+      "runId": "55a747ed-ee78-4d13-9a05-1312c5ef9843",
+      "first_token_ms": 17047,
+      "total_ms": 24921,
+      "tools": [
+        "get_cart",
+        "get_product",
+        "get_product"
+      ],
+      "answer": "No — neither item in your cart is sponsored:\n\n- **Melitta #4 Cone Coffee Filters** ($15.97) — `sponsored: false`\n- **Dunkin' Original Blend Ground Coffee** ($2.88) — `sponsored: false`\n\nCart total remains $18.85, within your $25 budget.",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "sponsored status stated correctly",
+          "pass": true,
+          "detail": "No — neither item in your cart is sponsored:\n\n- **Melitta #4 Cone Coffee Filters** ($15.97) — `sponsored: false`\n- **Dunkin' Original Blend Ground Coffee** ($2."
+        }
+      ]
+    },
+    {
+      "plane": "shopper",
+      "n": 8,
+      "prompt": "Find a cheaper ground coffee under $10, but do not change my cart.",
+      "runId": "f2f7a12f-1f84-4418-82bf-c332da1276d8",
+      "first_token_ms": 10434,
+      "total_ms": 26831,
+      "tools": [
+        "search_products"
+      ],
+      "answer": "Found several ground coffees under $10, all in stock at store 4108 — cart left unchanged as requested:\n\n- **AmazonFresh Just Bright Ground Coffee**, Light Roast, 32oz — $1.24, ★5.0\n- **Gevalia French Roast Ground Coffee**, 12oz — $1.88, ★3.7\n- **Organic French Roast, Boyer's Coffee**, Dark Roast, 2-pack 22oz — $2.78, ★4.5 (organic)\n- **Dunkin' Original Blend Medium Roast**, 20oz — $2.88, ★4.4 *(already in your cart)*\n- **AmazonFresh Colombia Ground Coffee**, Medium Roast, 12oz — $3.88, ★3.8\n- **AmazonFresh Direct Trade Rwanda Ground Coffee**, Light Roast, 12oz (3-pack) — $4.47, ★4.9\n- **Amazon",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "cart unchanged",
+          "pass": true,
+          "detail": ""
+        }
+      ]
+    },
+    {
+      "plane": "shopper",
+      "n": 9,
+      "prompt": "Help: what can you do for me?",
+      "runId": "45482258-baad-48ed-aa67-f24c94071456",
+      "first_token_ms": 4943,
+      "total_ms": 21793,
+      "tools": [],
+      "answer": "**Here's what I can help with:**\n\n✓ **Search & add items** – Find products, check stock at your store (ID: 4108), add to cart  \n✓ **Stay on budget** – Track spending against your limit  \n✓ **Respect constraints** – dietary needs, headcount, pickup preferences, etc.  \n✓ **Checkout prep** – Create a spend mandate for approval (I don't process payment)\n\n---\n\n**⚠️ Current situation:**\nYour cart has **$18.85** but your budget is **≤$10** — **over by $8.85**.\n\n**In your cart:**\n- Melitta #4 Cone Coffee Filters ($15.97)\n- Dunkin' Original Blend Ground Coffee ($2.88)\n\n**What would help:**\n1. Can you i",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "help answer given",
+          "pass": true,
+          "detail": "1581"
+        }
+      ]
+    },
+    {
+      "plane": "shopper",
+      "n": 10,
+      "prompt": "Check out my cart with a $40 spend cap. Do not pay, create a mandate for my approval.",
+      "runId": "f856b874-f40e-453b-88bb-176a6bf5b934",
+      "first_token_ms": 13490,
+      "total_ms": 23340,
+      "tools": [
+        "get_cart",
+        "create_checkout_mandate"
+      ],
+      "answer": "**Cart priced:**\n- Melitta #4 Cone Coffee Filters, Natural Brown (100ct x6) — $15.97 x1\n- Dunkin' Original Blend Medium Roast Ground Coffee, 20oz — $2.88 x1\n- **Total: $18.85** — within your $40 budget cap (status: met, $21.15 remaining)\n\n**Checkout mandate created** (mdt_e573cf664bc9):\n- Spend cap: $40.00 | Cart total: $18.85 | Within cap ✅\n- Status: **pending_human_approval**\n- Payment executed: **false**\n\n⚠️ This is not a payment — it's an approval request. Please **click Approve in the UI** to proceed; I cannot approve or pay on your behalf.\n\n**Ledger check:**\n- Budget ≤$40 → met ($18.85 u",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "mandate created, not paid",
+          "pass": true,
+          "detail": "get_cart,create_checkout_mandate"
+        }
+      ]
+    },
+    {
+      "plane": "ops",
+      "n": 1,
+      "prompt": "Read the model registry and name the current champion version.",
+      "runId": "4771459b-743f-4b96-8cc0-4129c8672c17",
+      "first_token_ms": 3724,
+      "total_ms": 12081,
+      "tools": [
+        "get_registry"
+      ],
+      "answer": "**Release agent — T0 (observe)**: Reading the model registry to identify the current champion.**Release agent — T0 (observe)**: registry read, no production changes.\n\n- **Current champion: `v4`** — RRF (w_bm25=0.7, w_vector=1.0, k=60) + MiniLM-L6 cross-encoder rerank (depth 50). Promoted via remediation `adjust_rrf_weights` (rem-af15f71f, approval apr-54032951).\n- Champion metrics: test_ndcg10 ≈ 0.607, dev_ndcg10 ≈ 0.667, dev_p95 ≈ 108ms.\n- Current registry **candidate slot: `v47`** (an untested rebuild-timing probe, metrics empty) — matches the \"candidate: none / last gate: not run\" state you",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "names the real champion",
+          "pass": true,
+          "detail": "champion v4"
+        }
+      ]
+    },
+    {
+      "plane": "ops",
+      "n": 2,
+      "prompt": "Show the 5 most recent audit log entries.",
+      "runId": "b85172a0-7cd2-4ec7-b105-3bc2f447e4dc",
+      "first_token_ms": 3489,
+      "total_ms": 11716,
+      "tools": [
+        "get_audit_log"
+      ],
+      "answer": "**Audit Log agent — T0 (observe)**\n\nFetching the 5 most recent entries now.**5 most recent audit entries:**\n\n- **#75** Remediation agent (T2) — `propose_remediation` on alert alr-7b946c5e → **no_trigger** (no proposals)\n- **#74** Drift Monitor (T1) — `compute_drift` seasonal → **alert** raised (`alr-7b946c5e`, MMD²=0.047, p=0.0033)\n- **#73** Drift Monitor (T0) — `estimate_performance` seasonal → NDCG@10 ≈ 0.450\n- **#72** Drift Monitor (T1) — `compute_drift` seasonal → **alert** raised (`alr-25e768df`, same MMD²/p-value)\n- **#71** Eval (T3) — gate check on preregistered `late_interaction` candi",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "read the audit log",
+          "pass": true,
+          "detail": "get_audit_log"
+        }
+      ]
+    },
+    {
+      "plane": "ops",
+      "n": 3,
+      "prompt": "Check the live query stream for drift and estimate the NDCG impact. Do not propose anything yet.",
+      "runId": "2e7171ad-c37e-42e2-a690-82f3249730b4",
+      "first_token_ms": 2750,
+      "total_ms": 17856,
+      "tools": [
+        "compute_drift",
+        "estimate_performance"
+      ],
+      "answer": "**Plan:** Two T0 (observe) reads — Drift Monitor agent and Eval/Performance estimation agent. No writes, no approvals needed.**Drift Monitor agent (T0/T1 — observe/alert, read-only):**\n\n- 🚨 **Drift alert `alr-55a2ac62`** on the `seasonal` stream: MMD² = 0.047, p = 0.0033 (significant) — driven by back-to-school/holiday queries (e.g. \"costume fire\", \"the crow costume brandon lee\") not in the reference set.\n- **Estimated NDCG@10 impact:** 0.6811 (reference) → **0.4497 now**, a **-0.231 delta**, degrading monotonically across the 5 windows as seasonal query fraction rises 0%→100%.\n- Top-1 cosine",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "computed drift",
+          "pass": true,
+          "detail": "compute_drift,estimate_performance"
+        }
+      ]
+    },
+    {
+      "plane": "ops",
+      "n": 4,
+      "prompt": "What is the canary status right now?",
+      "runId": "1b76fac9-69e4-4266-87f1-def30c894243",
+      "first_token_ms": 3049,
+      "total_ms": 7553,
+      "tools": [
+        "get_canary_status"
+      ],
+      "answer": "**Release Agent — T0 (observe)**\n\nChecking current canary status now.- **Release Agent (T0 – observe):** Canary status is **idle** — no canary arms are currently running, 0ms injected latency.\n- Consistent with beat state: no candidate built, no eval gate run yet, no approvals recorded.\n- Nothing to act on here; next steps would require T1 proposals or T2 approvals before any candidate/canary work begins.",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "read canary status",
+          "pass": true,
+          "detail": "get_canary_status"
+        }
+      ]
+    },
+    {
+      "plane": "ops",
+      "n": 5,
+      "prompt": "Propose remediations for the latest drift alert for my approval. Do not build anything.",
+      "runId": "8247ed2f-f783-4946-994f-b9cbb9cce6cc",
+      "first_token_ms": 4783,
+      "total_ms": 24797,
+      "tools": [
+        "compute_drift",
+        "propose_remediation"
+      ],
+      "answer": "I'll start by checking the latest drift signal (Drift Monitor, T0 — read-only), then use that alert to request remediation proposals (Remediation, T1 — recommend only, no build).**Drift Monitor (T1)** — alert `alr-d89da2c4` confirmed: seasonal query drift, MMD² 0.0471, p=0.0033, est. NDCG@10 down ~0.68→0.45 (query mix shifting toward back-to-school/holiday terms like \"marble notebook\", \"costume fire\").\n\nNow requesting remediation options against this alert (Remediation, T1 — recommend only, nothing built or approved).**Remediation (T1, retrain-agent)** — result for alert `alr-d89da2c4`:\n\n- **N",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "proposed, did not build",
+          "pass": true,
+          "detail": "compute_drift,propose_remediation"
+        }
+      ]
+    }
+  ],
+  "ledger_calls": 45
+}

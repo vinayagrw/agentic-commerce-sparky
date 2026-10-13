@@ -1,0 +1,37 @@
+# Vertex AI CustomJob for technique harness: Serving benchmark harness (shared by 23/24/25)
+# Submit with ONE command from this directory:
+#     gcloud ai custom-jobs create --region=us-central1 \
+#         --display-name=sota-harness-harness --config=job.yaml
+#
+# Prerequisites: a container image in Artifact Registry built from requirements.txt, and the
+# ESCI parquet files in GCS at gs://<bucket>/sparky/data (scripts/fetch_data.py produces them).
+workerPoolSpecs:
+  - machineSpec:
+      machineType: n2-standard-8
+      # CPU-only worker pool
+    replicaCount: 1
+    diskSpec:
+      bootDiskType: pd-ssd
+      bootDiskSizeGb: 500
+    containerSpec:
+      imageUri: us-central1-docker.pkg.dev/PROJECT_ID/sparky/sota-harness:latest
+      command: ["python", "serving/harness/bench.py"]
+      args:
+        - "--base-url"
+        - "http://localhost:8000"
+        - "--model"
+        - "/models/qu-rewriter-8b"
+        - "--n"
+        - "500"
+        - "--out"
+        - "/gcs/BUCKET/sparky/out/sota-harness-harness/results.json"
+      env:
+        - name: SPARKY_DATA_DIR
+          value: "/gcs/BUCKET/sparky/data"
+        - name: MLFLOW_EXPERIMENT_NAME
+          value: "sparky-sota-harness"
+
+baseOutputDirectory:
+  outputUriPrefix: gs://BUCKET/sparky/out/sota-harness-harness
+
+# SKU: none - CPU load-generator client; it runs beside the endpoint under test

@@ -1,0 +1,5 @@
+{
+ "about": "Presenter INPUTS, not measurements. The UI and README read these from data/coverage.json (demo_inputs) so the button label, the request it sends and the script cannot drift apart.",
+ "inject_latency_ms": 900,
+ "inject_latency_note": "Latency added to the canary arm of simulated replayed traffic by the presenter button. Whether the guardrail rolls back is decided live by ops-http against gate_config.canary_guardrail."
+}

@@ -1,0 +1,55 @@
+{
+  "synthetic_label": "synthetic demo shopper accounts - not real people, not real balances (demo)",
+  "note": "Seed for shop-mcp accounts.ensure_seeded(). Cards are referenced by allowlist PROFILE ID (see payments.CARD_PROFILES); no card number appears in this file or anywhere in the database. brand/last4/outcome are taken from the frozen profile, so a persona cannot claim a brand the allowlist does not publish. A fourth persona, 'guest', is intentionally ABSENT: the guest path has no account at all.",
+  "personas": [
+    {
+      "account_id": "acct_maya",
+      "name": "Maya Alvarez",
+      "email": "maya@example.invalid",
+      "label": "happy path: approved card plus a gift balance",
+      "prefs": {"dietary": ["gluten_free"], "brands": ["Casa Rosa", "La Banderita"], "store_id": "4108", "household_size": 3},
+      "payment_methods": [
+        {"pm_id": "pm_maya_visa", "profile": "visa_approved", "is_default": true, "nickname": "Everyday Visa"},
+        {"pm_id": "pm_maya_gift", "kind": "gift", "balance": 25.00, "is_default": false, "nickname": "Gift balance $25"}
+      ],
+      "addresses": [
+        {"address_id": "adr_maya_home", "name": "Maya Alvarez", "line1": "1204 Walton Blvd", "line2": "Apt 5",
+         "city": "Bentonville", "region": "AR", "postal_code": "72712", "store_id": "4108",
+         "instructions": "Leave at the front desk", "is_default": true}
+      ]
+    },
+    {
+      "account_id": "acct_dev",
+      "name": "Dev Patel",
+      "email": "dev@example.invalid",
+      "label": "failure paths: verification step, declined, expired",
+      "prefs": {"dietary": [], "brands": ["Mission"], "store_id": "2231", "household_size": 2},
+      "payment_methods": [
+        {"pm_id": "pm_dev_stepup", "profile": "visa_step_up", "is_default": true, "nickname": "Card that asks to verify"},
+        {"pm_id": "pm_dev_declined", "profile": "visa_declined", "is_default": false, "nickname": "Card that declines"},
+        {"pm_id": "pm_dev_expired", "profile": "visa_expired", "is_default": false, "nickname": "Expired card"}
+      ],
+      "addresses": [
+        {"address_id": "adr_dev_home", "name": "Dev Patel", "line1": "808 Ross Ave", "line2": null,
+         "city": "Dallas", "region": "TX", "postal_code": "75201", "store_id": "2231",
+         "instructions": null, "is_default": true}
+      ]
+    },
+    {
+      "account_id": "acct_rosa",
+      "name": "Rosa Nguyen",
+      "email": "rosa@example.invalid",
+      "label": "split tender: EBT SNAP balance plus a debit card with a low demo balance",
+      "prefs": {"dietary": [], "brands": [], "store_id": "5360", "household_size": 5},
+      "payment_methods": [
+        {"pm_id": "pm_rosa_ebt", "kind": "ebt_snap", "balance": 60.00, "is_default": true, "nickname": "EBT SNAP $60"},
+        {"pm_id": "pm_rosa_debit", "profile": "visa_debit_insufficient", "is_default": false, "nickname": "Debit (low balance)"}
+      ],
+      "addresses": [
+        {"address_id": "adr_rosa_home", "name": "Rosa Nguyen", "line1": "77 N First St", "line2": null,
+         "city": "San Jose", "region": "CA", "postal_code": "95113", "store_id": "5360",
+         "instructions": "Call on arrival", "is_default": true}
+      ]
+    }
+  ]
+}

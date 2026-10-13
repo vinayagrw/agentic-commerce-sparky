@@ -1,0 +1,42 @@
+# Azure ML job for technique 12: DPO preference tuning of the Sparky rewriter
+# Submit with ONE command from this directory:
+#     az ml job create -f job.yml --resource-group <rg> --workspace-name <ws>
+#
+# Prerequisites: `az extension add -n ml`, an AML compute cluster named below, and the ESCI
+# parquet files registered as the data asset `sparky_esci` (scripts/fetch_data.py produces them).
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+experiment_name: sparky-sota-12
+display_name: sota-12-dpo
+description: >-
+  DPO preference tuning of the Sparky rewriter. See README.md for the GPU SKU, the cost arithmetic and the expected result.
+
+# `code` is the whole training/ tree so that common/ and this directory ship together.
+code: ../
+command: >-
+  python 12_dpo/train_dpo.py
+  --model azureml://.../tail-rewriter-lora --beta 0.1
+  --output-dir ${{outputs.model}}
+
+environment:
+  image: mcr.microsoft.com/azureml/curated/acpt-pytorch-2.2-cuda12.1:latest
+  conda_file: null
+
+inputs:
+  esci:
+    type: uri_folder
+    path: azureml:sparky_esci@latest
+    mode: ro_mount
+
+outputs:
+  model:
+    type: uri_folder
+
+environment_variables:
+  SPARKY_DATA_DIR: ${{inputs.esci}}
+  MLFLOW_EXPERIMENT_NAME: sparky-sota-12
+
+compute: azureml:gpu-12
+resources:
+  instance_count: 1
+  # SKU: 1x NVIDIA A100 80GB (Azure Standard_NC24ads_A100_v4 / GCP a2-ultragpu-1g)
+  # set the cluster's vm_size to Standard_NC24ads_A100_v4

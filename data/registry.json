@@ -1,0 +1,1964 @@
+{
+  "versions": {
+    "v1": {
+      "version": "v1",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 60,
+        "w_bm25": 1.0,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "65ee9275e69c",
+      "created_at": 1789512145.014,
+      "status": "retired",
+      "note": "baseline: bge-small + BM25, RRF k=60, MiniLM-L6 rerank top-50",
+      "parent": null,
+      "actor": "api",
+      "metrics": {
+        "test_ndcg10": 0.6027,
+        "test_p95_ms": 113.0
+      },
+      "mlflow": {
+        "run_id": "1627542544a4469dacc6a62c7fd68791",
+        "model_version": 1,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v2": {
+      "version": "v2",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 60,
+        "w_bm25": 1.0,
+        "w_vector": 1.0,
+        "reranker": false,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "e45181d906e4",
+      "created_at": 1789512187.231,
+      "status": "candidate",
+      "note": "worse candidate (reranker off) \u2014 demo toggle",
+      "parent": "v1",
+      "actor": "remediation-agent",
+      "metrics": {
+        "test_ndcg10": 0.5725,
+        "test_mrr": 0.7436,
+        "test_ndcg10_delta_vs_v1": -0.03018,
+        "test_ndcg10_delta_ci_low": -0.05562,
+        "test_p95_ms": 16.4,
+        "test_ndcg10_delta_vs_v4": -0.03428
+      },
+      "mlflow": {
+        "run_id": "6d35a4ee86b849e3af525e1d5b72d9c9",
+        "model_version": 2,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v3": {
+      "version": "v3",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 60,
+        "w_bm25": 1.0,
+        "w_vector": 1.3,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "3797ad171cf2",
+      "created_at": 1789512206.261,
+      "status": "retired",
+      "note": "remediation reweight_rrf",
+      "parent": "v1",
+      "actor": "remediation-agent",
+      "metrics": {
+        "test_ndcg10": 0.6075,
+        "test_mrr": 0.7931,
+        "test_ndcg10_delta_vs_v1": 0.00474,
+        "test_ndcg10_delta_ci_low": -0.00086,
+        "test_p95_ms": 97.9,
+        "test_ndcg10_delta_vs_v4": 0.00064
+      },
+      "mlflow": {
+        "run_id": "664f00a338a7400eb66addc7463aa3a5",
+        "model_version": 3,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v4": {
+      "version": "v4",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 60,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "26613e38b495",
+      "created_at": 1789520170.181,
+      "status": "champion",
+      "note": "adjust_rrf_weights for alr-9cb3edee (rem-af15f71f, apr-54032951)",
+      "parent": "v3",
+      "actor": "retrain-agent",
+      "metrics": {
+        "test_ndcg10": 0.6063,
+        "test_mrr": 0.7938,
+        "test_ndcg10_delta_vs_v3": -0.00064,
+        "test_ndcg10_delta_ci_low": -0.00208,
+        "test_p95_ms": 117.5,
+        "dev_ndcg10": 0.6666,
+        "dev_p95_ms": 108.3
+      },
+      "mlflow": {
+        "run_id": "ae5bd7babb574e8b95926282adf98472",
+        "model_version": 4,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v5": {
+      "version": "v5",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 60,
+        "w_bm25": 1.0,
+        "w_vector": 1.0,
+        "reranker": false,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {
+          "back to school": [
+            "school supplies"
+          ],
+          "backpack": [
+            "bookbag",
+            "school bag"
+          ],
+          "lunch box": [
+            "lunchbox",
+            "bento"
+          ],
+          "christmas": [
+            "holiday",
+            "xmas"
+          ],
+          "xmas": [
+            "christmas"
+          ],
+          "halloween": [
+            "costume"
+          ],
+          "notebook": [
+            "composition book"
+          ]
+        }
+      },
+      "config_hash": "405884dbeb00",
+      "created_at": 1789520422.602,
+      "status": "candidate",
+      "note": "seasonal_synonyms for alr-0cf5e9f6 (rem-7a607908, apr-67bfa374) [presenter toggle: reranker OFF, expected to fail the gate]",
+      "parent": "v4",
+      "actor": "retrain-agent",
+      "metrics": {
+        "test_ndcg10": 0.572,
+        "test_mrr": 0.7403,
+        "test_ndcg10_delta_vs_v4": -0.03486,
+        "test_ndcg10_delta_ci_low": -0.05623,
+        "test_p95_ms": 10.2
+      },
+      "mlflow": {
+        "run_id": "99d61d717c9a40818ff63f942bc514d4",
+        "model_version": 5,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v6": {
+      "version": "v6",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 60,
+        "w_bm25": 1.0,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {
+          "back to school": [
+            "school supplies"
+          ],
+          "backpack": [
+            "bookbag",
+            "school bag"
+          ],
+          "lunch box": [
+            "lunchbox",
+            "bento"
+          ],
+          "christmas": [
+            "holiday",
+            "xmas"
+          ],
+          "xmas": [
+            "christmas"
+          ],
+          "halloween": [
+            "costume"
+          ],
+          "notebook": [
+            "composition book"
+          ]
+        }
+      },
+      "config_hash": "5cbf2eed14b6",
+      "created_at": 1789521932.823,
+      "status": "candidate",
+      "note": "seasonal_synonyms for alr-0eb0966e (rem-7a4aff05, apr-eaa7f392)",
+      "parent": "v4",
+      "actor": "retrain-agent",
+      "metrics": {
+        "test_ndcg10": 0.6027,
+        "test_mrr": 0.788,
+        "test_ndcg10_delta_vs_v4": -0.0041,
+        "test_ndcg10_delta_ci_low": -0.01145,
+        "test_p95_ms": 94.3
+      },
+      "mlflow": {
+        "run_id": "28d8e0e668b64592aab45537c7d985dd",
+        "model_version": 6,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v7": {
+      "version": "v7",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 40,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "ce458580d139",
+      "created_at": 1789525765.115,
+      "status": "candidate",
+      "note": "timing probe",
+      "parent": "v4",
+      "actor": "probe",
+      "metrics": {
+        "dev_ndcg10": 0.6499,
+        "dev_mrr": 0.8023,
+        "dev_ndcg10_delta_vs_v4": -0.00103,
+        "dev_ndcg10_delta_ci_low": -0.00389,
+        "dev_p95_ms": 223.1
+      },
+      "mlflow": {
+        "run_id": "188bbdf716aa41d5b18cfbbd66a52c4f",
+        "model_version": 7,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v8": {
+      "version": "v8",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 20,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "afc803732cba",
+      "created_at": 1789526149.243,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 1: rrf_k: 60 -> 20",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6493,
+        "dev_mrr": 0.8023,
+        "dev_ndcg10_delta_vs_v4": -0.00163,
+        "dev_ndcg10_delta_ci_low": -0.0056,
+        "dev_p95_ms": 133.5
+      },
+      "mlflow": {
+        "run_id": "685f8c30a7fa4f1093abcc740448f712",
+        "model_version": 8,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v9": {
+      "version": "v9",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 40,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "ce458580d139",
+      "created_at": 1789526161.175,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 2: rrf_k: 20 -> 40",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6499,
+        "dev_mrr": 0.8023,
+        "dev_ndcg10_delta_vs_v4": -0.00103,
+        "dev_ndcg10_delta_ci_low": -0.00389,
+        "dev_p95_ms": 223.1
+      },
+      "mlflow": {
+        "run_id": "746a6e6913a04d0ca041434b8037c689",
+        "model_version": 9,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v10": {
+      "version": "v10",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 90,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "bd635a74fbbd",
+      "created_at": 1789526161.34,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 3: rrf_k: 40 -> 90",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6496,
+        "dev_mrr": 0.8025,
+        "dev_ndcg10_delta_vs_v4": -0.00133,
+        "dev_ndcg10_delta_ci_low": -0.00362,
+        "dev_p95_ms": 129.6
+      },
+      "mlflow": {
+        "run_id": "e53df5198a874a9a8b83abcb96d6bb3d",
+        "model_version": 10,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v11": {
+      "version": "v11",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 120,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "36bd98dcbf62",
+      "created_at": 1789526172.649,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 4: rrf_k: 40 -> 120",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6501,
+        "dev_mrr": 0.8025,
+        "dev_ndcg10_delta_vs_v4": -0.00084,
+        "dev_ndcg10_delta_ci_low": -0.00314,
+        "dev_p95_ms": 166.7,
+        "test_ndcg10": 0.6082,
+        "test_mrr": 0.7998,
+        "test_ndcg10_delta_vs_v4": 0.00134,
+        "test_ndcg10_delta_ci_low": -0.00193,
+        "test_p95_ms": 187.2
+      },
+      "mlflow": {
+        "run_id": "4e05fb974cb14f83a8e9ce5efb07a218",
+        "model_version": 11,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v12": {
+      "version": "v12",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 120,
+        "w_bm25": 0.5,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "c07038c74f0b",
+      "created_at": 1789526186.059,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 5: w_bm25: 0.7 -> 0.5",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6495,
+        "dev_mrr": 0.8025,
+        "dev_ndcg10_delta_vs_v4": -0.00146,
+        "dev_ndcg10_delta_ci_low": -0.00412,
+        "dev_p95_ms": 180.9
+      },
+      "mlflow": {
+        "run_id": "ce7a501efe454e1d883d58d99c166c3d",
+        "model_version": 12,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v13": {
+      "version": "v13",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 120,
+        "w_bm25": 1.0,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "e6f1002835ac",
+      "created_at": 1789526203.196,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 6: w_bm25: 0.7 -> 1.0",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6491,
+        "dev_mrr": 0.8021,
+        "dev_ndcg10_delta_vs_v4": -0.00186,
+        "dev_ndcg10_delta_ci_low": -0.00482,
+        "dev_p95_ms": 208.4
+      },
+      "mlflow": {
+        "run_id": "75ff7012b3014c4284806a94ef7741c6",
+        "model_version": 13,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v14": {
+      "version": "v14",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 120,
+        "w_bm25": 1.3,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "c928417f548b",
+      "created_at": 1789526220.521,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 7: w_bm25: 0.7 -> 1.3",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6485,
+        "dev_mrr": 0.803,
+        "dev_ndcg10_delta_vs_v4": -0.00247,
+        "dev_ndcg10_delta_ci_low": -0.00779,
+        "dev_p95_ms": 215.0
+      },
+      "mlflow": {
+        "run_id": "be0dde0aaa724d6daef0ebf771f49aaa",
+        "model_version": 14,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v15": {
+      "version": "v15",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 120,
+        "w_bm25": 0.7,
+        "w_vector": 0.7,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "999eda06b16d",
+      "created_at": 1789526238.45,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 8: w_vector: 1.0 -> 0.7",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6491,
+        "dev_mrr": 0.8021,
+        "dev_ndcg10_delta_vs_v4": -0.00186,
+        "dev_ndcg10_delta_ci_low": -0.00482,
+        "dev_p95_ms": 224.8
+      },
+      "mlflow": {
+        "run_id": "3dc450a3a5ee4702a501d57282d6b544",
+        "model_version": 15,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v16": {
+      "version": "v16",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 120,
+        "w_bm25": 0.7,
+        "w_vector": 1.3,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "3f053ad2299f",
+      "created_at": 1789526257.575,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 9: w_vector: 1.0 -> 1.3",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6495,
+        "dev_mrr": 0.8025,
+        "dev_ndcg10_delta_vs_v4": -0.00146,
+        "dev_ndcg10_delta_ci_low": -0.00412,
+        "dev_p95_ms": 308.4
+      },
+      "mlflow": {
+        "run_id": "aecedaf6b238477b97f9b2ded31ae342",
+        "model_version": 16,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v17": {
+      "version": "v17",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 120,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 25,
+        "synonyms": {}
+      },
+      "config_hash": "8d711d75b470",
+      "created_at": 1789526281.099,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 10: rerank_depth: 50 -> 25",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6424,
+        "dev_mrr": 0.8018,
+        "dev_ndcg10_delta_vs_v4": -0.00855,
+        "dev_ndcg10_delta_ci_low": -0.01697,
+        "dev_p95_ms": 132.4
+      },
+      "mlflow": {
+        "run_id": "cad0ec4237cf4905acf51ab7db239ea9",
+        "model_version": 17,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v18": {
+      "version": "v18",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 20,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "afc803732cba",
+      "created_at": 1789526591.55,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 1: rrf_k: 60 -> 20",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6493,
+        "dev_mrr": 0.8023,
+        "dev_ndcg10_delta_vs_v4": -0.00163,
+        "dev_ndcg10_delta_ci_low": -0.0056,
+        "dev_p95_ms": 133.5
+      },
+      "mlflow": {
+        "run_id": "a0b9abc347c247868ee1f95296429f2f",
+        "model_version": 18,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v19": {
+      "version": "v19",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 40,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "ce458580d139",
+      "created_at": 1789526591.766,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 2: rrf_k: 20 -> 40",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6499,
+        "dev_mrr": 0.8023,
+        "dev_ndcg10_delta_vs_v4": -0.00103,
+        "dev_ndcg10_delta_ci_low": -0.00389,
+        "dev_p95_ms": 223.1
+      },
+      "mlflow": {
+        "run_id": "57bf411c9f1b4d7c85c16aa68a491978",
+        "model_version": 19,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v20": {
+      "version": "v20",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 90,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "bd635a74fbbd",
+      "created_at": 1789526591.927,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 3: rrf_k: 40 -> 90",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6496,
+        "dev_mrr": 0.8025,
+        "dev_ndcg10_delta_vs_v4": -0.00133,
+        "dev_ndcg10_delta_ci_low": -0.00362,
+        "dev_p95_ms": 129.6
+      },
+      "mlflow": {
+        "run_id": "794e74016a9043d1a9e8257730dda276",
+        "model_version": 20,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v21": {
+      "version": "v21",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 120,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "36bd98dcbf62",
+      "created_at": 1789526592.086,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 4: rrf_k: 40 -> 120",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6501,
+        "dev_mrr": 0.8025,
+        "dev_ndcg10_delta_vs_v4": -0.00084,
+        "dev_ndcg10_delta_ci_low": -0.00314,
+        "dev_p95_ms": 166.7,
+        "test_ndcg10": 0.6082,
+        "test_mrr": 0.7998,
+        "test_ndcg10_delta_vs_v4": 0.00134,
+        "test_ndcg10_delta_ci_low": -0.00193,
+        "test_p95_ms": 187.2
+      },
+      "mlflow": {
+        "run_id": "5a213d8634cb46058fc44023b4c7c9e2",
+        "model_version": 21,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v22": {
+      "version": "v22",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 120,
+        "w_bm25": 0.5,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "c07038c74f0b",
+      "created_at": 1789526592.278,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 5: w_bm25: 0.7 -> 0.5",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6495,
+        "dev_mrr": 0.8025,
+        "dev_ndcg10_delta_vs_v4": -0.00146,
+        "dev_ndcg10_delta_ci_low": -0.00412,
+        "dev_p95_ms": 180.9
+      },
+      "mlflow": {
+        "run_id": "9737fff87f45408e8e4292892731abcd",
+        "model_version": 22,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v23": {
+      "version": "v23",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 120,
+        "w_bm25": 1.0,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "e6f1002835ac",
+      "created_at": 1789526592.441,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 6: w_bm25: 0.7 -> 1.0",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6491,
+        "dev_mrr": 0.8021,
+        "dev_ndcg10_delta_vs_v4": -0.00186,
+        "dev_ndcg10_delta_ci_low": -0.00482,
+        "dev_p95_ms": 208.4
+      },
+      "mlflow": {
+        "run_id": "3fd5693ac8894ecc992cf4094fad0bf2",
+        "model_version": 23,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v24": {
+      "version": "v24",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 120,
+        "w_bm25": 1.3,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "c928417f548b",
+      "created_at": 1789526592.595,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 7: w_bm25: 0.7 -> 1.3",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6485,
+        "dev_mrr": 0.803,
+        "dev_ndcg10_delta_vs_v4": -0.00247,
+        "dev_ndcg10_delta_ci_low": -0.00779,
+        "dev_p95_ms": 215.0
+      },
+      "mlflow": {
+        "run_id": "31cc4629141c4e0e8e769f8ccdd95cc7",
+        "model_version": 24,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v25": {
+      "version": "v25",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 120,
+        "w_bm25": 0.7,
+        "w_vector": 0.7,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "999eda06b16d",
+      "created_at": 1789526592.751,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 8: w_vector: 1.0 -> 0.7",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6491,
+        "dev_mrr": 0.8021,
+        "dev_ndcg10_delta_vs_v4": -0.00186,
+        "dev_ndcg10_delta_ci_low": -0.00482,
+        "dev_p95_ms": 224.8
+      },
+      "mlflow": {
+        "run_id": "d0e730b5c510491390f1dc77e588b9e3",
+        "model_version": 25,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v26": {
+      "version": "v26",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 120,
+        "w_bm25": 0.7,
+        "w_vector": 1.3,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "3f053ad2299f",
+      "created_at": 1789526592.914,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 9: w_vector: 1.0 -> 1.3",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6495,
+        "dev_mrr": 0.8025,
+        "dev_ndcg10_delta_vs_v4": -0.00146,
+        "dev_ndcg10_delta_ci_low": -0.00412,
+        "dev_p95_ms": 308.4
+      },
+      "mlflow": {
+        "run_id": "31aef1b549734d05b96a582d2693d386",
+        "model_version": 26,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v27": {
+      "version": "v27",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 120,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 25,
+        "synonyms": {}
+      },
+      "config_hash": "8d711d75b470",
+      "created_at": 1789526593.07,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 10: rerank_depth: 50 -> 25",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6424,
+        "dev_mrr": 0.8018,
+        "dev_ndcg10_delta_vs_v4": -0.00855,
+        "dev_ndcg10_delta_ci_low": -0.01697,
+        "dev_p95_ms": 132.4
+      },
+      "mlflow": {
+        "run_id": "7cf5cc9e62dc4523947cc9da788b6840",
+        "model_version": 27,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v28": {
+      "version": "v28",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 60,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "26613e38b495",
+      "created_at": 1789526990.012,
+      "status": "candidate",
+      "note": "technique 32: timing a real rebuild of the champion config (v4)",
+      "parent": "v4",
+      "actor": "cost-measurement",
+      "metrics": {},
+      "mlflow": {
+        "run_id": "620e6fba63394dffb0d2221cdba95465",
+        "model_version": 28,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v29": {
+      "version": "v29",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 60,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "26613e38b495",
+      "created_at": 1789527026.068,
+      "status": "candidate",
+      "note": "technique 32: timing a real rebuild of the champion config (v4)",
+      "parent": "v4",
+      "actor": "cost-measurement",
+      "metrics": {},
+      "mlflow": {
+        "run_id": "3d22b62ab78a4599a942c0c0ecbfa97f",
+        "model_version": 29,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v30": {
+      "version": "v30",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 60,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "26613e38b495",
+      "created_at": 1789527123.868,
+      "status": "candidate",
+      "note": "technique 32: timing a real rebuild of the champion config (v4)",
+      "parent": "v4",
+      "actor": "cost-measurement",
+      "metrics": {},
+      "mlflow": {
+        "run_id": "23bac4a414234091b7b7c8daa6c02439",
+        "model_version": 30,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v31": {
+      "version": "v31",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 20,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "afc803732cba",
+      "created_at": 1789527145.133,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 1: rrf_k: 60 -> 20",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6666,
+        "dev_mrr": 0.8076,
+        "dev_ndcg10_delta_vs_v4": -3e-05,
+        "dev_ndcg10_delta_ci_low": -0.00366,
+        "dev_p95_ms": 97.4
+      },
+      "mlflow": {
+        "run_id": "94b018ff010148a99874d9ed90101a01",
+        "model_version": 31,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v32": {
+      "version": "v32",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 40,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "ce458580d139",
+      "created_at": 1789527169.045,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 2: rrf_k: 20 -> 40",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6675,
+        "dev_mrr": 0.8074,
+        "dev_ndcg10_delta_vs_v4": 0.0009,
+        "dev_ndcg10_delta_ci_low": -0.00217,
+        "dev_p95_ms": 108.3,
+        "test_ndcg10": 0.6085,
+        "test_mrr": 0.7976,
+        "test_ndcg10_delta_vs_v4": 0.00167,
+        "test_ndcg10_delta_ci_low": -0.00134,
+        "test_p95_ms": 104.2
+      },
+      "mlflow": {
+        "run_id": "ee680525689e4c37bc00b9fa743f6c39",
+        "model_version": 32,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v33": {
+      "version": "v33",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 90,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "bd635a74fbbd",
+      "created_at": 1789527181.432,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 3: rrf_k: 40 -> 90",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.666,
+        "dev_mrr": 0.8075,
+        "dev_ndcg10_delta_vs_v4": -0.00068,
+        "dev_ndcg10_delta_ci_low": -0.00245,
+        "dev_p95_ms": 105.0
+      },
+      "mlflow": {
+        "run_id": "a13451cc478e4ab3b6c54ccd601c83c5",
+        "model_version": 33,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v34": {
+      "version": "v34",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 120,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "36bd98dcbf62",
+      "created_at": 1789527193.67,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 4: rrf_k: 40 -> 120",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6641,
+        "dev_mrr": 0.8053,
+        "dev_ndcg10_delta_vs_v4": -0.0025,
+        "dev_ndcg10_delta_ci_low": -0.00738,
+        "dev_p95_ms": 96.1
+      },
+      "mlflow": {
+        "run_id": "80b770be6aba48f0b2ca08941dc1b104",
+        "model_version": 34,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v35": {
+      "version": "v35",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 40,
+        "w_bm25": 0.5,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "79979f399fd2",
+      "created_at": 1789527205.455,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 5: w_bm25: 0.7 -> 0.5",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6659,
+        "dev_mrr": 0.8086,
+        "dev_ndcg10_delta_vs_v4": -0.00078,
+        "dev_ndcg10_delta_ci_low": -0.00359,
+        "dev_p95_ms": 103.1
+      },
+      "mlflow": {
+        "run_id": "8919bdbd268f45098087da8d49acc663",
+        "model_version": 35,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v36": {
+      "version": "v36",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 40,
+        "w_bm25": 1.0,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "992f4779b4a9",
+      "created_at": 1789527217.839,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 6: w_bm25: 0.7 -> 1.0",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6666,
+        "dev_mrr": 0.8056,
+        "dev_ndcg10_delta_vs_v4": -8e-05,
+        "dev_ndcg10_delta_ci_low": -0.00363,
+        "dev_p95_ms": 110.6
+      },
+      "mlflow": {
+        "run_id": "d6b5bcdeab7b4e6a9ae0453201bab153",
+        "model_version": 36,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v37": {
+      "version": "v37",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 40,
+        "w_bm25": 1.3,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "462fa320f98a",
+      "created_at": 1789527230.433,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 7: w_bm25: 0.7 -> 1.3",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6672,
+        "dev_mrr": 0.806,
+        "dev_ndcg10_delta_vs_v4": 0.00053,
+        "dev_ndcg10_delta_ci_low": -0.00307,
+        "dev_p95_ms": 120.4
+      },
+      "mlflow": {
+        "run_id": "ac9fb3ccb47146c19a4a7abe5d74282f",
+        "model_version": 37,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v38": {
+      "version": "v38",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 40,
+        "w_bm25": 0.7,
+        "w_vector": 0.7,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "d4510b6150b9",
+      "created_at": 1789527242.979,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 8: w_vector: 1.0 -> 0.7",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6666,
+        "dev_mrr": 0.8056,
+        "dev_ndcg10_delta_vs_v4": -8e-05,
+        "dev_ndcg10_delta_ci_low": -0.00363,
+        "dev_p95_ms": 118.3
+      },
+      "mlflow": {
+        "run_id": "a47fb0cc6a0e4ccf9aad0676cec8d2a3",
+        "model_version": 38,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v39": {
+      "version": "v39",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 40,
+        "w_bm25": 0.7,
+        "w_vector": 1.3,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "2f0ab9d2d43e",
+      "created_at": 1789527255.467,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 9: w_vector: 1.0 -> 1.3",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6649,
+        "dev_mrr": 0.8075,
+        "dev_ndcg10_delta_vs_v4": -0.00169,
+        "dev_ndcg10_delta_ci_low": -0.00396,
+        "dev_p95_ms": 116.4
+      },
+      "mlflow": {
+        "run_id": "7faed21854a34819b0d63af6a257ed57",
+        "model_version": 39,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v40": {
+      "version": "v40",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 40,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 25,
+        "synonyms": {}
+      },
+      "config_hash": "95817b43cf68",
+      "created_at": 1789527268.637,
+      "status": "candidate",
+      "note": "technique 16 MLE search trial 10: rerank_depth: 50 -> 25",
+      "parent": "v4",
+      "actor": "mle-search-agent",
+      "metrics": {
+        "dev_ndcg10": 0.6642,
+        "dev_mrr": 0.8092,
+        "dev_ndcg10_delta_vs_v4": -0.00243,
+        "dev_ndcg10_delta_ci_low": -0.01,
+        "dev_p95_ms": 67.4
+      },
+      "mlflow": {
+        "run_id": "25df575e756a45e6b9dc0fa37db076f3",
+        "model_version": 40,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v41": {
+      "version": "v41",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 60,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "26613e38b495",
+      "created_at": 1789527444.579,
+      "status": "candidate",
+      "note": "technique 32: timing a real rebuild of the champion config (v4)",
+      "parent": "v4",
+      "actor": "cost-measurement",
+      "metrics": {},
+      "mlflow": {
+        "run_id": "59bb12111c3440d9b83fc3e8f3172434",
+        "model_version": 41,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v42": {
+      "version": "v42",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 60,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "26613e38b495",
+      "created_at": 1789527481.616,
+      "status": "candidate",
+      "note": "technique 32: timing a real rebuild of the champion config (v4)",
+      "parent": "v4",
+      "actor": "cost-measurement",
+      "metrics": {},
+      "mlflow": {
+        "run_id": "f6845e14b764478a987c9ebd76255681",
+        "model_version": 42,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v43": {
+      "version": "v43",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 60,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "26613e38b495",
+      "created_at": 1789527513.277,
+      "status": "candidate",
+      "note": "technique 32: timing a real rebuild of the champion config (v4)",
+      "parent": "v4",
+      "actor": "cost-measurement",
+      "metrics": {},
+      "mlflow": {
+        "run_id": "cc05a0703f9d458aafe38948ec516159",
+        "model_version": 43,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v44": {
+      "version": "v44",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 60,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "26613e38b495",
+      "created_at": 1789570395.663,
+      "status": "candidate",
+      "note": "technique 32: timing a real rebuild of the champion config (v4)",
+      "parent": "v4",
+      "actor": "cost-measurement",
+      "metrics": {},
+      "mlflow": {
+        "run_id": "6be96282650747fca213539d98c603a0",
+        "model_version": 44,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v45": {
+      "version": "v45",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 60,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "26613e38b495",
+      "created_at": 1789570774.694,
+      "status": "candidate",
+      "note": "technique 32: timing a real rebuild of the champion config (v4)",
+      "parent": "v4",
+      "actor": "cost-measurement",
+      "metrics": {},
+      "mlflow": {
+        "run_id": "f73e50a8ce8a4e8989658ad8ecdd24c0",
+        "model_version": 45,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v46": {
+      "version": "v46",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 60,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "26613e38b495",
+      "created_at": 1789587120.007,
+      "status": "candidate",
+      "note": "technique 32: timing a real rebuild of the champion config (v4)",
+      "parent": "v4",
+      "actor": "cost-measurement",
+      "metrics": {},
+      "mlflow": {
+        "run_id": "c835c58278f142b288a67a8e2d32cfbc",
+        "model_version": 46,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v47": {
+      "version": "v47",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 60,
+        "w_bm25": 1.0,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "65ee9275e69c",
+      "created_at": 1789967471.517,
+      "status": "candidate",
+      "note": "probe",
+      "parent": "v4",
+      "actor": "api",
+      "metrics": {
+        "test_ndcg10": 0.6017,
+        "test_mrr": 0.7728,
+        "test_ndcg10_delta_vs_v4": -0.00458,
+        "test_ndcg10_delta_ci_low": -0.01181,
+        "test_p95_ms": 128.1
+      },
+      "mlflow": {
+        "run_id": "e737650c4d6343e99fa3315aa3c8056b",
+        "model_version": 50,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    },
+    "v48": {
+      "version": "v48",
+      "config": {
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "rrf_k": 60,
+        "w_bm25": 1.0,
+        "w_vector": 1.0,
+        "reranker": true,
+        "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+        "rerank_depth": 50,
+        "synonyms": {}
+      },
+      "config_hash": "65ee9275e69c",
+      "created_at": 1789967536.462,
+      "status": "candidate",
+      "note": "probe",
+      "parent": "v4",
+      "actor": "api",
+      "metrics": {
+        "test_ndcg10": 0.6017,
+        "test_mrr": 0.7728,
+        "test_ndcg10_delta_vs_v4": -0.00458,
+        "test_ndcg10_delta_ci_low": -0.01181,
+        "test_p95_ms": 105.2
+      },
+      "mlflow": {
+        "run_id": "6fee1de88b5b4a809686e4ec938ae5dd",
+        "model_version": 51,
+        "tracking_uri": "sqlite:///data/mlflow.db",
+        "registered_model": "sparky-search-ranker"
+      }
+    }
+  },
+  "champion": "v4",
+  "candidate": "v48",
+  "history": [
+    {
+      "ts": 1789512147.97,
+      "alias": "champion",
+      "from": null,
+      "to": "v1",
+      "actor": "bootstrap",
+      "reason": "initial champion"
+    },
+    {
+      "ts": 1789512187.259,
+      "alias": "candidate",
+      "from": null,
+      "to": "v2",
+      "actor": "remediation-agent",
+      "reason": "worse candidate (reranker off) \u2014 demo toggle"
+    },
+    {
+      "ts": 1789512206.431,
+      "alias": "candidate",
+      "from": "v2",
+      "to": "v3",
+      "actor": "remediation-agent",
+      "reason": "remediation reweight_rrf"
+    },
+    {
+      "ts": 1789512246.455,
+      "alias": "canary",
+      "from": "v3",
+      "to": null,
+      "actor": "guardrail-watcher",
+      "reason": "guardrail breach: canary p95 977.2ms > 150ms and > 1.2x champion p95 103.9ms"
+    },
+    {
+      "ts": 1789512252.178,
+      "alias": "champion",
+      "from": "v1",
+      "to": "v3",
+      "actor": "release-agent",
+      "reason": "canary healthy, human approved"
+    },
+    {
+      "ts": 1789520173.258,
+      "alias": "candidate",
+      "from": null,
+      "to": "v4",
+      "actor": "retrain-agent",
+      "reason": "adjust_rrf_weights for alr-9cb3edee (rem-af15f71f, apr-54032951)"
+    },
+    {
+      "ts": 1789520256.687,
+      "alias": "champion",
+      "from": "v3",
+      "to": "v4",
+      "actor": "release-agent",
+      "reason": "approved apr-e7dd9e9e"
+    },
+    {
+      "ts": 1789520422.662,
+      "alias": "candidate",
+      "from": null,
+      "to": "v5",
+      "actor": "retrain-agent",
+      "reason": "seasonal_synonyms for alr-0cf5e9f6 (rem-7a607908, apr-67bfa374) [presenter toggle: reranker OFF, expected to fail the gate]"
+    },
+    {
+      "ts": 1789521935.646,
+      "alias": "candidate",
+      "from": "v5",
+      "to": "v6",
+      "actor": "retrain-agent",
+      "reason": "seasonal_synonyms for alr-0eb0966e (rem-7a4aff05, apr-eaa7f392)"
+    },
+    {
+      "ts": 1789525772.772,
+      "alias": "candidate",
+      "from": "v6",
+      "to": "v7",
+      "actor": "probe",
+      "reason": "timing probe"
+    },
+    {
+      "ts": 1789526149.387,
+      "alias": "candidate",
+      "from": "v7",
+      "to": "v8",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 1: rrf_k: 60 -> 20"
+    },
+    {
+      "ts": 1789526161.304,
+      "alias": "candidate",
+      "from": "v8",
+      "to": "v9",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 2: rrf_k: 20 -> 40"
+    },
+    {
+      "ts": 1789526161.44,
+      "alias": "candidate",
+      "from": "v9",
+      "to": "v10",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 3: rrf_k: 40 -> 90"
+    },
+    {
+      "ts": 1789526172.738,
+      "alias": "candidate",
+      "from": "v10",
+      "to": "v11",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 4: rrf_k: 40 -> 120"
+    },
+    {
+      "ts": 1789526186.211,
+      "alias": "candidate",
+      "from": "v11",
+      "to": "v12",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 5: w_bm25: 0.7 -> 0.5"
+    },
+    {
+      "ts": 1789526203.334,
+      "alias": "candidate",
+      "from": "v12",
+      "to": "v13",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 6: w_bm25: 0.7 -> 1.0"
+    },
+    {
+      "ts": 1789526220.673,
+      "alias": "candidate",
+      "from": "v13",
+      "to": "v14",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 7: w_bm25: 0.7 -> 1.3"
+    },
+    {
+      "ts": 1789526238.595,
+      "alias": "candidate",
+      "from": "v14",
+      "to": "v15",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 8: w_vector: 1.0 -> 0.7"
+    },
+    {
+      "ts": 1789526257.737,
+      "alias": "candidate",
+      "from": "v15",
+      "to": "v16",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 9: w_vector: 1.0 -> 1.3"
+    },
+    {
+      "ts": 1789526281.223,
+      "alias": "candidate",
+      "from": "v16",
+      "to": "v17",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 10: rerank_depth: 50 -> 25"
+    },
+    {
+      "ts": 1789526591.732,
+      "alias": "candidate",
+      "from": "v17",
+      "to": "v18",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 1: rrf_k: 60 -> 20"
+    },
+    {
+      "ts": 1789526591.893,
+      "alias": "candidate",
+      "from": "v18",
+      "to": "v19",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 2: rrf_k: 20 -> 40"
+    },
+    {
+      "ts": 1789526592.053,
+      "alias": "candidate",
+      "from": "v19",
+      "to": "v20",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 3: rrf_k: 40 -> 90"
+    },
+    {
+      "ts": 1789526592.243,
+      "alias": "candidate",
+      "from": "v20",
+      "to": "v21",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 4: rrf_k: 40 -> 120"
+    },
+    {
+      "ts": 1789526592.408,
+      "alias": "candidate",
+      "from": "v21",
+      "to": "v22",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 5: w_bm25: 0.7 -> 0.5"
+    },
+    {
+      "ts": 1789526592.561,
+      "alias": "candidate",
+      "from": "v22",
+      "to": "v23",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 6: w_bm25: 0.7 -> 1.0"
+    },
+    {
+      "ts": 1789526592.713,
+      "alias": "candidate",
+      "from": "v23",
+      "to": "v24",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 7: w_bm25: 0.7 -> 1.3"
+    },
+    {
+      "ts": 1789526592.878,
+      "alias": "candidate",
+      "from": "v24",
+      "to": "v25",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 8: w_vector: 1.0 -> 0.7"
+    },
+    {
+      "ts": 1789526593.038,
+      "alias": "candidate",
+      "from": "v25",
+      "to": "v26",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 9: w_vector: 1.0 -> 1.3"
+    },
+    {
+      "ts": 1789526593.159,
+      "alias": "candidate",
+      "from": "v26",
+      "to": "v27",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 10: rerank_depth: 50 -> 25"
+    },
+    {
+      "ts": 1789526990.104,
+      "alias": "candidate",
+      "from": "v27",
+      "to": "v28",
+      "actor": "cost-measurement",
+      "reason": "technique 32: timing a real rebuild of the champion config (v4)"
+    },
+    {
+      "ts": 1789527026.161,
+      "alias": "candidate",
+      "from": "v28",
+      "to": "v29",
+      "actor": "cost-measurement",
+      "reason": "technique 32: timing a real rebuild of the champion config (v4)"
+    },
+    {
+      "ts": 1789527123.958,
+      "alias": "candidate",
+      "from": "v29",
+      "to": "v30",
+      "actor": "cost-measurement",
+      "reason": "technique 32: timing a real rebuild of the champion config (v4)"
+    },
+    {
+      "ts": 1789527145.237,
+      "alias": "candidate",
+      "from": "v30",
+      "to": "v31",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 1: rrf_k: 60 -> 20"
+    },
+    {
+      "ts": 1789527169.129,
+      "alias": "candidate",
+      "from": "v31",
+      "to": "v32",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 2: rrf_k: 20 -> 40"
+    },
+    {
+      "ts": 1789527181.516,
+      "alias": "candidate",
+      "from": "v32",
+      "to": "v33",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 3: rrf_k: 40 -> 90"
+    },
+    {
+      "ts": 1789527193.766,
+      "alias": "candidate",
+      "from": "v33",
+      "to": "v34",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 4: rrf_k: 40 -> 120"
+    },
+    {
+      "ts": 1789527205.541,
+      "alias": "candidate",
+      "from": "v34",
+      "to": "v35",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 5: w_bm25: 0.7 -> 0.5"
+    },
+    {
+      "ts": 1789527217.927,
+      "alias": "candidate",
+      "from": "v35",
+      "to": "v36",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 6: w_bm25: 0.7 -> 1.0"
+    },
+    {
+      "ts": 1789527230.517,
+      "alias": "candidate",
+      "from": "v36",
+      "to": "v37",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 7: w_bm25: 0.7 -> 1.3"
+    },
+    {
+      "ts": 1789527243.063,
+      "alias": "candidate",
+      "from": "v37",
+      "to": "v38",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 8: w_vector: 1.0 -> 0.7"
+    },
+    {
+      "ts": 1789527255.553,
+      "alias": "candidate",
+      "from": "v38",
+      "to": "v39",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 9: w_vector: 1.0 -> 1.3"
+    },
+    {
+      "ts": 1789527268.734,
+      "alias": "candidate",
+      "from": "v39",
+      "to": "v40",
+      "actor": "mle-search-agent",
+      "reason": "technique 16 MLE search trial 10: rerank_depth: 50 -> 25"
+    },
+    {
+      "ts": 1789527444.671,
+      "alias": "candidate",
+      "from": "v40",
+      "to": "v41",
+      "actor": "cost-measurement",
+      "reason": "technique 32: timing a real rebuild of the champion config (v4)"
+    },
+    {
+      "ts": 1789527481.702,
+      "alias": "candidate",
+      "from": "v41",
+      "to": "v42",
+      "actor": "cost-measurement",
+      "reason": "technique 32: timing a real rebuild of the champion config (v4)"
+    },
+    {
+      "ts": 1789527513.362,
+      "alias": "candidate",
+      "from": "v42",
+      "to": "v43",
+      "actor": "cost-measurement",
+      "reason": "technique 32: timing a real rebuild of the champion config (v4)"
+    },
+    {
+      "ts": 1789570398.573,
+      "alias": "candidate",
+      "from": "v43",
+      "to": "v44",
+      "actor": "cost-measurement",
+      "reason": "technique 32: timing a real rebuild of the champion config (v4)"
+    },
+    {
+      "ts": 1789570774.81,
+      "alias": "candidate",
+      "from": "v44",
+      "to": "v45",
+      "actor": "cost-measurement",
+      "reason": "technique 32: timing a real rebuild of the champion config (v4)"
+    },
+    {
+      "ts": 1789587121.298,
+      "alias": "candidate",
+      "from": "v45",
+      "to": "v46",
+      "actor": "cost-measurement",
+      "reason": "technique 32: timing a real rebuild of the champion config (v4)"
+    },
+    {
+      "ts": 1789967476.0,
+      "alias": "candidate",
+      "from": "v46",
+      "to": "v47",
+      "actor": "api",
+      "reason": "probe"
+    },
+    {
+      "ts": 1789967539.924,
+      "alias": "candidate",
+      "from": "v47",
+      "to": "v48",
+      "actor": "api",
+      "reason": "probe"
+    }
+  ]
+}

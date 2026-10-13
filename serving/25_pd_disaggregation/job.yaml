@@ -1,0 +1,34 @@
+# Vertex AI CustomJob for technique 25: Prefill/decode disaggregation + KV tiering
+# Submit with ONE command from this directory:
+#     gcloud ai custom-jobs create --region=us-central1 \
+#         --display-name=sota-25-pd-disaggregation --config=job.yaml
+#
+# Prerequisites: a container image in Artifact Registry built from requirements.txt, and the
+# ESCI parquet files in GCS at gs://<bucket>/sparky/data (scripts/fetch_data.py produces them).
+workerPoolSpecs:
+  - machineSpec:
+      machineType: a3-highgpu-8g
+      acceleratorType: NVIDIA_H100_80GB
+      acceleratorCount: 16
+    replicaCount: 1
+    diskSpec:
+      bootDiskType: pd-ssd
+      bootDiskSizeGb: 500
+    containerSpec:
+      imageUri: us-central1-docker.pkg.dev/PROJECT_ID/sparky/sota-25:latest
+      command: ["python", "serving/25_pd_disaggregation/run_pd.py"]
+      args:
+        - "--up"
+        - "--model"
+        - "/models/sparky-answer-70b-fp8"
+        # this entrypoint writes no output artefact; it starts a server
+      env:
+        - name: SPARKY_DATA_DIR
+          value: "/gcs/BUCKET/sparky/data"
+        - name: MLFLOW_EXPERIMENT_NAME
+          value: "sparky-sota-25"
+
+baseOutputDirectory:
+  outputUriPrefix: gs://BUCKET/sparky/out/sota-25-pd-disaggregation
+
+# SKU: 2x 8-GPU H100 80GB nodes with RDMA (Azure ND96isr_H100_v5 InfiniBand / GCP a3-highgpu-8g GPUDirect-RDMA): 1 prefill pool + 1 decode pool

@@ -1,0 +1,413 @@
+import Fastify from "fastify";
+import cors from "@fastify/cors";
+import { config, ROOT } from "./config.js";
+import { existsSync, readFileSync, statSync } from "node:fs";
+import { join } from "node:path";
+import { aguiBridgeFor, stopRun, saveUpload } from "./agui/bridge.js";
+import { randomUUID } from "node:crypto";
+import { OPS_UI_HINTS } from "@sparky/shared";
+import { auditLog, decideApproval, executeRunbook, gatePreregisteredCandidate, injectLatency, isOpsUnavailable, recordLabelReviews, registry, tokenReport, watchAlerts } from "./ops/opsClient.js";
+import { finopsRouter } from "./ops/finops.js";
+import { applyOpsResult, uiOf } from "./ops/reducer.js";
+import { buildOpsA2ui } from "./ops/a2uiOps.js";
+import { registerCopilotRuntime } from "./copilotRuntime.js";
+import { diag, outageLine, outagesFor } from "./diag.js";
+import { getThread, listThreads } from "./agui/threadStore.js";
+import { agentFeed, execHumanAction, isUnavailable, ndcg, search, shop } from "./shop/client.js";
+import { applyToolResult } from "./agui/stateReducer.js";
+import * as metrics from "./metrics.js";
+import { read as readPolicyEvents } from "./policyEvents.js";
+import { route as routeQuery, routerReport } from "./ops/router.js";
+import { exportSessions, judgeAgreement } from "./ops/onlineEval.js";
+import { listRuns, readRun, recording } from "./replay/eventLog.js";
+import { injectLatencyMs } from "./ops/gateConfig.js";
+import { startTracing, status as otelStatus, stopTracing } from "./otel.js";
+import { noteHitlDecided, traceForRun } from "./trace/store.js";
+import { registerTraceRoutes } from "./trace/routes.js";
+import { registerTokenRoutes } from "./tokens/routes.js";
+import { registerGuideRoutes } from "./guide/features.js";
+import { registerSpecResultsRoutes } from "./guide/specResults.js";
+import { registerSessionRoutes } from "./session/routes.js";
+import { registerAccountRoutes } from "./session/accountRoutes.js";
+import { registerAssistRoutes, startWatchTimer } from "./assist/routes.js";
+
+// Technique 29: OTel GenAI tracing. Off unless OTEL_ENABLED=1, so the normal path is unchanged.
+const tracing = await startTracing();
+
+const app = Fastify({ logger: { level: process.env.LOG_LEVEL ?? "info" }, bodyLimit: 12 * 1024 * 1024 });
+await app.register(cors, { origin: config.corsOrigin });
+
+app.get("/api/health", async () => ({ ok: true, service: "bff" }));
+
+/** The health gate the web app polls. `outages` is what the red banners render. */
+app.get("/api/diag", async (req) => {
+  const d = await diag((req.query as any)?.fresh === "1");
+  const shopper = outagesFor("shopper", d);
+  const ops = outagesFor("ops", d);
+  return {
+    ...d,
+    outages: { shopper, ops },
+    banners: { shopper: shopper.map(outageLine), ops: ops.map(outageLine) },
+  };
+});
+
+// B14: every AG-UI run is also recorded (additive tap on the SSE stream; the bridge is unchanged).
+app.post("/api/agui", recording("shopper", aguiBridgeFor("shopper")));
+app.post("/api/agui/ops", recording("ops", aguiBridgeFor("ops")));
+/** Stop generating: aborts the live CLI run for a thread (the CopilotKit proxy does not forward a client disconnect). */
+app.post("/api/agui/stop", async (req) => {
+  const { threadId } = (req.body ?? {}) as { threadId?: string };
+  return { ok: true, stopped: threadId ? stopRun(String(threadId)) : false };
+});
+
+/** B14: recorded AG-UI runs for operator replay. A replay only ever shows recorded events. */
+app.get("/api/replay/runs", async (req) => {
+  const q = (req.query ?? {}) as Record<string, string>;
+  return { runs: listRuns(Number(q.limit ?? 50)), provenance: { service: "bff", endpoint: "GET /api/replay/runs", timestamp: new Date().toISOString(), note: "data/agui_runs/index.jsonl: one row per recorded run" } };
+});
+app.get("/api/replay/runs/:id", async (req, reply) => {
+  const r = readRun(String((req.params as any).id));
+  if (!r) return reply.code(404).send({ error: "No recorded run with that id. Only runs streamed through this BFF since recording was added exist." });
+  return { ...r, trace_id: traceForRun((req.params as any).id)?.traceId ?? null, provenance: { service: "bff", endpoint: "GET /api/replay/runs/:id", timestamp: new Date().toISOString(), note: "recorded AG-UI events, replayed verbatim" } };
+});
+await registerCopilotRuntime(app);
+
+// Wave 0 storefront: shared site/chat session, catalogue reads, operator triage.
+registerSessionRoutes(app);
+registerAccountRoutes(app);
+registerAssistRoutes(app);
+startWatchTimer();
+
+app.get("/api/threads", async () => listThreads());
+app.get("/api/threads/:id/state", async (req) => getThread((req.params as any).id).state);
+
+/** Measured run metrics: what the FinOps view is computed from. */
+app.get("/api/metrics", async () => ({ ...metrics.all(), provenance: { service: "bff", endpoint: "GET /api/metrics", timestamp: new Date().toISOString(), note: "sampled from real runs in this process" } }));
+
+/**
+ * The technique coverage board: data/coverage.json, generated by scripts/build_coverage.py.
+ * Served verbatim with a provenance block. If the file is missing or unreadable the BFF
+ * refuses; it never substitutes a bundled or partial board.
+ */
+app.get("/api/coverage", async (_req, reply) => {
+  const path = join(ROOT, "data", "coverage.json");
+  const refuse = (detail: string) =>
+    reply.code(503).send({
+      error: `The coverage board is unavailable: ${detail}. Nothing is shown in its place.`,
+      service: "bff",
+      endpoint: "GET /api/coverage",
+      fix: "make smoke-sota",
+    });
+  if (!existsSync(path)) return refuse("data/coverage.json does not exist");
+  let board: any;
+  try {
+    board = JSON.parse(readFileSync(path, "utf8"));
+  } catch (e) {
+    return refuse(`data/coverage.json could not be parsed (${(e as Error).message})`);
+  }
+  if (!Array.isArray(board?.techniques) || !board?.tally) return refuse("data/coverage.json has no techniques[] or tally");
+  const fileMtime = statSync(path).mtime.toISOString();
+  return {
+    ...board,
+    provenance: {
+      service: "bff",
+      endpoint: "GET /api/coverage",
+      timestamp: new Date().toISOString(),
+      source: "data/coverage.json",
+      generated_by: board.generated_by ?? null,
+      // The file carries no generated_at of its own; say so rather than invent one.
+      generated_at: board.generated_at ?? null,
+      file_mtime: fileMtime,
+      note: board.generated_at ? `generated ${board.generated_at}` : `file has no generated_at; file last written ${fileMtime}`,
+    },
+  };
+});
+
+/** The policy-mcp decision log: every allowed and refused tool call. */
+app.get("/api/policy/events", async (req) => {
+  const q = (req.query ?? {}) as Record<string, string>;
+  return { events: readPolicyEvents({ sessionId: q.session_id, limit: Number(q.limit ?? 100) }) };
+});
+
+/** HITL: A2UI Button actions post back here (substitute accept/reject, mandate approve/reject, add to cart). */
+app.post("/api/a2ui/action", async (req, reply) => {
+  const { threadId, name, context = {} } = (req.body ?? {}) as { threadId?: string; name?: string; context?: Record<string, any> };
+  if (!threadId || !name) return reply.code(400).send({ error: "threadId and name required" });
+  const ctx = getThread(threadId);
+  let result: any;
+  let message = "";
+  if (name.startsWith("ops_") || name === "label_submit") return opsAction(threadId, name, context);
+  switch (name) {
+    case "add_to_cart":
+      result = await execHumanAction(threadId, "add_to_cart", { product_id: context.product_id, qty: Number(context.qty ?? 1), budget: ctx.state.budget ?? undefined });
+      message = result.error ? `Not added: ${result.error}` : `Added ${context.product_id} to cart.`;
+      break;
+    case "substitute_accept":
+      if (context.replaces) await execHumanAction(threadId, "remove_from_cart", { product_id: context.replaces });
+      result = await execHumanAction(threadId, "add_to_cart", { product_id: context.product_id, qty: 1, budget: ctx.state.budget ?? undefined });
+      message = result.error ? `Substitute failed: ${result.error}` : `Accepted substitute ${context.product_id}${context.replaces ? ` for ${context.replaces}` : ""}.`;
+      break;
+    case "substitute_reject":
+      result = { ok: true };
+      message = `Rejected substitute ${context.product_id}. Nothing changed.`;
+      break;
+    case "mandate_approve":
+    case "mandate_reject":
+      result = await execHumanAction(threadId, "approve_mandate", { mandate_id: context.mandate_id, approved: name === "mandate_approve" });
+      message = result.error ? `Mandate error: ${result.error}` : `Mandate ${result.status ?? (name === "mandate_approve" ? "approved" : "rejected")}. No payment executed.`;
+      break;
+    default:
+      return reply.code(400).send({ error: `unknown action ${name}` });
+  }
+  if (isUnavailable(result)) {
+    return reply.code(503).send({ ok: false, message: result.error, ...result });
+  }
+  applyToolResult(ctx, name.startsWith("mandate") ? "approve_mandate" : "add_to_cart", result);
+  if (name.startsWith("mandate") && ctx.state.mandate && !result.error) {
+    ctx.state.mandate.status = name === "mandate_approve" ? "approved" : "rejected";
+    const co = ctx.state.agents.find((a) => a.name === "Checkout");
+    if (co) Object.assign(co, { status: "done", note: `human ${ctx.state.mandate.status} the mandate` });
+  }
+  ctx.state.trace.push({ id: `hitl_${Date.now()}`, tool: `human:${name}`, args: context, latency_ms: 0, ok: !result?.error });
+  return { ok: !result?.error, message, result, state: ctx.state };
+});
+
+/** Build A2UI surfaces for ops results produced outside a chat run (HITL follow-ups, latency button). */
+function opsSurfaces(results: any[]) {
+  return results
+    .filter((r) => r && (OPS_UI_HINTS as string[]).includes(uiOf(r) ?? ""))
+    .map((r) => {
+      const hint = uiOf(r) as any;
+      const surfaceId = `${hint}-${randomUUID().slice(0, 8)}`;
+      return { surfaceId, hint, messages: buildOpsA2ui(hint, r, surfaceId) };
+    });
+}
+
+async function opsAction(threadId: string, name: string, context: Record<string, any>) {
+  const ctx = getThread(threadId, "ops");
+  const s = ctx.state;
+  if (name === "label_submit") {
+    const ids = String(context.item_ids ?? "").split(",").filter(Boolean);
+    const labels = String(context.labels ?? "").split(",");
+    const r = await recordLabelReviews(ids.map((item_id, i) => ({ item_id, label: labels[i] })));
+    if (isOpsUnavailable(r)) return { ok: false, message: r.error, result: r, state: s };
+    applyOpsResult(s, "record_labels", r);
+    s.trace.push({ id: `hitl_${Date.now()}`, tool: "human:label_submit", args: context, latency_ms: 0, ok: true });
+    const audit = await auditLog();
+    applyOpsResult(s, "get_audit_log", audit);
+    return { ok: true, message: `${ids.length} label(s) confirmed by a human and recorded in ops-http.`, result: r, state: s, surfaces: opsSurfaces([r]) };
+  }
+  const approved = name === "ops_approve";
+  const r = await decideApproval(String(context.approval_id), approved, context.choice ? String(context.choice) : undefined);
+  if (isOpsUnavailable(r) || (r as any).blocked) {
+    return { ok: false, message: (r as any).error, result: r, state: s };
+  }
+  const decision = r as { ok: true; approval_id: string; kind: string; status: "approved" | "rejected"; subject?: string; choice?: string };
+  const kind = String(context.kind ?? decision.kind ?? "remediation");
+  const known = s.ops.approvals.find((a) => a.approval_id === decision.approval_id);
+  const subject = decision.subject ?? known?.subject;
+  s.ops.approvals = [...s.ops.approvals.filter((a) => a.approval_id !== decision.approval_id), { approval_id: decision.approval_id, kind, status: decision.status, choice: decision.choice, subject }];
+  s.trace.push({ id: `hitl_${Date.now()}`, tool: `human:${name}`, args: context, latency_ms: 0, ok: true });
+  const audit = await auditLog();
+  applyOpsResult(s, "get_audit_log", audit);
+  if (kind === "runbook") {
+    // Phase 3 runbook executor: the human approval above is recorded in ops-http; the T2 runbook runs now, once.
+    if (!approved) return { ok: true, message: `Rejected runbook ${subject ?? ""}. Nothing ran.`, result: decision, state: s, next: null, subject };
+    const t0 = Date.now();
+    const rr: any = await executeRunbook(decision.approval_id);
+    if (isOpsUnavailable(rr) || rr?.error || rr?.detail) return { ok: false, message: `Runbook did not run: ${rr?.error ?? rr?.detail}`, result: rr, state: s };
+    applyOpsResult(s, "run_runbook", rr);
+    s.trace.push({ id: `runbook_${Date.now()}`, tool: `runbook:${subject}`, args: { approval_id: decision.approval_id }, latency_ms: Date.now() - t0, ok: Boolean(rr.ok) });
+    applyOpsResult(s, "get_audit_log", await auditLog());
+    return { ok: Boolean(rr.ok), message: `Approved and executed runbook ${subject}: ${rr.summary}`, result: rr, state: s, surfaces: opsSurfaces([rr]), next: null, subject };
+  }
+  const next = approved ? (kind === "promote" ? "release" : "build") : null;
+  const message = approved
+    ? `Approved ${kind}${decision.choice ? ` (${decision.choice})` : ""} by a human, recorded in ops-http. ${next === "build" ? "Build + eval gate starting…" : "Release starting…"}`
+    : `Rejected ${kind}. Nothing will be built or released.`;
+  return { ok: true, message, result: decision, state: s, next, subject };
+}
+
+/** Phase 3: proactive watch alerts and the cost/token dashboard (ops-mcp copilot over ops.db, search-svc, the ledger). */
+app.get("/api/ops/watch", async (_req, reply) => {
+  const r: any = await watchAlerts();
+  if (isOpsUnavailable(r)) return reply.code(503).send(r);
+  return r;
+});
+app.get("/api/ops/tokens", async (req, reply) => {
+  const r: any = await tokenReport(Number((req.query as any)?.hours ?? 168));
+  if (isOpsUnavailable(r)) return reply.code(503).send(r);
+  return r;
+});
+
+app.post("/api/ops/inject-latency", async (req, reply) => {
+  const { threadId, ms } = (req.body ?? {}) as { threadId?: string; ms?: number };
+  const configured = injectLatencyMs();
+  if (ms == null && configured == null) return reply.code(503).send({ ok: false, error: "No injected latency given and data/coverage.json has no demo_inputs.inject_latency_ms. Run make smoke-sota." });
+  const results = await injectLatency(Number(ms ?? configured));
+  if (results.some((r) => isOpsUnavailable(r))) return reply.code(503).send({ ok: false, results });
+  let state = null;
+  if (threadId) {
+    const s = getThread(threadId, "ops").state;
+    for (const r of results) applyOpsResult(s, r.provenance?.endpoint?.includes("audit") ? "get_audit_log" : "rollback", r);
+    s.trace.push({ id: `hitl_${Date.now()}`, tool: "presenter:inject_latency", args: { ms }, latency_ms: 0, ok: true });
+    state = s;
+  }
+  return { ok: true, results, state, surfaces: opsSurfaces(results) };
+});
+
+/**
+ * B08: put a real preregistered null candidate (late interaction, M22) through the release gate, live.
+ * ops-http re-measures it on search-svc with the run_eval_suite thresholds; the result is applied to the
+ * ops thread state exactly like an agent's run_eval_suite result.
+ */
+app.post("/api/ops/gate-preregistered", async (req, reply) => {
+  const { threadId, candidate } = (req.body ?? {}) as { threadId?: string; candidate?: string };
+  const r = await gatePreregisteredCandidate(String(candidate ?? "late_interaction"));
+  if (isOpsUnavailable(r) || (r as any).error) return reply.code(503).send({ ok: false, ...r });
+  let state = null;
+  if (threadId) {
+    const s = getThread(threadId, "ops").state;
+    applyOpsResult(s, "gate_preregistered_candidate", r);
+    s.trace.push({ id: `presenter_${Date.now()}`, tool: "presenter:gate_preregistered_candidate", args: { candidate }, latency_ms: Math.round(Number((r as any).seconds ?? 0) * 1000), ok: true });
+    const audit = await auditLog();
+    applyOpsResult(s, "get_audit_log", audit);
+    state = s;
+  }
+  return { ok: true, result: r, state, surfaces: opsSurfaces([r]) };
+});
+
+app.get("/api/ops/audit", async (_req, reply) => {
+  const r = await auditLog();
+  return isOpsUnavailable(r) ? reply.code(503).send(r) : r;
+});
+
+/** Live model registry from search-svc (:8801). Refuses when it is down; nothing stands in. */
+app.get("/api/ops/registry", async (_req, reply) => {
+  const r = await registry();
+  return isOpsUnavailable(r) ? reply.code(503).send(r) : r;
+});
+
+app.get("/api/ops/finops", async (_req, reply) => {
+  const r = await finopsRouter({});
+  return r.blocked ? reply.code(503).send(r) : r;
+});
+
+/**
+ * Technique 26: the router. GET drives n real queries through the cascade and the
+ * always-premium control, and reports measured p50/p95 and cost per 1k per arm.
+ */
+app.get("/api/ops/router", async (req, reply) => {
+  const q = (req.query ?? {}) as Record<string, string>;
+  const r = await routerReport({ n: Number(q.n ?? 24), control: q.control !== "0", ...(q.escalate ? { escalateThreshold: Number(q.escalate) } : {}) });
+  return (r as any).blocked ? reply.code(503).send(r) : r;
+});
+
+/** Route and execute ONE query. This is the per-request path the measurements come from. */
+app.post("/api/route", async (req, reply) => {
+  const { query, escalate } = (req.body ?? {}) as { query?: string; escalate?: number };
+  if (!query) return reply.code(400).send({ error: "query required" });
+  return routeQuery(String(query), escalate === undefined ? undefined : Number(escalate));
+});
+
+/** Technique 29: tracing status, session export, and the judge's measured agreement. */
+app.get("/api/ops/tracing", async () => ({ ...otelStatus(), startup: tracing }));
+registerTraceRoutes(app);
+registerTokenRoutes(app);
+registerGuideRoutes(app);
+registerSpecResultsRoutes(app);
+app.post("/api/ops/online-evals/export", async (_req, reply) => {
+  const r = await exportSessions();
+  return (r as any).blocked ? reply.code(503).send(r) : r;
+});
+app.get("/api/ops/online-evals/agreement", async (req, reply) => {
+  const q = (req.query ?? {}) as Record<string, string>;
+  const r = await judgeAgreement(Number(q.rate ?? 1), Number(q.max_pairs ?? 400));
+  return (r as any).blocked ? reply.code(503).send(r) : r;
+});
+
+app.post("/api/upload", async (req, reply) => {
+  const { dataUrl, name } = (req.body ?? {}) as { dataUrl?: string; name?: string };
+  try {
+    return { path: saveUpload(String(dataUrl), name) };
+  } catch (e) {
+    return reply.code(400).send({ error: String((e as Error).message) });
+  }
+});
+
+// ---- Reads that go straight to search-svc (8801) and shop-http (8802) ----
+app.get("/api/eval/ndcg", async (req, reply) => {
+  const r = await ndcg(Number((req.query as any)?.n ?? 100));
+  return isUnavailable(r) ? reply.code(503).send(r) : r;
+});
+
+/** Agent pass^k, from a real eval run. There is no bundled result to fall back to. */
+app.get("/api/eval/passk", async (_req, reply) => {
+  const r = await search("/eval/passk", { timeoutMs: 120_000 });
+  if (isUnavailable(r) || (r as any)?.error) {
+    return reply.code(503).send({
+      error: "No agent pass^k results are available. Run `make eval` to produce them; nothing is shown in the meantime.",
+      fix: "make eval",
+    });
+  }
+  return r;
+});
+
+app.get("/api/queries/sample", async (req, reply) => {
+  const r = await search(`/queries/sample?n=${Number((req.query as any)?.n ?? 12)}`);
+  return isUnavailable(r) ? reply.code(503).send(r) : r;
+});
+
+app.get("/api/cart/:sid", async (req, reply) => {
+  const r = await execHumanAction((req.params as any).sid, "get_cart", {});
+  return isUnavailable(r) ? reply.code(503).send(r) : r;
+});
+
+app.get("/api/mandates/:id", async (req, reply) => {
+  const r = await shop(`/mandates/${encodeURIComponent((req.params as any).id)}`);
+  return isUnavailable(r) ? reply.code(503).send(r) : r;
+});
+
+app.post("/api/mandates/:id/:decision", async (req, reply) => {
+  const { id, decision } = req.params as { id: string; decision: string };
+  if (!["approve", "reject"].includes(decision)) return reply.code(400).send({ error: "approve|reject" });
+  const r = await shop(`/mandates/${encodeURIComponent(id)}/${decision}`, { method: "POST" });
+  if (!isUnavailable(r)) noteHitlDecided(`mandate:${id}`, decision, { "sparky.hitl.outcome": String((r as any)?.status ?? (r as any)?.mandate?.status ?? decision) });
+  return isUnavailable(r) ? reply.code(503).send(r) : r;
+});
+
+app.get("/api/agent/feed", async (req, reply) => {
+  const q = (req.query ?? {}) as Record<string, string>;
+  const r = await agentFeed(q.variant ?? "verified", q.category ?? "Grocery", q.agent_id ?? "shopper-agent-42");
+  return isUnavailable(r) ? reply.code(503).send(r) : r;
+});
+
+app.get("/api/agent/readiness", async (req, reply) => {
+  const r = await execHumanAction("readiness", "agent_readiness_score", { category: (req.query as any)?.category ?? "Grocery" });
+  return isUnavailable(r) ? reply.code(503).send(r) : r;
+});
+
+for (const [prefix, base] of [["/api/shop", config.shopHttpUrl], ["/api/search", config.searchSvcUrl]] as const) {
+  app.all(`${prefix}/*`, async (req, reply) => {
+    const path = (req.raw.url ?? "").slice(prefix.length);
+    const { jfetch } = await import("./lib/http.js");
+    const r = await jfetch(`${base}${path}`, { method: req.method, body: ["GET", "HEAD"].includes(req.method) ? undefined : JSON.stringify(req.body ?? {}), timeoutMs: 30_000 });
+    return reply.code(r.status || 503).send(r.data ?? { error: r.error ?? `${base} unreachable — run \`make dev\`` });
+  });
+}
+
+for (const sig of ["SIGINT", "SIGTERM"] as const) {
+  process.once(sig, async () => {
+    await stopTracing();
+    await app.close();
+    process.exit(0);
+  });
+}
+
+try {
+  await app.listen({ port: config.port, host: "0.0.0.0" });
+  app.log.info(`Compass BFF on :${config.port} — live services only, policy-mcp enforces the tool path`);
+} catch (err) {
+  app.log.error(err);
+  process.exit(1);
+}

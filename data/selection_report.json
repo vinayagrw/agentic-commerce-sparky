@@ -1,0 +1,104 @@
+{
+  "generated_at": "2026-09-16T02:02:23Z",
+  "seconds": 15.1,
+  "inputs": {
+    "source": "data/products.parquet + data/embeddings.npy (bge-small-en-v1.5)",
+    "catalogue": 25003,
+    "sample": null,
+    "keep_frac": 0.4,
+    "seed": 20260915,
+    "test_queries": 200,
+    "dev_queries_for_coverage": 300,
+    "embedding_model": "BAAI/bge-small-en-v1.5",
+    "usd_per_cpu_min": 0.0017
+  },
+  "method": {
+    "score": "coverage(max cosine to a DEV query) + lambda * (1 - redundancy(mean cosine to k-NN))",
+    "lambda": 0.5,
+    "knn_k": 10,
+    "selection_seconds": 8.43,
+    "retrieval": "RRF(k=60) over BM25 + dense top-100, no cross-encoder (identical for all three arms)",
+    "eval": "NDCG@10 on held-out ESCI test queries; the test split is never used for selection",
+    "cost_model": "measured index build time + embedding time extrapolated from a measured encode rate, priced at $0.0017/CPU-minute",
+    "scoring_stats": {
+      "coverage_mean": 0.6897,
+      "redundancy_mean": 0.8434,
+      "score_mean": 0.768,
+      "lambda": 0.5,
+      "knn_k": 10,
+      "selected_coverage_mean": 0.7383,
+      "selected_redundancy_mean": 0.8335
+    }
+  },
+  "arms": [
+    {
+      "arm": "full",
+      "docs": 25003,
+      "frac_of_catalogue": 1.0,
+      "ndcg10": 0.5725,
+      "queries_scored": 200,
+      "query_p50_ms": 0.9,
+      "relevant_doc_retention": 1.0,
+      "index_build_seconds": 1.13,
+      "embedding_seconds_extrapolated": 103.3,
+      "total_build_cpu_minutes": 1.741,
+      "build_cost_usd": 0.00296
+    },
+    {
+      "arm": "selected_cluster_representative",
+      "docs": 10001,
+      "frac_of_catalogue": 0.4,
+      "ndcg10": 0.3736,
+      "queries_scored": 200,
+      "query_p50_ms": 0.4,
+      "relevant_doc_retention": 0.3901,
+      "index_build_seconds": 0.42,
+      "embedding_seconds_extrapolated": 41.3,
+      "total_build_cpu_minutes": 0.696,
+      "build_cost_usd": 0.00118
+    },
+    {
+      "arm": "selected_coverage_novelty",
+      "docs": 10001,
+      "frac_of_catalogue": 0.4,
+      "ndcg10": 0.2883,
+      "queries_scored": 200,
+      "query_p50_ms": 0.4,
+      "relevant_doc_retention": 0.3546,
+      "index_build_seconds": 0.44,
+      "embedding_seconds_extrapolated": 41.3,
+      "total_build_cpu_minutes": 0.696,
+      "build_cost_usd": 0.00118
+    },
+    {
+      "arm": "random_baseline",
+      "docs": 10001,
+      "frac_of_catalogue": 0.4,
+      "ndcg10": 0.4228,
+      "queries_scored": 200,
+      "query_p50_ms": 0.4,
+      "relevant_doc_retention": 0.3984,
+      "index_build_seconds": 0.42,
+      "embedding_seconds_extrapolated": 41.3,
+      "total_build_cpu_minutes": 0.696,
+      "build_cost_usd": 0.00118
+    }
+  ],
+  "comparison": {
+    "primary_selected_arm": "selected_cluster_representative",
+    "ndcg10_full": 0.5725,
+    "ndcg10_selected": 0.3736,
+    "ndcg10_random_baseline": 0.4228,
+    "ndcg10_selected_coverage_novelty": 0.2883,
+    "ndcg10_selected_cluster_representative": 0.3736,
+    "ndcg_delta_selected_vs_full": -0.1989,
+    "ndcg_retained_pct": 65.3,
+    "ndcg_delta_selected_vs_random": -0.0492,
+    "build_cost_usd_full": 0.00296,
+    "build_cost_usd_selected": 0.00118,
+    "build_cost_saving_pct": 60.1,
+    "build_time_saving_pct": 60.0
+  },
+  "note": "Dropping catalogue rows removes relevant documents, so some NDCG loss is arithmetically unavoidable. The honest question is how the selected subset compares with a random subset of the SAME size, which is why the random arm is reported alongside, together with each arm's relevant_doc_retention.",
+  "interpretation": "In ESCI every graded label is bound to one product_id, so a dropped relevant document cannot be substituted by a near-twin and NDCG under index pruning tracks relevant_doc_retention almost mechanically. Uniform random pruning retains exactly keep_frac of EVERY query's relevant set; a model-based scorer can only beat it by predicting which documents will be judged relevant for unseen queries. Compare the arms' relevant_doc_retention against keep_frac=0.4 to see how much signal each strategy actually carries."
+}

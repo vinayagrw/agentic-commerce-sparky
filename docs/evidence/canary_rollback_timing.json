@@ -1,0 +1,40 @@
+{
+ "measured_at": "2026-09-16 (local), main stack via make dev (search-svc 8801, ops-http 8803)",
+ "method": "Candidate v47 (w_bm25=0.7) started as a 50% canary directly on search-svc POST /canary (background simulated ESCI replay). After >=30 canary requests, POST /debug/inject_latency {ms:250}. The ops-mcp guardrail watcher inside ops-http (poll interval 2 s, OPS_GUARDRAIL_INTERVAL default) detected the breach and called POST /models/rollback unattended. Timer polled GET /canary/status every 0.1 s: t0 = injection call returned, t1 = first status rolled_back. Registry, mlflow.db and ops.db were backed up before and restored after.",
+ "runs": [
+  {
+   "run": 1,
+   "inject_to_rolled_back_s": 1.46,
+   "breach_visible_to_rolled_back_s": 0.72
+  },
+  {
+   "run": 2,
+   "inject_to_rolled_back_s": 1.14,
+   "breach_visible_to_rolled_back_s": 0.63
+  },
+  {
+   "run": 3,
+   "inject_to_rolled_back_s": 1.37,
+   "breach_visible_to_rolled_back_s": 0.73
+  }
+ ],
+ "n": 3,
+ "median_inject_to_rolled_back_s": 1.37,
+ "median_breach_to_rolled_back_s": 0.72,
+ "excluded_attempts": [
+  {
+   "inject_to_rolled_back_s": 2.42,
+   "breach_visible_to_rolled_back_s": 1.69,
+   "why_excluded": "first script attempt; valid run but the script then hung (below) and was restarted, so the series was re-run from scratch"
+  },
+  {
+   "why_excluded": "canary rolled back by the watcher before latency was injected (natural p95 188.9 ms > 150 ms and > 1.2x champion 126.2 ms on a busy CPU): a false-positive guardrail breach, no timing possible"
+  }
+ ],
+ "caveats": [
+  "Bounded by the 2 s watcher poll interval; times reflect where in the poll cycle the breach landed, n=3, no CI.",
+  "Simulated canary traffic inside search-svc on a laptop CPU; says nothing about production rollback time.",
+  "Canary was started on search-svc directly, not through the gated ops-mcp start_canary tool; only the rollback path is ops-mcp.",
+  "One unprovoked guardrail breach from CPU contention was seen in 5 attempts."
+ ]
+}

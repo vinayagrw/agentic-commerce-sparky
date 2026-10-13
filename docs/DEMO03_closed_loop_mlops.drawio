@@ -1,0 +1,90 @@
+<mxfile host="app.diagrams.net" agent="Claude">
+  <diagram id="demo03" name="DEMO03 Closed-loop MLOps">
+    <mxGraphModel dx="1422" dy="820" grid="1" gridSize="10" guides="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1500" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="banner" value="Closed-loop search quality &#183; beat 8b&lt;br&gt;&lt;font style='font-size:16px'&gt;drift &#8594; propose &#8594; approve &#8594; build &#8594; gate &#8594; canary &#8594; promote or roll back &#8594; sign, ML-BOM, audit&lt;/font&gt;" parent="1" vertex="1" style="rounded=1;arcSize=6;html=1;fillColor=#1A56C4;gradientColor=#4C8BF5;strokeColor=none;fontColor=#FFFFFF;fontSize=26;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=24;shadow=1;">
+          <mxGeometry x="60" y="40" width="1680" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ring" value="" parent="1" vertex="1" style="ellipse;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;strokeWidth=2;dashed=1;opacity=20;">
+          <mxGeometry x="180" y="180" width="1440" height="1000" as="geometry" />
+        </mxCell>
+
+        <mxCell id="hub" value="&lt;b style='font-size:16px'&gt;&#x1F3AF; Champion on search-svc&lt;/b&gt;&lt;br&gt;&lt;table cellpadding='3' style='font-size:13px;border-collapse:collapse'&gt;&lt;tr style='background:#1A56C4;color:#ffffff'&gt;&lt;td&gt;&lt;b&gt;Mode&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;b&gt;NDCG@10&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;bm25&lt;/td&gt;&lt;td&gt;0.543&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;vector&lt;/td&gt;&lt;td&gt;0.559&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;rrf&lt;/td&gt;&lt;td&gt;0.573&lt;/td&gt;&lt;/tr&gt;&lt;tr style='background:#D5E8D4'&gt;&lt;td&gt;&lt;b&gt;rrf_rerank&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;b&gt;0.603&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;font style='font-size:12px'&gt;200 held-out ESCI queries&lt;/font&gt;" parent="1" vertex="1" style="rounded=1;arcSize=8;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=14;spacingTop=8;fillColor=#FFFFFF;strokeColor=#6C8EBF;strokeWidth=2;fontColor=#1F2933;fontSize=14;shadow=1;">
+          <mxGeometry x="700" y="480" width="400" height="280" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s0" value="&#x1F4C9;&lt;br&gt;&lt;font style='font-size:15px'&gt;&lt;b&gt;1. Drift detected&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style='font-size:13px'&gt;MMD p=0.0033 &#183; T0 &#8594; T1&lt;/font&gt;" parent="1" vertex="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=72;fontColor=#1F2933;">
+          <mxGeometry x="810" y="200" width="180" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="s1" value="&#x1F9E0;&lt;br&gt;&lt;font style='font-size:15px'&gt;&lt;b&gt;2. Diagnose, propose&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style='font-size:13px'&gt;cost-aware, 2 options &#183; T1&lt;/font&gt;" parent="1" vertex="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=72;fontColor=#1F2933;">
+          <mxGeometry x="1210" y="270" width="180" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="s2" value="&#x2705;&lt;br&gt;&lt;font style='font-size:15px'&gt;&lt;b&gt;3. Human approves&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style='font-size:13px'&gt;ops-http only &#183; &lt;b&gt;T2 gate&lt;/b&gt;&lt;/font&gt;" parent="1" vertex="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=72;fontColor=#1F2933;">
+          <mxGeometry x="1370" y="540" width="180" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="s3" value="&#x1F3D7;&#xFE0F;&lt;br&gt;&lt;font style='font-size:15px'&gt;&lt;b&gt;4. Build candidate&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style='font-size:13px'&gt;registered in MLflow &#183; T2&lt;/font&gt;" parent="1" vertex="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=72;fontColor=#1F2933;">
+          <mxGeometry x="1210" y="810" width="180" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="s4" value="&#x1F6A6;&lt;br&gt;&lt;font style='font-size:15px'&gt;&lt;b&gt;5. Eval gate&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style='font-size:13px'&gt;paired bootstrap CI &#183; T3&lt;/font&gt;" parent="1" vertex="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=72;fontColor=#1F2933;">
+          <mxGeometry x="810" y="920" width="180" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="s5" value="&#x1F425;&lt;br&gt;&lt;font style='font-size:15px'&gt;&lt;b&gt;6. Canary 10%&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style='font-size:13px'&gt;guardrail watcher &#183; T3&lt;/font&gt;" parent="1" vertex="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=72;fontColor=#1F2933;">
+          <mxGeometry x="410" y="810" width="180" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="s6" value="&#x1F680;&lt;br&gt;&lt;font style='font-size:15px'&gt;&lt;b&gt;7. Promote&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style='font-size:13px'&gt;human approves &#183; &lt;b&gt;T2 gate&lt;/b&gt;&lt;/font&gt;" parent="1" vertex="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=72;fontColor=#1F2933;">
+          <mxGeometry x="250" y="540" width="180" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="s7" value="&#x1F510;&lt;br&gt;&lt;font style='font-size:15px'&gt;&lt;b&gt;8. Sign, ML-BOM, audit&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;font style='font-size:13px'&gt;CycloneDX &#183; who did what&lt;/font&gt;" parent="1" vertex="1" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=72;fontColor=#1F2933;">
+          <mxGeometry x="410" y="270" width="180" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="r0" value="" parent="1" source="s0" target="s1" edge="1" style="html=1;curved=1;endArrow=block;strokeColor=#E8732A;strokeWidth=4;flowAnimation=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r1" value="" parent="1" source="s1" target="s2" edge="1" style="html=1;curved=1;endArrow=block;strokeColor=#E8732A;strokeWidth=4;flowAnimation=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r2" value="" parent="1" source="s2" target="s3" edge="1" style="html=1;curved=1;endArrow=block;strokeColor=#E8732A;strokeWidth=4;flowAnimation=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r3" value="" parent="1" source="s3" target="s4" edge="1" style="html=1;curved=1;endArrow=block;strokeColor=#E8732A;strokeWidth=4;flowAnimation=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r4" value="PASS" parent="1" source="s4" target="s5" edge="1" style="html=1;curved=1;endArrow=block;strokeColor=#E8732A;strokeWidth=4;flowAnimation=1;fontColor=#A8500F;fontSize=14;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r5" value="healthy" parent="1" source="s5" target="s6" edge="1" style="html=1;curved=1;endArrow=block;strokeColor=#E8732A;strokeWidth=4;flowAnimation=1;fontColor=#A8500F;fontSize=14;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r6" value="" parent="1" source="s6" target="s7" edge="1" style="html=1;curved=1;endArrow=block;strokeColor=#E8732A;strokeWidth=4;flowAnimation=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r7" value="watch again" parent="1" source="s7" target="s0" edge="1" style="html=1;curved=1;endArrow=block;strokeColor=#9673A6;strokeWidth=3;dashed=1;flowAnimation=1;fontColor=#5B3A73;fontSize=14;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rad1" value="measured against the champion" parent="1" source="s4" target="hub" edge="1" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#6C8EBF;strokeWidth=3;dashed=1;flowAnimation=1;fontColor=#1A3A6B;fontSize=13;exitX=0.5;exitY=0;entryX=0.5;entryY=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rad2" value="T3 auto-rollback in 1.37 s (median, 3 runs), unattended" parent="1" source="s5" target="hub" edge="1" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#B85450;strokeWidth=4;dashed=1;flowAnimation=1;fontColor=#7A2E2C;fontSize=13;exitX=1;exitY=0.5;entryX=0;entryY=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="note_fail" value="&lt;b&gt;A failing gate stops the release&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:13px'&gt;reranker-off candidate: &#916; &#8722;0.0302,&lt;br&gt;CI [&#8722;0.0520, &#8722;0.0079] &#8594; FAIL, exit 1&lt;/font&gt;" parent="1" vertex="1" style="rounded=1;arcSize=8;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;spacingLeft=12;fillColor=#F8CECC;strokeColor=#B85450;strokeWidth=2;fontColor=#7A2E2C;fontSize=14;">
+          <mxGeometry x="1160" y="1120" width="440" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend" value="&lt;b style='font-size:16px'&gt;How to read this&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:14px'&gt;&lt;font color='#E8732A'&gt;&#9644;&#9644;&#9644;&lt;/font&gt; hero loop: one closed lifecycle pass, all eight stages&lt;br&gt;&lt;font color='#6C8EBF'&gt;&#9644; &#9644;&lt;/font&gt; measurement against the live champion&#160;&#160;&lt;font color='#B85450'&gt;&#9644; &#9644;&lt;/font&gt; guardrail rollback&lt;br&gt;&lt;font color='#9673A6'&gt;&#9644; &#9644;&lt;/font&gt; the loop closing: the promoted model is the next thing watched&lt;br&gt;Stages 3 and 7 are &lt;b&gt;human gates&lt;/b&gt; on ops-http; no agent can pass them.&lt;/font&gt;" parent="1" vertex="1" style="rounded=1;arcSize=6;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=16;spacingTop=10;fillColor=#FFFFFF;strokeColor=#9AA7B5;fontColor=#1F2933;fontSize=14;shadow=1;">
+          <mxGeometry x="60" y="1260" width="820" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="evidence" value="&lt;b style='font-size:16px'&gt;Measured on this laptop&lt;/b&gt;&lt;br&gt;&lt;table cellpadding='4' style='font-size:13px;border-collapse:collapse'&gt;&lt;tr style='background:#1A56C4;color:#ffffff'&gt;&lt;td&gt;&lt;b&gt;Signal&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;b&gt;Value&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Seasonal drift (MMD permutation)&lt;/td&gt;&lt;td&gt;p = 0.0033&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Label-free NDCG estimate&lt;/td&gt;&lt;td&gt;0.452 vs 0.682&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;w_bm25 = 0.7 candidate&lt;/td&gt;&lt;td&gt;&#916; +0.0041 PASS&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Red-team injection suite&lt;/td&gt;&lt;td&gt;8 / 8 blocked&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" parent="1" vertex="1" style="rounded=1;arcSize=6;html=1;whiteSpace=wrap;align=left;verticalAlign=top;spacingLeft=16;spacingTop=10;fillColor=#FFFFFF;strokeColor=#9AA7B5;fontColor=#1F2933;fontSize=14;shadow=1;">
+          <mxGeometry x="920" y="1260" width="820" height="200" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

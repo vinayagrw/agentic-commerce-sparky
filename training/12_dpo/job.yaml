@@ -1,0 +1,36 @@
+# Vertex AI CustomJob for technique 12: DPO preference tuning of the Sparky rewriter
+# Submit with ONE command from this directory:
+#     gcloud ai custom-jobs create --region=us-central1 \
+#         --display-name=sota-12-dpo --config=job.yaml
+#
+# Prerequisites: a container image in Artifact Registry built from requirements.txt, and the
+# ESCI parquet files in GCS at gs://<bucket>/sparky/data (scripts/fetch_data.py produces them).
+workerPoolSpecs:
+  - machineSpec:
+      machineType: a2-ultragpu-1g
+      acceleratorType: NVIDIA_A100_80GB
+      acceleratorCount: 1
+    replicaCount: 1
+    diskSpec:
+      bootDiskType: pd-ssd
+      bootDiskSizeGb: 500
+    containerSpec:
+      imageUri: us-central1-docker.pkg.dev/PROJECT_ID/sparky/sota-12:latest
+      command: ["python", "12_dpo/train_dpo.py"]
+      args:
+        - "--model"
+        - "azureml://.../tail-rewriter-lora"
+        - "--beta"
+        - "0.1"
+        - "--output-dir"
+        - "/gcs/BUCKET/sparky/out/sota-12-dpo/results.json"
+      env:
+        - name: SPARKY_DATA_DIR
+          value: "/gcs/BUCKET/sparky/data"
+        - name: MLFLOW_EXPERIMENT_NAME
+          value: "sparky-sota-12"
+
+baseOutputDirectory:
+  outputUriPrefix: gs://BUCKET/sparky/out/sota-12-dpo
+
+# SKU: 1x NVIDIA A100 80GB (Azure Standard_NC24ads_A100_v4 / GCP a2-ultragpu-1g)

@@ -1,0 +1,1260 @@
+{
+  "generated_at": "2026-09-16T02:00:54Z",
+  "seconds": 188.0,
+  "inputs": {
+    "source": "data/products.parquet",
+    "catalogue_size": 25003,
+    "sample": 25,
+    "seed": 20260915,
+    "max_attempts": 3,
+    "model": "haiku",
+    "parallel": 4,
+    "categories": [
+      "grocery",
+      "health_household"
+    ],
+    "filter": "products with real ESCI description or bullets and no existing dietary tag"
+  },
+  "method": {
+    "generator": "claude CLI, 1 turn, no tools",
+    "verification": [
+      "schema check",
+      "deterministic grounding against the real product text",
+      "independent LLM verifier call (fresh context, sees only text + claims)"
+    ],
+    "rejection_sampling": "resample up to 3 times with the rejection reason fed back"
+  },
+  "results": {
+    "products": 25,
+    "accepted": 25,
+    "acceptance_rate": 1.0,
+    "accepted_first_attempt": 20,
+    "first_attempt_acceptance_rate": 0.8,
+    "generations_attempted": 30,
+    "per_generation_acceptance_rate": 0.8333,
+    "mean_attempts_per_product": 1.2,
+    "rejections_by_stage": {
+      "deterministic": 5
+    },
+    "rejection_reasons": {
+      "dietary tag unsupported or out of vocabulary": 3,
+      "pack_size.unit outside vocabulary: 'oz.'": 2,
+      "pack_size.unit outside vocabulary: 'pcs'": 1,
+      "pack_size.unit outside vocabulary: 'refills'": 1
+    }
+  },
+  "cost": {
+    "claude_calls": 56,
+    "total_usd": 0.724,
+    "usd_per_accepted_attribute_set": 0.02896
+  },
+  "rejected_examples": [],
+  "accepted_examples": [
+    {
+      "product_id": "B076F925VF",
+      "title": "Utz Kettle Classics Gourmet Dark Russets Potato Chips 8 oz. Bag (3 Bags)",
+      "claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 8,
+          "unit": "oz"
+        },
+        "key_features": [
+          "Hand cooked in pure peanut oil",
+          "Robust flavored dark and crunchy",
+          "Made from finest potatoes"
+        ]
+      },
+      "attempts_needed": 2
+    },
+    {
+      "product_id": "B07DGKSF1P",
+      "title": "Keto Chow | Electrolyte Drops | Sodium, Magnesium, Potassium & Trace Minerals | Promotes E",
+      "claim": {
+        "dietary": [
+          "keto"
+        ],
+        "pack_size": {
+          "value": 250,
+          "unit": "ml"
+        },
+        "key_features": [
+          "Sodium, Magnesium, Potassium & Trace Minerals",
+          "Promotes Electrolyte Balance",
+          "No Artificial Ingredients, Colors, Caffeine, or Dyes"
+        ]
+      },
+      "attempts_needed": 1
+    },
+    {
+      "product_id": "B087KCXS8L",
+      "title": "Marc Anthony Complete Color Care Shampoo for Brunettes, 8 Ounce (Packaging May Vary)",
+      "claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 8,
+          "unit": "Ounce"
+        },
+        "key_features": [
+          "Color care shampoo for brunettes",
+          "Anti-fade formula with mahogany extract",
+          "Free from sulfates, SLS, parabens, phthalates"
+        ]
+      },
+      "attempts_needed": 1
+    },
+    {
+      "product_id": "B09FS16XPQ",
+      "title": "TILANY Tea Cup and Wooden Saucer Set - Luxury 10 Oz Ceramic Latte Mug with Golden Spoon & ",
+      "claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 10,
+          "unit": "Oz"
+        },
+        "key_features": [
+          "Beautiful gold with matte-glazed exterior",
+          "Smooth to touch saucer holds cup securely",
+          "Golden spoon and wooden saucer included"
+        ]
+      },
+      "attempts_needed": 1
+    },
+    {
+      "product_id": "B07N4ZZHDH",
+      "title": "Victoria\u2019s Secret Love Spell Frosted Fragrance Lotion 8.0 fl oz Limited Edition 2018",
+      "claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 8.0,
+          "unit": "fl oz"
+        },
+        "key_features": [
+          "Full-size hydrating body lotion",
+          "Love Spell Frosted scent",
+          "Limited Edition"
+        ]
+      },
+      "attempts_needed": 1
+    },
+    {
+      "product_id": "B00QY0AREY",
+      "title": "Kirkland Signature Children's Complete Multivitamin Gummies, 320 Count",
+      "claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 320,
+          "unit": "Count"
+        },
+        "key_features": [
+          "Healthy Growth and Development",
+          "Immune Health Support",
+          "Energy Metabolism"
+        ]
+      },
+      "attempts_needed": 1
+    },
+    {
+      "product_id": "B084KS6TH7",
+      "title": "Apple Cider Vinegar Gummies - 1000mg - Formulated for Weight Loss, Energy Boost & Gut Heal",
+      "claim": {
+        "dietary": [],
+        "pack_size": null,
+        "key_features": [
+          "1000mg Apple Cider Vinegar Bite-Sized Gummy",
+          "Supports Digestion, Detox & Cleansing",
+          "Supports Healthy Weight Loss"
+        ]
+      },
+      "attempts_needed": 1
+    },
+    {
+      "product_id": "B092MYJ34D",
+      "title": "Harry's Deodorant & Antiperspirant - Odor & Sweat Control Antiperspirant for Men - Redwood",
+      "claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 3,
+          "unit": "Count"
+        },
+        "key_features": [
+          "Antiperspirant provides 24-hour odor & sweat protection",
+          "Clear solid stick formula goes on smoothly",
+          "Contains soothing jojoba oil, sulfate free"
+        ]
+      },
+      "attempts_needed": 1
+    }
+  ],
+  "items": [
+    {
+      "product_id": "B076F925VF",
+      "title": "Utz Kettle Classics Gourmet Dark Russets Potato Chips 8 oz. Bag (3 Bags)",
+      "category": "grocery",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.012836,
+          "stage": "deterministic",
+          "accepted": false,
+          "reasons": [
+            "pack_size.unit outside vocabulary: 'oz.'"
+          ],
+          "claim": {
+            "dietary": [],
+            "pack_size": {
+              "value": 8,
+              "unit": "oz."
+            },
+            "key_features": [
+              "Hand cooked in 100% pure peanut oil",
+              "Gourmet dark russet potato chips",
+              "ALL NATURAL made from finest potatoes"
+            ]
+          }
+        },
+        {
+          "attempt": 2,
+          "cost_usd": 0.025636,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [],
+            "pack_size": {
+              "value": 8,
+              "unit": "oz"
+            },
+            "key_features": [
+              "Hand cooked in pure peanut oil",
+              "Robust flavored dark and crunchy",
+              "Made from finest potatoes"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 8,
+          "unit": "oz"
+        },
+        "key_features": [
+          "Hand cooked in pure peanut oil",
+          "Robust flavored dark and crunchy",
+          "Made from finest potatoes"
+        ]
+      }
+    },
+    {
+      "product_id": "B07DGKSF1P",
+      "title": "Keto Chow | Electrolyte Drops | Sodium, Magnesium, Potassium & Trace Minerals | Promotes E",
+      "category": "health_household",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.025157,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [
+              "keto"
+            ],
+            "pack_size": {
+              "value": 250,
+              "unit": "ml"
+            },
+            "key_features": [
+              "Sodium, Magnesium, Potassium & Trace Minerals",
+              "Promotes Electrolyte Balance",
+              "No Artificial Ingredients, Colors, Caffeine, or Dyes"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [
+          "keto"
+        ],
+        "pack_size": {
+          "value": 250,
+          "unit": "ml"
+        },
+        "key_features": [
+          "Sodium, Magnesium, Potassium & Trace Minerals",
+          "Promotes Electrolyte Balance",
+          "No Artificial Ingredients, Colors, Caffeine, or Dyes"
+        ]
+      }
+    },
+    {
+      "product_id": "B087KCXS8L",
+      "title": "Marc Anthony Complete Color Care Shampoo for Brunettes, 8 Ounce (Packaging May Vary)",
+      "category": "health_household",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.021836,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [],
+            "pack_size": {
+              "value": 8,
+              "unit": "Ounce"
+            },
+            "key_features": [
+              "Color care shampoo for brunettes",
+              "Anti-fade formula with mahogany extract",
+              "Free from sulfates, SLS, parabens, phthalates"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 8,
+          "unit": "Ounce"
+        },
+        "key_features": [
+          "Color care shampoo for brunettes",
+          "Anti-fade formula with mahogany extract",
+          "Free from sulfates, SLS, parabens, phthalates"
+        ]
+      }
+    },
+    {
+      "product_id": "B09FS16XPQ",
+      "title": "TILANY Tea Cup and Wooden Saucer Set - Luxury 10 Oz Ceramic Latte Mug with Golden Spoon & ",
+      "category": "grocery",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.023651,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [],
+            "pack_size": {
+              "value": 10,
+              "unit": "Oz"
+            },
+            "key_features": [
+              "Beautiful gold with matte-glazed exterior",
+              "Smooth to touch saucer holds cup securely",
+              "Golden spoon and wooden saucer included"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 10,
+          "unit": "Oz"
+        },
+        "key_features": [
+          "Beautiful gold with matte-glazed exterior",
+          "Smooth to touch saucer holds cup securely",
+          "Golden spoon and wooden saucer included"
+        ]
+      }
+    },
+    {
+      "product_id": "B07N4ZZHDH",
+      "title": "Victoria\u2019s Secret Love Spell Frosted Fragrance Lotion 8.0 fl oz Limited Edition 2018",
+      "category": "health_household",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.020484,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [],
+            "pack_size": {
+              "value": 8.0,
+              "unit": "fl oz"
+            },
+            "key_features": [
+              "Full-size hydrating body lotion",
+              "Love Spell Frosted scent",
+              "Limited Edition"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 8.0,
+          "unit": "fl oz"
+        },
+        "key_features": [
+          "Full-size hydrating body lotion",
+          "Love Spell Frosted scent",
+          "Limited Edition"
+        ]
+      }
+    },
+    {
+      "product_id": "B00QY0AREY",
+      "title": "Kirkland Signature Children's Complete Multivitamin Gummies, 320 Count",
+      "category": "grocery",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.019333,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [],
+            "pack_size": {
+              "value": 320,
+              "unit": "Count"
+            },
+            "key_features": [
+              "Healthy Growth and Development",
+              "Immune Health Support",
+              "Energy Metabolism"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 320,
+          "unit": "Count"
+        },
+        "key_features": [
+          "Healthy Growth and Development",
+          "Immune Health Support",
+          "Energy Metabolism"
+        ]
+      }
+    },
+    {
+      "product_id": "B084KS6TH7",
+      "title": "Apple Cider Vinegar Gummies - 1000mg - Formulated for Weight Loss, Energy Boost & Gut Heal",
+      "category": "grocery",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.026685,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [],
+            "pack_size": null,
+            "key_features": [
+              "1000mg Apple Cider Vinegar Bite-Sized Gummy",
+              "Supports Digestion, Detox & Cleansing",
+              "Supports Healthy Weight Loss"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [],
+        "pack_size": null,
+        "key_features": [
+          "1000mg Apple Cider Vinegar Bite-Sized Gummy",
+          "Supports Digestion, Detox & Cleansing",
+          "Supports Healthy Weight Loss"
+        ]
+      }
+    },
+    {
+      "product_id": "B092MYJ34D",
+      "title": "Harry's Deodorant & Antiperspirant - Odor & Sweat Control Antiperspirant for Men - Redwood",
+      "category": "health_household",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.023057,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [],
+            "pack_size": {
+              "value": 3,
+              "unit": "Count"
+            },
+            "key_features": [
+              "Antiperspirant provides 24-hour odor & sweat protection",
+              "Clear solid stick formula goes on smoothly",
+              "Contains soothing jojoba oil, sulfate free"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 3,
+          "unit": "Count"
+        },
+        "key_features": [
+          "Antiperspirant provides 24-hour odor & sweat protection",
+          "Clear solid stick formula goes on smoothly",
+          "Contains soothing jojoba oil, sulfate free"
+        ]
+      }
+    },
+    {
+      "product_id": "B0012ZQPKG",
+      "title": "Thorne Research - Zinc Picolinate 30 mg - Well-Absorbed Zinc Supplement for Growth and Imm",
+      "category": "health_household",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.011383,
+          "stage": "deterministic",
+          "accepted": false,
+          "reasons": [
+            "dietary tag unsupported by text: gluten_free",
+            "dietary tag unsupported by text: dairy_free",
+            "dietary tag unsupported by text: nut_free"
+          ],
+          "claim": {
+            "dietary": [
+              "gluten_free",
+              "dairy_free",
+              "nut_free"
+            ],
+            "pack_size": {
+              "value": 60,
+              "unit": "Capsules"
+            },
+            "key_features": [
+              "30 mg of zinc per capsule",
+              "well-absorbed zinc supplement",
+              "Essential for growth and immune function"
+            ]
+          }
+        },
+        {
+          "attempt": 2,
+          "cost_usd": 0.026216,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [],
+            "pack_size": {
+              "value": 60,
+              "unit": "Capsules"
+            },
+            "key_features": [
+              "30 mg of zinc per capsule",
+              "Well-absorbed zinc supplement",
+              "Essential for growth and immune function"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 60,
+          "unit": "Capsules"
+        },
+        "key_features": [
+          "30 mg of zinc per capsule",
+          "Well-absorbed zinc supplement",
+          "Essential for growth and immune function"
+        ]
+      }
+    },
+    {
+      "product_id": "B00HHFWFVI",
+      "title": "Fresh Gourmet Authentic Wonton Strips | 1 Pound | Low Carb | Crunchy Snack and Salad Toppe",
+      "category": "grocery",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.02471,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [],
+            "pack_size": {
+              "value": 1,
+              "unit": "Pound"
+            },
+            "key_features": [
+              "Authentic wonton strips",
+              "Thin, crisp, bubbly texture",
+              "Convenient resealable bag"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 1,
+          "unit": "Pound"
+        },
+        "key_features": [
+          "Authentic wonton strips",
+          "Thin, crisp, bubbly texture",
+          "Convenient resealable bag"
+        ]
+      }
+    },
+    {
+      "product_id": "B003R28HWQ",
+      "title": "Breville JE98XL Juice Fountain Plus Centrifugal Juicer, Brushed Stainless Steel",
+      "category": "grocery",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.02812,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [],
+            "pack_size": null,
+            "key_features": [
+              "3 inch extra wide fruit chute",
+              "Titanium reinforced disc and Italian-made micro mesh filter",
+              "Built-in froth separator"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [],
+        "pack_size": null,
+        "key_features": [
+          "3 inch extra wide fruit chute",
+          "Titanium reinforced disc and Italian-made micro mesh filter",
+          "Built-in froth separator"
+        ]
+      }
+    },
+    {
+      "product_id": "B07MFZFTNP",
+      "title": "Pre JYM Pre Workout Powder - BCAAs, Creatine HCI, Citrulline Malate, Beta-Alanine, Betaine",
+      "category": "health_household",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.021343,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [],
+            "pack_size": {
+              "value": 20,
+              "unit": "Servings"
+            },
+            "key_features": [
+              "BCAAs and creatine for muscle growth",
+              "Citrulline malate and caffeine for endurance",
+              "Beta-alanine and betaine for strength"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 20,
+          "unit": "Servings"
+        },
+        "key_features": [
+          "BCAAs and creatine for muscle growth",
+          "Citrulline malate and caffeine for endurance",
+          "Beta-alanine and betaine for strength"
+        ]
+      }
+    },
+    {
+      "product_id": "B07Z98HJ9N",
+      "title": "Travel Bottles, Shynek 30Pcs 2 oz Empty Lotion Bottles Bulk Clear Plastic Small Liquid Con",
+      "category": "health_household",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.017057,
+          "stage": "deterministic",
+          "accepted": false,
+          "reasons": [
+            "pack_size.unit outside vocabulary: 'pcs'"
+          ],
+          "claim": {
+            "dietary": [],
+            "pack_size": {
+              "value": 30,
+              "unit": "pcs"
+            },
+            "key_features": [
+              "Leak proof bottle design",
+              "BPA free eco-friendly PET material",
+              "Convenient flip cap makes it easy to dispense"
+            ]
+          }
+        },
+        {
+          "attempt": 2,
+          "cost_usd": 0.024939,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [],
+            "pack_size": {
+              "value": 2,
+              "unit": "oz"
+            },
+            "key_features": [
+              "Leak proof bottle design",
+              "BPA free eco-friendly PET material",
+              "Convenient flip cap for dispensing"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 2,
+          "unit": "oz"
+        },
+        "key_features": [
+          "Leak proof bottle design",
+          "BPA free eco-friendly PET material",
+          "Convenient flip cap for dispensing"
+        ]
+      }
+    },
+    {
+      "product_id": "B07L6S7NHV",
+      "title": "Nut Harvest, Lightly Salted Whole Cashews, 24oz Jar",
+      "category": "grocery",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.026028,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [],
+            "pack_size": {
+              "value": 24,
+              "unit": "oz"
+            },
+            "key_features": [
+              "Roasted with sea salt locks fresh taste",
+              "Great tasting snack for midday",
+              "Resealable jar keeps nuts fresh"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 24,
+          "unit": "oz"
+        },
+        "key_features": [
+          "Roasted with sea salt locks fresh taste",
+          "Great tasting snack for midday",
+          "Resealable jar keeps nuts fresh"
+        ]
+      }
+    },
+    {
+      "product_id": "B07R4WHCQ7",
+      "title": "RELIEVVE Donut Pillow Tailbone Pain Relief Cushion - Hemmoroid Pillow Cushion for Hemorrho",
+      "category": "health_household",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.023798,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [],
+            "pack_size": null,
+            "key_features": [
+              "Donut-shaped Pillow for tailbone pain",
+              "spine and back stay aligned",
+              "recover with less pain"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [],
+        "pack_size": null,
+        "key_features": [
+          "Donut-shaped Pillow for tailbone pain",
+          "spine and back stay aligned",
+          "recover with less pain"
+        ]
+      }
+    },
+    {
+      "product_id": "B07MJTKGFL",
+      "title": "Schick Hydro Skin Comfort Sensitive 3 Blade Razor for Men, 1 Handle and 12 Refills",
+      "category": "health_household",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.012594,
+          "stage": "deterministic",
+          "accepted": false,
+          "reasons": [
+            "pack_size.unit outside vocabulary: 'refills'"
+          ],
+          "claim": {
+            "dietary": [],
+            "pack_size": {
+              "value": 12,
+              "unit": "Refills"
+            },
+            "key_features": [
+              "Dermatologist tested, optimal for sensitive skin",
+              "3 blades with Skin Guards protection",
+              "7 cushioning Gel Pools with Aloe"
+            ]
+          }
+        },
+        {
+          "attempt": 2,
+          "cost_usd": 0.040033,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [],
+            "pack_size": null,
+            "key_features": [
+              "Dermatologist tested, optimal for sensitive skin",
+              "3 blades with Skin Guards for protection",
+              "7 Gel Pools with Aloe reduce friction"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [],
+        "pack_size": null,
+        "key_features": [
+          "Dermatologist tested, optimal for sensitive skin",
+          "3 blades with Skin Guards for protection",
+          "7 Gel Pools with Aloe reduce friction"
+        ]
+      }
+    },
+    {
+      "product_id": "B07CBTDBXL",
+      "title": "WYD 3D Angel Wings Silicone Molds Aromatherapy Plaster Cake Molds Decoration Tool DIY Hand",
+      "category": "grocery",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.039979,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [],
+            "pack_size": null,
+            "key_features": [
+              "New environmental grade silicone",
+              "Reusable, durable and low energy consumption",
+              "Easy to clean"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [],
+        "pack_size": null,
+        "key_features": [
+          "New environmental grade silicone",
+          "Reusable, durable and low energy consumption",
+          "Easy to clean"
+        ]
+      }
+    },
+    {
+      "product_id": "B077K6KWY8",
+      "title": "Utz Original Potato Chips Snack Pack- 12 Pack (2 Bags of 12 Each)",
+      "category": "grocery",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.025844,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [],
+            "pack_size": {
+              "value": 12,
+              "unit": "Pack"
+            },
+            "key_features": [
+              "Perfect for lunches",
+              "Guaranteed fresh",
+              "Easy to serve"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 12,
+          "unit": "Pack"
+        },
+        "key_features": [
+          "Perfect for lunches",
+          "Guaranteed fresh",
+          "Easy to serve"
+        ]
+      }
+    },
+    {
+      "product_id": "B0722D2V3Z",
+      "title": "Atkins Snack Bar, Caramel Chocolate Nut Roll, Keto Friendly, 1.55 oz, 8 count",
+      "category": "grocery",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.026786,
+          "stage": "deterministic",
+          "accepted": false,
+          "reasons": [
+            "pack_size.unit outside vocabulary: 'oz.'"
+          ],
+          "claim": {
+            "dietary": [
+              "keto"
+            ],
+            "pack_size": {
+              "value": 12.4,
+              "unit": "oz."
+            },
+            "key_features": [
+              "Peanut-nougat center with caramel chocolate coating",
+              "7 grams of protein per bar",
+              "3 grams of net carbs per serving"
+            ]
+          }
+        },
+        {
+          "attempt": 2,
+          "cost_usd": 0.032505,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [
+              "keto"
+            ],
+            "pack_size": {
+              "value": 12.4,
+              "unit": "oz"
+            },
+            "key_features": [
+              "Peanut-nougat center with chocolate coating",
+              "7 grams of protein per bar",
+              "3 grams of net carbs per serving"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [
+          "keto"
+        ],
+        "pack_size": {
+          "value": 12.4,
+          "unit": "oz"
+        },
+        "key_features": [
+          "Peanut-nougat center with chocolate coating",
+          "7 grams of protein per bar",
+          "3 grams of net carbs per serving"
+        ]
+      }
+    },
+    {
+      "product_id": "B00ARBEQQ6",
+      "title": "Nutella Chocolate Hazelnut Spread, Single Serve Mini Cups, Perfect Topping for Pancakes, G",
+      "category": "grocery",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.022908,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [],
+            "pack_size": {
+              "value": 120,
+              "unit": "Count"
+            },
+            "key_features": [
+              "single use mini packages",
+              "perfect topping for pancakes waffles and more",
+              "made from roasted hazelnuts and cocoa"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 120,
+          "unit": "Count"
+        },
+        "key_features": [
+          "single use mini packages",
+          "perfect topping for pancakes waffles and more",
+          "made from roasted hazelnuts and cocoa"
+        ]
+      }
+    },
+    {
+      "product_id": "B001LRPUMY",
+      "title": "Citracal Maximum Plus Highly Soluble, Easily Digested, 630 mg Calcium Citrate With 1000 IU",
+      "category": "health_household",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.02659,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [
+              "sugar_free"
+            ],
+            "pack_size": {
+              "value": 180,
+              "unit": "Count"
+            },
+            "key_features": [
+              "Highly Soluble, Easily Digested",
+              "630 mg calcium per serving",
+              "Supports bone health"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [
+          "sugar_free"
+        ],
+        "pack_size": {
+          "value": 180,
+          "unit": "Count"
+        },
+        "key_features": [
+          "Highly Soluble, Easily Digested",
+          "630 mg calcium per serving",
+          "Supports bone health"
+        ]
+      }
+    },
+    {
+      "product_id": "B01M4QR0SA",
+      "title": "KONE Drawstring Trash Bag, 4 Gallon Small Garbage Bags Extra Thick Wastebasket Bin Liners ",
+      "category": "health_household",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.024591,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [],
+            "pack_size": {
+              "value": 100,
+              "unit": "Count"
+            },
+            "key_features": [
+              "Extra thick 0.7mil construction",
+              "Heavy duty drawstring design",
+              "Eco-friendly polyethylene materials"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 100,
+          "unit": "Count"
+        },
+        "key_features": [
+          "Extra thick 0.7mil construction",
+          "Heavy duty drawstring design",
+          "Eco-friendly polyethylene materials"
+        ]
+      }
+    },
+    {
+      "product_id": "B086XMKSVC",
+      "title": "Jym SS8 Super Shredded 8|Advanced Fat Burner, Acetyl-L Carnitine, Tyrosine, Green Tea Extr",
+      "category": "grocery",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.022597,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [],
+            "pack_size": {
+              "value": 120,
+              "unit": "Capsules"
+            },
+            "key_features": [
+              "Total fat loss solution",
+              "Advanced fat loss supplement",
+              "Short-term fat loss, long-term maintenance"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 120,
+          "unit": "Capsules"
+        },
+        "key_features": [
+          "Total fat loss solution",
+          "Advanced fat loss supplement",
+          "Short-term fat loss, long-term maintenance"
+        ]
+      }
+    },
+    {
+      "product_id": "B071QYX46Z",
+      "title": "Rezamid Acne Lotion, 2 oz per Bottle",
+      "category": "health_household",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.019692,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [],
+            "pack_size": {
+              "value": 2,
+              "unit": "oz"
+            },
+            "key_features": [
+              "Original acne therapy",
+              "Color Matcher"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 2,
+          "unit": "oz"
+        },
+        "key_features": [
+          "Original acne therapy",
+          "Color Matcher"
+        ]
+      }
+    },
+    {
+      "product_id": "B08YRB59N8",
+      "title": "Dove Dry Shampoo Hair Treatment for Oily Hair, Volume and Fullness Cleansing Hair Volumize",
+      "category": "health_household",
+      "accepted": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "cost_usd": 0.023157,
+          "stage": "verifier",
+          "accepted": true,
+          "reasons": [],
+          "claim": {
+            "dietary": [],
+            "pack_size": {
+              "value": 5,
+              "unit": "oz"
+            },
+            "key_features": [
+              "Leaves hair looking and feeling refreshed",
+              "Absorbs excess oil from hair",
+              "Pumps hair with volume"
+            ]
+          }
+        }
+      ],
+      "accepted_claim": {
+        "dietary": [],
+        "pack_size": {
+          "value": 5,
+          "unit": "oz"
+        },
+        "key_features": [
+          "Leaves hair looking and feeling refreshed",
+          "Absorbs excess oil from hair",
+          "Pumps hair with volume"
+        ]
+      }
+    }
+  ],
+  "note": "The catalogue's existing `dietary` column is SYNTHETIC demo data. This script generates attributes from the REAL ESCI title/description/bullets text and only keeps generations that survive all three verification stages, so the accepted set is grounded in real text."
+}

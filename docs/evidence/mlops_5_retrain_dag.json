@@ -1,0 +1,70 @@
+{
+ "capability": 5,
+ "slug": "retrain_dag",
+ "generated_at": "2026-09-29T20:26:39Z",
+ "fired": true,
+ "profile": "delayed",
+ "label_age_h": 329.47,
+ "drift": {
+  "mmd2": 0.0471,
+  "p_value": 0.0033,
+  "alert": true,
+  "zero_result_rate": 0.0,
+  "est_ndcg10": 0.4497,
+  "est_ndcg10_delta": -0.2314,
+  "top1_cosine_delta": -0.1039
+ },
+ "alert_id": "alr-0b3074c8",
+ "approval_id": "apr-2cbe6bee",
+ "steps": [
+  {
+   "step": "detect_drift",
+   "status": "ok",
+   "seconds": 4.11,
+   "detail": "MMD\u00b2 0.0471 p=0.0033 alert=True est \u0394NDCG@10 -0.2314"
+  },
+  {
+   "step": "label_profile",
+   "status": "ok",
+   "seconds": 0.0,
+   "detail": "delayed (online_sessions last ingested 329.5 h ago)"
+  },
+  {
+   "step": "slice_check",
+   "status": "ok",
+   "seconds": 0.0,
+   "detail": "worst slice use_case NDCG@10 0.5924"
+  },
+  {
+   "step": "trigger_decision",
+   "status": "ok",
+   "seconds": 0.0,
+   "detail": "FIRE: alert=True and est \u0394NDCG@10 -0.2314 <= -0.02"
+  },
+  {
+   "step": "record_alert",
+   "status": "ok",
+   "seconds": 0.0,
+   "detail": "alert alr-0b3074c8 recorded"
+  },
+  {
+   "step": "build_candidate_gate",
+   "status": "waiting_human",
+   "seconds": 0.0,
+   "detail": "delayed-label profile needs human sign-off apr-2cbe6bee before propose_remediation/build_candidate"
+  },
+  {
+   "step": "eval_gate",
+   "status": "pending",
+   "seconds": 0.0,
+   "detail": "run_eval_suite on the built candidate (T3 gate)"
+  },
+  {
+   "step": "promote",
+   "status": "requires_human",
+   "seconds": 0.0,
+   "detail": "promotion is ALWAYS a human T2 approval; this DAG never promotes"
+  }
+ ],
+ "seconds": 4.12
+}

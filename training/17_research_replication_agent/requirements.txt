@@ -1,0 +1,8 @@
+# Pinned for reproducibility. Versions resolved 2026-09-15; re-pin before each run.
+numpy==2.2.6
+pandas==2.3.3
+pyarrow==21.0.0
+PyYAML==6.0.3
+mlflow==3.4.0
+# agent backend: install ONE of these in the sandbox image
+# @anthropic-ai/claude-code (npm)  |  openhands-ai==0.57.0

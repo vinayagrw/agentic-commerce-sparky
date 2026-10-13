@@ -1,0 +1,397 @@
+{
+  "technique": 16,
+  "objective": {
+    "metric": "ndcg@10",
+    "direction": "maximize",
+    "search_split": "dev",
+    "n_queries_per_trial": 150
+  },
+  "baseline": {
+    "version": "v4",
+    "config": {
+      "rrf_k": 60,
+      "w_bm25": 0.7,
+      "w_vector": 1.0,
+      "rerank_depth": 50
+    }
+  },
+  "strategy": "greedy coordinate search with memory; restart the sweep from each accepted incumbent",
+  "space": {
+    "rrf_k": [
+      20,
+      40,
+      60,
+      90,
+      120
+    ],
+    "w_bm25": [
+      0.5,
+      0.7,
+      1.0,
+      1.3
+    ],
+    "w_vector": [
+      0.7,
+      1.0,
+      1.3
+    ],
+    "rerank_depth": [
+      25,
+      50,
+      75,
+      100
+    ]
+  },
+  "space_size": 240,
+  "budget": {
+    "max_trials": 10,
+    "usd_cap": 0.05,
+    "usd_per_cpu_min": 0.0017,
+    "basis": "measured wall clock per trial x the stated $/CPU-min rate",
+    "caveat": "search-svc memoises per-query eval results by config hash, so re-running a search that revisits the same configs costs a fraction of the first, cold run. Quote the cold number.",
+    "on_breach": "stop before the next trial and return the partial trajectory"
+  },
+  "spent": {
+    "trials": 10,
+    "usd": 0.004179,
+    "wall_clock_s": 147.5,
+    "stop_reason": "trial_budget_exhausted"
+  },
+  "trajectory": [
+    {
+      "trial": 1,
+      "round": 1,
+      "move": "rrf_k: 60 -> 20",
+      "version": "v31",
+      "config": {
+        "rrf_k": 20,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "rerank_depth": 50
+      },
+      "ndcg10": 0.6666,
+      "ndcg10_delta": -3e-05,
+      "ci95": [
+        -0.00366,
+        0.00351
+      ],
+      "p95_ms": 97.4,
+      "n_queries": 150,
+      "seconds": 23.91,
+      "cost_usd": 0.000678,
+      "cumulative_usd": 0.000678,
+      "accepted": true,
+      "mlflow_run_id": "94b018ff010148a99874d9ed90101a01"
+    },
+    {
+      "trial": 2,
+      "round": 2,
+      "move": "rrf_k: 20 -> 40",
+      "version": "v32",
+      "config": {
+        "rrf_k": 40,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "rerank_depth": 50
+      },
+      "ndcg10": 0.6675,
+      "ndcg10_delta": 0.0009,
+      "ci95": [
+        -0.00217,
+        0.00417
+      ],
+      "p95_ms": 108.3,
+      "n_queries": 150,
+      "seconds": 12.39,
+      "cost_usd": 0.000351,
+      "cumulative_usd": 0.001029,
+      "accepted": true,
+      "mlflow_run_id": "ee680525689e4c37bc00b9fa743f6c39"
+    },
+    {
+      "trial": 3,
+      "round": 3,
+      "move": "rrf_k: 40 -> 90",
+      "version": "v33",
+      "config": {
+        "rrf_k": 90,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "rerank_depth": 50
+      },
+      "ndcg10": 0.666,
+      "ndcg10_delta": -0.00068,
+      "ci95": [
+        -0.00245,
+        0.00077
+      ],
+      "p95_ms": 105.0,
+      "n_queries": 150,
+      "seconds": 12.24,
+      "cost_usd": 0.000347,
+      "cumulative_usd": 0.001376,
+      "accepted": false,
+      "mlflow_run_id": "a13451cc478e4ab3b6c54ccd601c83c5"
+    },
+    {
+      "trial": 4,
+      "round": 3,
+      "move": "rrf_k: 40 -> 120",
+      "version": "v34",
+      "config": {
+        "rrf_k": 120,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "rerank_depth": 50
+      },
+      "ndcg10": 0.6641,
+      "ndcg10_delta": -0.0025,
+      "ci95": [
+        -0.00738,
+        0.00039
+      ],
+      "p95_ms": 96.1,
+      "n_queries": 150,
+      "seconds": 11.78,
+      "cost_usd": 0.000334,
+      "cumulative_usd": 0.00171,
+      "accepted": false,
+      "mlflow_run_id": "80b770be6aba48f0b2ca08941dc1b104"
+    },
+    {
+      "trial": 5,
+      "round": 3,
+      "move": "w_bm25: 0.7 -> 0.5",
+      "version": "v35",
+      "config": {
+        "rrf_k": 40,
+        "w_bm25": 0.5,
+        "w_vector": 1.0,
+        "rerank_depth": 50
+      },
+      "ndcg10": 0.6659,
+      "ndcg10_delta": -0.00078,
+      "ci95": [
+        -0.00359,
+        0.00267
+      ],
+      "p95_ms": 103.1,
+      "n_queries": 150,
+      "seconds": 12.38,
+      "cost_usd": 0.000351,
+      "cumulative_usd": 0.002061,
+      "accepted": false,
+      "mlflow_run_id": "8919bdbd268f45098087da8d49acc663"
+    },
+    {
+      "trial": 6,
+      "round": 3,
+      "move": "w_bm25: 0.7 -> 1.0",
+      "version": "v36",
+      "config": {
+        "rrf_k": 40,
+        "w_bm25": 1.0,
+        "w_vector": 1.0,
+        "rerank_depth": 50
+      },
+      "ndcg10": 0.6666,
+      "ndcg10_delta": -8e-05,
+      "ci95": [
+        -0.00363,
+        0.00338
+      ],
+      "p95_ms": 110.6,
+      "n_queries": 150,
+      "seconds": 12.59,
+      "cost_usd": 0.000357,
+      "cumulative_usd": 0.002418,
+      "accepted": false,
+      "mlflow_run_id": "d6b5bcdeab7b4e6a9ae0453201bab153"
+    },
+    {
+      "trial": 7,
+      "round": 3,
+      "move": "w_bm25: 0.7 -> 1.3",
+      "version": "v37",
+      "config": {
+        "rrf_k": 40,
+        "w_bm25": 1.3,
+        "w_vector": 1.0,
+        "rerank_depth": 50
+      },
+      "ndcg10": 0.6672,
+      "ndcg10_delta": 0.00053,
+      "ci95": [
+        -0.00307,
+        0.00414
+      ],
+      "p95_ms": 120.4,
+      "n_queries": 150,
+      "seconds": 12.55,
+      "cost_usd": 0.000355,
+      "cumulative_usd": 0.002773,
+      "accepted": false,
+      "mlflow_run_id": "ac9fb3ccb47146c19a4a7abe5d74282f"
+    },
+    {
+      "trial": 8,
+      "round": 3,
+      "move": "w_vector: 1.0 -> 0.7",
+      "version": "v38",
+      "config": {
+        "rrf_k": 40,
+        "w_bm25": 0.7,
+        "w_vector": 0.7,
+        "rerank_depth": 50
+      },
+      "ndcg10": 0.6666,
+      "ndcg10_delta": -8e-05,
+      "ci95": [
+        -0.00363,
+        0.00338
+      ],
+      "p95_ms": 118.3,
+      "n_queries": 150,
+      "seconds": 12.49,
+      "cost_usd": 0.000354,
+      "cumulative_usd": 0.003127,
+      "accepted": false,
+      "mlflow_run_id": "a47fb0cc6a0e4ccf9aad0676cec8d2a3"
+    },
+    {
+      "trial": 9,
+      "round": 3,
+      "move": "w_vector: 1.0 -> 1.3",
+      "version": "v39",
+      "config": {
+        "rrf_k": 40,
+        "w_bm25": 0.7,
+        "w_vector": 1.3,
+        "rerank_depth": 50
+      },
+      "ndcg10": 0.6649,
+      "ndcg10_delta": -0.00169,
+      "ci95": [
+        -0.00396,
+        0.00029
+      ],
+      "p95_ms": 116.4,
+      "n_queries": 150,
+      "seconds": 13.17,
+      "cost_usd": 0.000373,
+      "cumulative_usd": 0.0035,
+      "accepted": false,
+      "mlflow_run_id": "7faed21854a34819b0d63af6a257ed57"
+    },
+    {
+      "trial": 10,
+      "round": 3,
+      "move": "rerank_depth: 50 -> 25",
+      "version": "v40",
+      "config": {
+        "rrf_k": 40,
+        "w_bm25": 0.7,
+        "w_vector": 1.0,
+        "rerank_depth": 25
+      },
+      "ndcg10": 0.6642,
+      "ndcg10_delta": -0.00243,
+      "ci95": [
+        -0.01,
+        0.00585
+      ],
+      "p95_ms": 67.4,
+      "n_queries": 150,
+      "seconds": 7.24,
+      "cost_usd": 0.000205,
+      "cumulative_usd": 0.003705,
+      "accepted": false,
+      "mlflow_run_id": "25df575e756a45e6b9dc0fa37db076f3"
+    }
+  ],
+  "best_observed": {
+    "trial": 2,
+    "round": 2,
+    "move": "rrf_k: 20 -> 40",
+    "version": "v32",
+    "config": {
+      "rrf_k": 40,
+      "w_bm25": 0.7,
+      "w_vector": 1.0,
+      "rerank_depth": 50
+    },
+    "ndcg10": 0.6675,
+    "ndcg10_delta": 0.0009,
+    "ci95": [
+      -0.00217,
+      0.00417
+    ],
+    "p95_ms": 108.3,
+    "n_queries": 150,
+    "seconds": 12.39,
+    "cost_usd": 0.000351,
+    "cumulative_usd": 0.001029,
+    "accepted": true,
+    "mlflow_run_id": "ee680525689e4c37bc00b9fa743f6c39"
+  },
+  "beats_baseline_on_search_split": true,
+  "best": {
+    "trial": 2,
+    "round": 2,
+    "move": "rrf_k: 20 -> 40",
+    "version": "v32",
+    "config": {
+      "rrf_k": 40,
+      "w_bm25": 0.7,
+      "w_vector": 1.0,
+      "rerank_depth": 50
+    },
+    "ndcg10": 0.6675,
+    "ndcg10_delta": 0.0009,
+    "ci95": [
+      -0.00217,
+      0.00417
+    ],
+    "p95_ms": 108.3,
+    "n_queries": 150,
+    "seconds": 12.39,
+    "cost_usd": 0.000351,
+    "cumulative_usd": 0.001029,
+    "accepted": true,
+    "mlflow_run_id": "ee680525689e4c37bc00b9fa743f6c39"
+  },
+  "holdout": {
+    "split": "test",
+    "n_queries": 200,
+    "baseline_ndcg10": 0.6068,
+    "best_ndcg10": 0.6085,
+    "ndcg10_delta": 0.00167,
+    "ci95": [
+      -0.00134,
+      0.00504
+    ],
+    "p_delta_le_0": 0.172,
+    "wins_losses_ties": [
+      10,
+      6,
+      184
+    ],
+    "p95_ms": 104.2,
+    "baseline_p95_ms": 221.5,
+    "method": "paired per-query deltas on identical ESCI queries; percentile bootstrap, 1000 resamples, seed 20260915",
+    "seconds": 16.73
+  },
+  "leaderboard_guard": {
+    "sealed_split": "test",
+    "seen_by_search": false,
+    "search_split": "dev",
+    "max_dev_holdout_gap": 0.02,
+    "note": "no trial was scored on 'test'; only the winning config is, once, after the budget closes",
+    "dev_minus_holdout_gap": -0.00077,
+    "flagged": false,
+    "flag_reason": null
+  },
+  "verdict": "no_significant_improvement",
+  "headline": "Best config v32 (rrf_k: 20 -> 40) led on dev by +0.00090, but on the sealed test split the delta is +0.00167 with CI95 [-0.00134, 0.00504], which straddles zero. That is a null result: the search found no config that is measurably better than v4.",
+  "human_review": "T1 sandbox result. No config is promoted by this tool: propose_remediation/build_candidate and the eval gate remain the only path to champion, and both need a human."
+}

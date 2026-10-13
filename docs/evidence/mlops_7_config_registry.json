@@ -1,0 +1,162 @@
+{
+ "capability": 7,
+ "slug": "config_registry",
+ "generated_at": "2026-09-29T20:27:16Z",
+ "action": "diff",
+ "current": "cfg1",
+ "hash": "de86ab2ce6a7",
+ "previous": null,
+ "registered_now": null,
+ "applied_rollback": null,
+ "versions": [
+  [
+   "cfg1",
+   "de86ab2ce6a7",
+   "2026-09-17 11:12",
+   "baseline"
+  ]
+ ],
+ "files_changed": [],
+ "model_changes": {},
+ "models": {
+  "claudeBin": "claude",
+  "model": "sonnet",
+  "planner": "haiku",
+  "shopper": "sonnet",
+  "critic": "haiku",
+  "ops": "sonnet"
+ },
+ "eval": {
+  "columns": [
+   "role",
+   "n before",
+   "n after",
+   "ok before",
+   "ok after",
+   "cost before",
+   "cost after",
+   "\u0394cost CI95",
+   "p95 ms before",
+   "p95 ms after",
+   "status"
+  ],
+  "rows": [
+   [
+    "Checkout",
+    3,
+    0,
+    1.0,
+    null,
+    0.02253,
+    null,
+    "[null, null]",
+    14437,
+    null,
+    "insufficient n"
+   ],
+   [
+    "Critic",
+    48,
+    54,
+    1.0,
+    1.0,
+    0.00349,
+    0.00141,
+    "[-0.003984, -0.000746]",
+    31077,
+    7203,
+    "ok"
+   ],
+   [
+    "Ops Copilot",
+    77,
+    166,
+    1.0,
+    1.0,
+    0.02364,
+    0.02394,
+    "[-0.004856, 0.005126]",
+    29742,
+    29578,
+    "ok"
+   ],
+   [
+    "Planner",
+    81,
+    228,
+    0.926,
+    0.921,
+    0.00174,
+    0.00101,
+    "[-0.001412, -0.000223]",
+    14746,
+    8107,
+    "ok"
+   ],
+   [
+    "Shopper",
+    90,
+    240,
+    1.0,
+    0.996,
+    0.03181,
+    0.03276,
+    "[-0.00479, 0.006196]",
+    38405,
+    31219,
+    "ok"
+   ],
+   [
+    "Shopper revision",
+    25,
+    18,
+    1.0,
+    1.0,
+    0.00799,
+    0.00868,
+    "[-0.000366, 0.002111]",
+    9722,
+    18614,
+    "ok"
+   ],
+   [
+    "followups",
+    143,
+    346,
+    1.0,
+    1.0,
+    0.00215,
+    0.00121,
+    "[-0.001785, -0.000362]",
+    15467,
+    8430,
+    "ok"
+   ],
+   [
+    "photo extract",
+    3,
+    9,
+    1.0,
+    1.0,
+    0.00782,
+    0.00949,
+    "[-0.001297, 0.004349]",
+    7657,
+    10001,
+    "insufficient n"
+   ]
+  ]
+ },
+ "ledger_turns_before": 470,
+ "ledger_turns_after": 1061,
+ "regressions": [],
+ "regression_approval": null,
+ "rollback_approval": null,
+ "verdict": "no regression in ledger eval (baseline version: evaluated across its last file change)",
+ "tracked_files": [
+  "bff/src/ops/prompt.ts",
+  "bff/src/agents/roles.ts",
+  "bff/src/config.ts"
+ ],
+ "eval_method": "token_ledger.jsonl turns between the previous config's change time and this one vs after it, per role; ok-rate (Wilson) and cost (bootstrap)"
+}

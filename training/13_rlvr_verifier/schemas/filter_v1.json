@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sparky.demo.internal/schemas/filter_v1.json",
+  "title": "Sparky search filter (RLVR target, playbook §13)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["category", "price_max", "dietary", "brand", "evidence"],
+  "properties": {
+    "category": {
+      "type": "string",
+      "enum": ["grocery", "home_kitchen", "baby", "health_household", "pet", "electronics_accessories"]
+    },
+    "price_max": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 10000
+    },
+    "dietary": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "enum": ["gluten_free", "vegan", "organic"]}
+    },
+    "brand": {"type": ["string", "null"], "maxLength": 80},
+    "evidence": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "a literal substring of the shopper query that justifies the filter"
+    }
+  }
+}

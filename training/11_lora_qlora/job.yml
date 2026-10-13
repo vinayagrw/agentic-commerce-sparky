@@ -1,0 +1,42 @@
+# Azure ML job for technique 11: LoRA / QLoRA tail-query rewriter
+# Submit with ONE command from this directory:
+#     az ml job create -f job.yml --resource-group <rg> --workspace-name <ws>
+#
+# Prerequisites: `az extension add -n ml`, an AML compute cluster named below, and the ESCI
+# parquet files registered as the data asset `sparky_esci` (scripts/fetch_data.py produces them).
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+experiment_name: sparky-sota-11
+display_name: sota-11-lora-qlora
+description: >-
+  LoRA / QLoRA tail-query rewriter. See README.md for the GPU SKU, the cost arithmetic and the expected result.
+
+# `code` is the whole training/ tree so that common/ and this directory ship together.
+code: ../
+command: >-
+  python 11_lora_qlora/train_lora.py
+  --model meta-llama/Llama-3.1-8B-Instruct --qlora --tail-only
+  --output-dir ${{outputs.model}}
+
+environment:
+  image: mcr.microsoft.com/azureml/curated/acpt-pytorch-2.2-cuda12.1:latest
+  conda_file: null
+
+inputs:
+  esci:
+    type: uri_folder
+    path: azureml:sparky_esci@latest
+    mode: ro_mount
+
+outputs:
+  model:
+    type: uri_folder
+
+environment_variables:
+  SPARKY_DATA_DIR: ${{inputs.esci}}
+  MLFLOW_EXPERIMENT_NAME: sparky-sota-11
+
+compute: azureml:gpu-11
+resources:
+  instance_count: 1
+  # SKU: 1x NVIDIA A100 80GB (Azure Standard_NC24ads_A100_v4 / GCP a2-ultragpu-1g)
+  # set the cluster's vm_size to Standard_NC24ads_A100_v4

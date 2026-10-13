@@ -1,0 +1,279 @@
+{
+  "generated_at": "2026-09-16T02:42:24Z",
+  "generator": "scripts/measure_techniques.py",
+  "status": "real-measured",
+  "contract": "Every number in `measurements` was computed by this script on this machine against the real ESCI subset in data/. Companion file training/NOT_RUN_HERE.json holds the techniques whose scripts exist but were NOT executed; nothing is shared between the two files.",
+  "environment": {
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "python": "3.12.12",
+    "catalogue_size": 25003,
+    "split": "test",
+    "eval_metric": "engine.ndcg10 - exponential gain, cut at 10, identical to /eval/ndcg"
+  },
+  "seconds": 67.8,
+  "techniques": [
+    {
+      "id": 8,
+      "name": "Contextual retrieval (LLM-written situating context, re-embedded variant index)",
+      "status": "real-measured",
+      "code": {
+        "generator": "scripts/contextual_enrich.py",
+        "index": "engine.VariantIndex / Engine.rank_variant",
+        "endpoint_search": "POST /search/variant",
+        "endpoint_eval": "POST /eval/contextual"
+      },
+      "sample_size": 67,
+      "how_computed": "Paired per-query NDCG@10 on the 67 held-out ESCI `baby` queries inside the first 200 test-split queries selected by engine.eval_qids - the same query selection and the same engine.ndcg10 (exponential gain) the existing /eval/ndcg and /eval/compare use. The two arms differ ONLY in the document representation used by first-stage retrieval. 95% CI: percentile bootstrap over paired per-query deltas, 1000 resamples, seed 20260915 (mlops.MLOps.bootstrap_ci).",
+      "measurements": {
+        "ndcg10_baseline_rrf": {
+          "value": 0.5007,
+          "how_computed": "RRF(k=60) over baseline BM25+dense, no reranker",
+          "sample_size": 67
+        },
+        "ndcg10_contextual_rrf": {
+          "value": 0.5194,
+          "how_computed": "RRF(k=60) over enriched BM25+dense, no reranker",
+          "sample_size": 67
+        },
+        "ndcg10_delta_retrieval_only": {
+          "value": 0.01878,
+          "how_computed": "paired delta, contextual - baseline (no reranker)",
+          "sample_size": 67,
+          "ci95": [
+            -0.0051,
+            0.04062
+          ],
+          "p_le_0": 0.049,
+          "wins": 33,
+          "losses": 22,
+          "ties": 12,
+          "verdict": "null result: the 95% CI of the paired delta straddles zero"
+        },
+        "ndcg10_baseline_rrf_rerank": {
+          "value": 0.5345,
+          "how_computed": "production path: RRF + cross-encoder top-50",
+          "sample_size": 67
+        },
+        "ndcg10_contextual_rrf_rerank": {
+          "value": 0.5344,
+          "how_computed": "production path with the enriched index",
+          "sample_size": 67
+        },
+        "ndcg10_delta_production_path": {
+          "value": -0.00015,
+          "how_computed": "paired delta on the production path",
+          "sample_size": 67,
+          "ci95": [
+            -0.00812,
+            0.00795
+          ],
+          "p_le_0": 0.531,
+          "wins": 7,
+          "losses": 4,
+          "ties": 56,
+          "verdict": "null result: the 95% CI of the paired delta straddles zero"
+        },
+        "contexts_accepted": {
+          "value": 892,
+          "how_computed": "contexts surviving schema + length + entity check",
+          "sample_size": 948,
+          "acceptance_rate": 0.9409
+        },
+        "generation_cost_usd": {
+          "value": 1.9094,
+          "how_computed": "summed total_cost_usd reported by the claude CLI",
+          "sample_size": 25,
+          "budget_usd": 1.5,
+          "usd_per_accepted_context": 0.002141
+        }
+      },
+      "verdict": "null result: the 95% CI of the paired delta straddles zero",
+      "caveats": [
+        "Only the enriched slice differs between the arms; every other document keeps its baseline text.",
+        "The cross-encoder pair text is unchanged, so enrichment can only move which documents reach the rerank window and in what first-stage order.",
+        "The slice is the baseline candidate pool, so a document that ONLY enrichment would have surfaced was never enriched. That makes the measurement conservative, not optimistic.",
+        "The playbook's own 'When NOT to use' for this technique names structured catalogue records. This is a structured catalogue."
+      ],
+      "citation": "Anthropic engineering, \"Introducing Contextual Retrieval\", Sept 2024. That post reports a 35-67% reduction in top-20 retrieval failure on document corpora with prompt caching; it is NOT a result on this catalogue and is not claimed as one here. The playbook's own \"When NOT to use\" for this technique names structured catalogue records, which is what was tested."
+    },
+    {
+      "id": 9,
+      "name": "Late-interaction retrieval (ColBERT-style MaxSim over TEXT)",
+      "status": "real-measured",
+      "code": {
+        "scorer": "engine.Engine.maxsim / Engine.late_interaction",
+        "endpoint_search": "POST /search/late_interaction",
+        "endpoint_eval": "POST /eval/late_interaction"
+      },
+      "sample_size": 200,
+      "how_computed": "Paired per-query NDCG@10 on the 200 held-out test-split ESCI queries selected by engine.eval_qids, scored with engine.ndcg10 - identical selection and metric to /eval/ndcg. All three arms share the same BM25 + dense RRF(k=60) first stage; only the rescorer of the top-50 differs. Latency is per-query wall clock inside the engine, with the document-token cache DISABLED, so p50/p95 is the cold cost. 95% CI: percentile bootstrap over paired deltas, 1000 resamples, seed 20260915.",
+      "measurements": {
+        "ndcg10_hybrid_rrf": {
+          "value": 0.5725,
+          "how_computed": "first stage only, no rescoring",
+          "sample_size": 200
+        },
+        "ndcg10_hybrid_rrf_rerank": {
+          "value": 0.6027,
+          "how_computed": "current production path: cross-encoder ms-marco-MiniLM-L-6-v2 on top-50",
+          "sample_size": 200
+        },
+        "ndcg10_late_interaction": {
+          "value": 0.5896,
+          "how_computed": "MaxSim rescoring of the same top-50 with bge-small token embeddings",
+          "sample_size": 200
+        },
+        "ndcg10_delta_vs_production": {
+          "value": -0.01315,
+          "how_computed": "paired delta, MaxSim - cross-encoder rerank",
+          "sample_size": 200,
+          "ci95": [
+            -0.03164,
+            0.00427
+          ],
+          "p_le_0": 0.921,
+          "wins": 84,
+          "losses": 93,
+          "verdict": "null result: the 95% CI of the paired delta straddles zero"
+        },
+        "ndcg10_delta_vs_first_stage": {
+          "value": 0.01703,
+          "how_computed": "paired delta, MaxSim - RRF with no rescoring",
+          "sample_size": 200,
+          "ci95": [
+            -0.00168,
+            0.036
+          ],
+          "p_le_0": 0.038,
+          "wins": 98,
+          "losses": 83,
+          "verdict": "null result: the 95% CI of the paired delta straddles zero"
+        },
+        "latency_p50_ms_production": {
+          "value": 73.9,
+          "how_computed": "median per-query engine wall clock",
+          "sample_size": 200
+        },
+        "latency_p95_ms_production": {
+          "value": 108.5,
+          "how_computed": "95th percentile per-query engine wall clock",
+          "sample_size": 200
+        },
+        "latency_p50_ms_late_interaction": {
+          "value": 127.5,
+          "how_computed": "median per-query engine wall clock, doc-token cache disabled",
+          "sample_size": 200
+        },
+        "latency_p95_ms_late_interaction": {
+          "value": 181.5,
+          "how_computed": "95th percentile per-query engine wall clock, doc-token cache disabled",
+          "sample_size": 200
+        }
+      },
+      "verdict": "null result: the 95% CI of the paired delta straddles zero",
+      "colpali_disclaimer": "ColPali is the VISION variant of this technique and is NOT run here. No image model runs in this repository, no page is rasterised, and no number produced by this endpoint is a visual-retrieval result.",
+      "caveats": [
+        "bge-small token vectors were trained for mean-pooled sentence similarity, not for late interaction. A trained ColBERT checkpoint has [Q]/[D] marker tokens and a learned 128-d projection this does not. This measures the SHAPE of the technique on the existing encoder, not ColBERTv2's published quality.",
+        "Latency was measured on one macOS laptop with OMP_NUM_THREADS=1, single request at a time. It is a relative comparison between arms on identical hardware, not a service SLO."
+      ],
+      "citation": "ColBERTv2, Santhanam et al., NAACL 2022. ColPali, Faysse et al., arXiv:2407.01449, ICLR 2025 - the VISION variant, NOT run here. No published ColBERT or ColPali number is reproduced or claimed by this record."
+    },
+    {
+      "id": 10,
+      "name": "Routed GraphRAG (networkx product graph + rules-first query router)",
+      "status": "real-measured",
+      "code": {
+        "graph": "services/search-svc/graph.py",
+        "eval_set": "services/search-svc/graph_eval_set.json",
+        "endpoint_stats": "GET /graph/stats",
+        "endpoint_route": "POST /graph/route",
+        "endpoint_eval": "GET /graph/eval"
+      },
+      "sample_size": 30,
+      "how_computed": "The router was run over all 30 queries of the hand-labelled set. A query counts as a true positive when its gold route is not `hybrid` and the router did not send it to `hybrid`. Graph hit rate is the share of graph-routed queries for which traversal returned at least one product reached over a real edge. Intervals are 95% Wilson score intervals on the proportion - the correct interval at this sample size, and wide because the sample is small. No bootstrap is reported because there is no paired continuous metric here.",
+      "graph": {
+        "nodes": 35935,
+        "edges": 317856,
+        "nodes_by_kind": {
+          "product": 25003,
+          "brand": 10926,
+          "category": 6
+        },
+        "edges_by_relation": {
+          "brand": 25003,
+          "brand_of": 25003,
+          "category": 25003,
+          "category_of": 25003,
+          "co_intent": 116484,
+          "complement": 4333,
+          "complement_of": 4333,
+          "substitute": 93170
+        },
+        "source": {
+          "nodes": "data/products.parquet (25,003 real ESCI products)",
+          "relational_edges": "ESCI E/S/C labels in qrels_{dev,test}.parquet",
+          "co_intent_cap_per_query": 10
+        },
+        "caveat": "substitute/complement/co_intent edges come from the same ESCI relevance labels the NDCG eval scores against, so no graph-vs-hybrid NDCG number is reported on ESCI queries"
+      },
+      "measurements": {
+        "router_precision": {
+          "value": 0.9375,
+          "how_computed": "TP / (TP + FP) over graph-routed predictions",
+          "sample_size": 16,
+          "ci95": [
+            0.7167,
+            0.9889
+          ],
+          "tp": 15,
+          "fp": 1
+        },
+        "router_recall": {
+          "value": 1.0,
+          "how_computed": "TP / (TP + FN) over graph-labelled queries",
+          "sample_size": 15,
+          "ci95": [
+            0.7961,
+            1.0
+          ],
+          "tp": 15,
+          "fn": 0
+        },
+        "router_f1": {
+          "value": 0.9677,
+          "how_computed": "harmonic mean of the two above",
+          "sample_size": 30
+        },
+        "router_exact_route_accuracy_3class": {
+          "value": 0.9667,
+          "how_computed": "exact match over {hybrid, graph_local, graph_global}",
+          "sample_size": 30,
+          "ci95": [
+            0.8333,
+            0.9941
+          ]
+        },
+        "graph_hit_rate": {
+          "value": 1.0,
+          "how_computed": "fraction of graph-routed queries for which traversal returned >=1 product reached over a real edge",
+          "sample_size": 16,
+          "ci95": [
+            0.8064,
+            1.0
+          ]
+        }
+      },
+      "verdict": "Router and traversal both work on the intents they were written for. The single false positive is a deliberate lexical trap ('car seat that FITS a newborn'), which is the documented failure mode of a rules-first router and the reason the playbook pairs it with a classifier fallback.",
+      "caveats": [
+        "n=30. A 95% Wilson interval on a proportion measured on 30 items is roughly +/-0.15-0.20 wide, so precision/recall here cannot separate a good router from a mediocre one.",
+        "Single labeller, no adjudication, no inter-annotator agreement. The labeller also wrote the router rules, so the set is not independent of the system under test - it is a smoke test, not an unbiased benchmark.",
+        "Queries are written in clean English. Real Sparky traffic is short, misspelt and elliptical, which is the regime rules routers fail in.",
+        "The hybrid half is deliberately seeded with near-miss lexical traps ('substitute' as a food word, 'fits' as a size word) because those are the cases a keyword router gets wrong.",
+        "n=30 hand-labelled queries. A 95% Wilson interval on a proportion at this sample size is roughly +/-0.15-0.20 wide, so these numbers are a smoke test of the routing rules, not evidence of generalisation.",
+        "The graph's substitute/complement/co_intent edges are derived from the SAME ESCI relevance labels the NDCG eval scores against. No graph-vs-hybrid NDCG number is reported, because it would be circular.",
+        "The router rules were debugged against this same 30-query set, so these numbers are in-sample."
+      ],
+      "citation": "Microsoft GraphRAG, Edge et al., arXiv:2404.16130. \"RAG vs GraphRAG\", arXiv:2502.11371. The playbook's expected \"+10-13 points on multi-hop\" is a PROPOSAL there and is neither reproduced nor claimed here."
+    }
+  ]
+}

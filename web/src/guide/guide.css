@@ -1,0 +1,34 @@
+/*
+ * Guide portal: print/export rules only. Every colour and space comes from styles/theme.css;
+ * nothing here defines one. On print the portal collapses to a single readable document:
+ * chrome (sidebar, sub-nav, filters, buttons) is dropped and every tab panel is expanded.
+ */
+@media print {
+  [data-guide-chrome] {
+    display: none !important;
+  }
+  [data-guide-scroll] {
+    overflow: visible !important;
+    max-height: none !important;
+    height: auto !important;
+  }
+  /* Radix Tabs hides inactive panels with hidden/data-state; print them all, in order. */
+  [data-guide-print-all] [role="tabpanel"] {
+    display: block !important;
+  }
+  [data-guide-print-all] [role="tabpanel"][hidden] {
+    display: block !important;
+  }
+  [data-guide-print-section] {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.75em;
+    word-break: break-all;
+  }
+  a[href^="#"]::after {
+    content: "";
+  }
+}

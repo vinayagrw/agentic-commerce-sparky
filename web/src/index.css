@@ -1,0 +1,4 @@
+/* Entry stylesheet. Tokens live in styles/theme.css; nothing else defines a colour. */
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "./styles/theme.css";

@@ -1,0 +1,343 @@
+{
+ "corpus_note": "Demo corpus written for this Sparky Next environment. It is NOT any real retailer's policy and must not be quoted as such.",
+ "version": 1,
+ "docs": [
+  {
+   "doc_id": "returns",
+   "title": "Returns and refunds (demo)",
+   "title_es": "Devoluciones y reembolsos (demo)",
+   "demo_corpus": true,
+   "sections": [
+    {
+     "section": "Return window",
+     "lang": "en",
+     "text": "Most items can be returned within 90 days of purchase with a receipt or order number. Electronics have a 30 day return window. Return an item in store or start a return online from your order history."
+    },
+    {
+     "section": "Refunds",
+     "lang": "en",
+     "text": "Refunds go back to the original payment method. Card refunds usually post within 3 to 5 business days; SNAP EBT refunds return to the EBT card."
+    },
+    {
+     "section": "Non-returnable items",
+     "lang": "en",
+     "text": "Opened perishable groceries, gift cards and prescription items cannot be returned. Damaged or wrong grocery items can be refunded without returning them."
+    },
+    {
+     "section": "Plazo de devolución",
+     "lang": "es",
+     "text": "La mayoría de los productos se pueden devolver dentro de 90 días con recibo o número de pedido. Los electrónicos tienen 30 días. Puede devolver un producto en la tienda o iniciar la devolución en línea desde su historial de pedidos."
+    },
+    {
+     "section": "Reembolsos",
+     "lang": "es",
+     "text": "El reembolso se hace al método de pago original, normalmente en 3 a 5 días hábiles."
+    }
+   ],
+   "keywords": [
+    "return",
+    "returns",
+    "refund",
+    "devolver",
+    "devuelvo",
+    "devolucion",
+    "devoluciones",
+    "reembolso"
+   ]
+  },
+  {
+   "doc_id": "pickup",
+   "title": "Store pickup (demo)",
+   "title_es": "Recoger en tienda (demo)",
+   "demo_corpus": true,
+   "sections": [
+    {
+     "section": "How pickup works",
+     "lang": "en",
+     "text": "Choose pickup at checkout and select a store. When the order is ready you get a notification; park in a pickup spot and check in with the app. Pickup is free on orders over $35."
+    },
+    {
+     "section": "Ready times",
+     "lang": "en",
+     "text": "Small orders are usually ready in about 1 hour and larger orders in 2 to 4 hours, depending on store stock. Orders are held for 3 days."
+    },
+    {
+     "section": "Cómo recoger su pedido",
+     "lang": "es",
+     "text": "Elija recoger en tienda al pagar y seleccione una tienda. Cuando el pedido esté listo recibirá un aviso; estaciónese en un lugar de recogida y registre su llegada en la app. Es gratis en pedidos de más de $35."
+    },
+    {
+     "section": "Tiempo de preparación",
+     "lang": "es",
+     "text": "Los pedidos pequeños suelen estar listos en 1 hora y los grandes en 2 a 4 horas. Los pedidos se guardan 3 días."
+    }
+   ],
+   "keywords": [
+    "pickup",
+    "pick up",
+    "curbside",
+    "recoger",
+    "recogida"
+   ]
+  },
+  {
+   "doc_id": "delivery",
+   "title": "Delivery (demo)",
+   "title_es": "Entrega a domicilio (demo)",
+   "demo_corpus": true,
+   "sections": [
+    {
+     "section": "Delivery options",
+     "lang": "en",
+     "text": "Delivery is available in most areas in 2 hour windows. A delivery fee from $6.95 to $9.95 applies to orders under $35; the minimum order is $35 for free delivery windows."
+    },
+    {
+     "section": "Missed delivery",
+     "lang": "en",
+     "text": "If nobody is home, perishable items are not left at the door and the order is refunded."
+    },
+    {
+     "section": "Opciones de entrega",
+     "lang": "es",
+     "text": "La entrega a domicilio está disponible en ventanas de 2 horas. Se cobra una tarifa de $6.95 a $9.95 en pedidos de menos de $35."
+    }
+   ],
+   "keywords": [
+    "delivery",
+    "deliver",
+    "entrega",
+    "envio",
+    "domicilio"
+   ]
+  },
+  {
+   "doc_id": "substitutions",
+   "title": "Substitutions (demo)",
+   "title_es": "Sustituciones (demo)",
+   "demo_corpus": true,
+   "sections": [
+    {
+     "section": "Substitution policy",
+     "lang": "en",
+     "text": "If an item is out of stock we may substitute a similar item of equal or greater size at the same price or lower. You can turn substitutions off per item before checkout."
+    },
+    {
+     "section": "Rejecting a substitute",
+     "lang": "en",
+     "text": "You can reject a substitute at pickup or delivery and you will not be charged for it."
+    },
+    {
+     "section": "Política de sustitución",
+     "lang": "es",
+     "text": "Si un producto está agotado podemos sustituirlo por uno similar al mismo precio o menor. Puede desactivar las sustituciones por producto antes de pagar."
+    }
+   ],
+   "keywords": [
+    "substitution",
+    "substitute",
+    "sustitucion",
+    "sustituir"
+   ]
+  },
+  {
+   "doc_id": "snap_ebt",
+   "title": "SNAP EBT payments (demo)",
+   "title_es": "Pagos con SNAP EBT (demo)",
+   "demo_corpus": true,
+   "sections": [
+    {
+     "section": "Using SNAP EBT",
+     "lang": "en",
+     "text": "SNAP EBT cards can be used online and in store for eligible grocery items. Enter the EBT card at checkout; eligible items are paid first from the SNAP balance."
+    },
+    {
+     "section": "What is eligible",
+     "lang": "en",
+     "text": "Most food items are SNAP eligible. Not eligible: alcohol, tobacco, vitamins and supplements, hot prepared foods, and non-food items. Delivery fees cannot be paid with SNAP."
+    },
+    {
+     "section": "Uso de SNAP EBT",
+     "lang": "es",
+     "text": "Las tarjetas SNAP EBT se pueden usar en línea y en tienda para alimentos elegibles. No son elegibles: alcohol, tabaco, vitaminas y suplementos, comidas calientes y productos que no son alimentos."
+    }
+   ],
+   "keywords": [
+    "snap",
+    "ebt",
+    "food stamps",
+    "cupones de alimentos"
+   ]
+  },
+  {
+   "doc_id": "age_restricted",
+   "title": "Age-restricted items (demo)",
+   "title_es": "Productos con restricción de edad (demo)",
+   "demo_corpus": true,
+   "sections": [
+    {
+     "section": "ID check",
+     "lang": "en",
+     "text": "Alcohol, tobacco and nicotine products, lighters and butane, and some knives require the buyer to be at least 21 (18 for some items). A valid photo ID is checked at pickup or delivery."
+    },
+    {
+     "section": "If ID cannot be verified",
+     "lang": "en",
+     "text": "If ID cannot be verified the restricted items are removed from the order and refunded."
+    },
+    {
+     "section": "Verificación de edad",
+     "lang": "es",
+     "text": "El alcohol, tabaco y nicotina, encendedores y algunos cuchillos requieren una edad mínima de 21 años (18 para algunos productos). Se verifica una identificación con foto al recoger o entregar."
+    }
+   ],
+   "keywords": [
+    "age",
+    "id",
+    "alcohol",
+    "tobacco",
+    "edad",
+    "identificacion"
+   ]
+  },
+  {
+   "doc_id": "store_hours",
+   "title": "Store hours (demo)",
+   "title_es": "Horario de las tiendas (demo)",
+   "demo_corpus": true,
+   "sections": [
+    {
+     "section": "Hours",
+     "lang": "en",
+     "text": "Demo stores are open 6 am to 11 pm local time every day. Pharmacy hours are shorter. Holiday hours may differ."
+    },
+    {
+     "section": "Horario",
+     "lang": "es",
+     "text": "Las tiendas de demostración abren de 6 am a 11 pm hora local todos los días. El horario de farmacia es más corto."
+    }
+   ],
+   "keywords": [
+    "hours",
+    "open",
+    "close",
+    "horario",
+    "abre",
+    "cierra"
+   ]
+  },
+  {
+   "doc_id": "order_status",
+   "title": "Order status (demo)",
+   "title_es": "Estado del pedido (demo)",
+   "demo_corpus": true,
+   "sections": [
+    {
+     "section": "Tracking an order",
+     "lang": "en",
+     "text": "Open order history to see the status of your order: placed, being prepared, ready for pickup, out for delivery, or completed. You get notifications at each step."
+    },
+    {
+     "section": "Estado del pedido",
+     "lang": "es",
+     "text": "Abra su historial de pedidos para ver el estado: realizado, en preparación, listo para recoger, en camino o completado."
+    }
+   ],
+   "keywords": [
+    "order status",
+    "track",
+    "where is my order",
+    "pedido",
+    "estado"
+   ]
+  },
+  {
+   "doc_id": "price_adjustments",
+   "title": "Price adjustments (demo)",
+   "title_es": "Ajustes de precio (demo)",
+   "demo_corpus": true,
+   "sections": [
+    {
+     "section": "Price changes before pickup",
+     "lang": "en",
+     "text": "Prices can change between adding an item and checkout. The price at checkout revalidation is the price charged. If the price drops before pickup you are charged the lower price."
+    },
+    {
+     "section": "Price match",
+     "lang": "en",
+     "text": "Demo stores do not match competitor prices."
+    },
+    {
+     "section": "Ajustes de precio",
+     "lang": "es",
+     "text": "Los precios pueden cambiar entre agregar un producto y pagar. Se cobra el precio vigente al validar el pago; si baja antes de recoger, se cobra el precio menor."
+    }
+   ],
+   "keywords": [
+    "price adjustment",
+    "price match",
+    "price change",
+    "ajuste de precio"
+   ]
+  },
+  {
+   "doc_id": "privacy",
+   "title": "Privacy (demo)",
+   "title_es": null,
+   "demo_corpus": true,
+   "sections": [
+    {
+     "section": "Privacy summary",
+     "lang": "en",
+     "text": "This demo stores cart, list and order data per session in a local database. It does not collect payment details and does not execute payments. Session data can be deleted by clearing the session."
+    }
+   ],
+   "keywords": [
+    "privacy",
+    "data",
+    "privacidad"
+   ]
+  },
+  {
+   "doc_id": "sponsored",
+   "title": "Sponsored listings (demo)",
+   "title_es": "Productos patrocinados (demo)",
+   "demo_corpus": true,
+   "sections": [
+    {
+     "section": "Sponsored disclosure",
+     "lang": "en",
+     "text": "Sponsored products are paid placements. They are labelled Sponsored, capped at one per eight results, and never affect the ranking of organic results."
+    },
+    {
+     "section": "Productos patrocinados",
+     "lang": "es",
+     "text": "Los productos patrocinados son ubicaciones pagadas, están etiquetados como Patrocinado y se limitan a uno por cada ocho resultados."
+    }
+   ],
+   "keywords": [
+    "sponsored",
+    "ad",
+    "ads",
+    "patrocinado"
+   ]
+  },
+  {
+   "doc_id": "accessibility",
+   "title": "Accessibility (demo)",
+   "title_es": null,
+   "demo_corpus": true,
+   "sections": [
+    {
+     "section": "Accessibility features",
+     "lang": "en",
+     "text": "The storefront supports keyboard navigation, screen readers and high contrast. Pickup associates can bring orders to the car. Contact the store for help with accessibility needs."
+    }
+   ],
+   "keywords": [
+    "accessibility",
+    "screen reader",
+    "accesibilidad"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,41 @@
+# Azure ML job for technique 23: PagedAttention + automatic prefix caching (vLLM)
+# Submit with ONE command from this directory:
+#     az ml job create -f job.yml --resource-group <rg> --workspace-name <ws>
+#
+# Prerequisites: `az extension add -n ml`, an AML compute cluster named below, and the ESCI
+# parquet files registered as the data asset `sparky_esci` (scripts/fetch_data.py produces them).
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+experiment_name: sparky-sota-23
+display_name: sota-23-prefix-caching
+description: >-
+  PagedAttention + automatic prefix caching (vLLM). See README.md for the GPU SKU, the cost arithmetic and the expected result.
+
+# `code` is the repo root, so that serving/ and training/common/ (the shared ESCI data module) both ship with the job.
+code: ../../
+command: >-
+  python serving/23_prefix_caching/serve_prefix_cache.py
+  --serve --model /models/qu-rewriter-8b-lora-fp8
+
+environment:
+  image: vllm/vllm-openai:v0.11.0
+  conda_file: null
+
+inputs:
+  esci:
+    type: uri_folder
+    path: azureml:sparky_esci@latest
+    mode: ro_mount
+
+outputs:
+  model:
+    type: uri_folder
+
+environment_variables:
+  SPARKY_DATA_DIR: ${{inputs.esci}}
+  MLFLOW_EXPERIMENT_NAME: sparky-sota-23
+
+compute: azureml:gpu-23
+resources:
+  instance_count: 1
+  # SKU: 1x NVIDIA L4 (GCP g2-standard-8) / 1x A10 (Azure Standard_NV36ads_A10_v5) for the 8B FP8 tail-QU rewriter
+  # set the cluster's vm_size to Standard_NV36ads_A10_v5

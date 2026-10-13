@@ -1,0 +1,66 @@
+# Example GitHub Actions workflow: evals as a CI gate for search-model changes (playbook technique 18).
+# Copy to .github/workflows/eval-gate.yml. The job fails (exit 1) when the gate fails.
+name: eval-gate
+
+on:
+  pull_request:
+    paths: ["services/search-svc/**", "services/shop-mcp/**", "evals/**", "scripts/run_evals.py"]
+  workflow_dispatch:
+    inputs:
+      candidate:
+        description: "Model version to gate (default: registry candidate)"
+        required: false
+
+jobs:
+  eval-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      SEARCH_SVC_URL: http://127.0.0.1:8801
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with: {python-version: "3.12"}
+
+      - name: Cache ESCI data + index
+        uses: actions/cache@v4
+        with:
+          path: |
+            data/*.parquet
+            data/bm25
+            data/faiss.index
+            data/embeddings.npy
+            ~/.cache/huggingface
+          key: esci-index-${{ hashFiles('scripts/build_index.py', 'scripts/fetch_data.py') }}
+
+      - name: Install
+        run: |
+          cd services/search-svc && uv sync
+          cd ../shop-mcp && uv sync
+          cd ../ops-mcp && uv sync
+
+      - name: Build data (cache miss)
+        run: |
+          test -f data/faiss.index || (cd services/search-svc && uv run python ../../scripts/fetch_data.py && uv run python ../../scripts/build_index.py)
+
+      - name: Unit tests
+        run: |
+          cd services/shop-mcp && uv run pytest -q
+          cd ../ops-mcp && uv run pytest -q
+
+      - name: Start search-svc
+        run: |
+          cd services/search-svc && nohup uv run uvicorn app:app --host 127.0.0.1 --port 8801 > /tmp/search.log 2>&1 &
+          for i in $(seq 1 90); do curl -sf http://127.0.0.1:8801/health && break; sleep 2; done
+
+      - name: Eval gate (NDCG CI + latency + red team; pass^k skipped without a Claude login)
+        run: |
+          cd services/ops-mcp
+          uv run python ../../scripts/run_evals.py --skip-agent ${{ github.event.inputs.candidate && format('--candidate {0}', github.event.inputs.candidate) || '' }}
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: evals/results.json

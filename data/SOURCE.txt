@@ -1,0 +1,1 @@
+Amazon ESCI Shopping Queries (Apache-2.0), US locale subset; commerce fields synthetic

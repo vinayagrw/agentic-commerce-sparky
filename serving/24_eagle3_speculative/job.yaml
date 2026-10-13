@@ -1,0 +1,44 @@
+# Vertex AI CustomJob for technique 24: EAGLE-3 speculative decoding (vLLM)
+# Submit with ONE command from this directory:
+#     gcloud ai custom-jobs create --region=us-central1 \
+#         --display-name=sota-24-eagle3-speculative --config=job.yaml
+#
+# Prerequisites: a container image in Artifact Registry built from requirements.txt, and the
+# ESCI parquet files in GCS at gs://<bucket>/sparky/data (scripts/fetch_data.py produces them).
+workerPoolSpecs:
+  - machineSpec:
+      machineType: a3-highgpu-8g
+      acceleratorType: NVIDIA_H100_80GB
+      acceleratorCount: 8
+    replicaCount: 1
+    diskSpec:
+      bootDiskType: pd-ssd
+      bootDiskSizeGb: 500
+    containerSpec:
+      imageUri: us-central1-docker.pkg.dev/PROJECT_ID/sparky/sota-24:latest
+      command: ["python", "serving/24_eagle3_speculative/bench_eagle3.py"]
+      args:
+        - "--sweep"
+        - "--k"
+        - "1"
+        - "2"
+        - "3"
+        - "4"
+        - "5"
+        - "--batch"
+        - "1"
+        - "8"
+        - "16"
+        - "64"
+        - "--out"
+        - "/gcs/BUCKET/sparky/out/sota-24-eagle3-speculative/results.json"
+      env:
+        - name: SPARKY_DATA_DIR
+          value: "/gcs/BUCKET/sparky/data"
+        - name: MLFLOW_EXPERIMENT_NAME
+          value: "sparky-sota-24"
+
+baseOutputDirectory:
+  outputUriPrefix: gs://BUCKET/sparky/out/sota-24-eagle3-speculative
+
+# SKU: 8x NVIDIA H100 80GB (Azure Standard_ND96isr_H100_v5 / GCP a3-highgpu-8g); the 70B FP8 target uses TP=4, the draft head TP=1

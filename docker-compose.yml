@@ -1,0 +1,28 @@
+# Optional containerised services. The BFF normally runs on the host because it
+# spawns the local `claude` CLI with your own login (no API key in containers).
+services:
+  search-svc:
+    image: ghcr.io/astral-sh/uv:python3.12-bookworm-slim
+    working_dir: /app/services/search-svc
+    command: sh -c "uv sync && uv run uvicorn app:app --host 0.0.0.0 --port 8801"
+    volumes: [".:/app"]
+    ports: ["8801:8801"]
+  # Technique 29: local trace backend for the BFF's OTel GenAI spans.
+  #   docker compose up -d jaeger    then    OTEL_ENABLED=1 npm run dev:bff
+  #   UI: http://127.0.0.1:16686 (service "sparky-bff")
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"
+    ports: ["16686:16686", "4318:4318"]
+
+  shop-http:
+    image: ghcr.io/astral-sh/uv:python3.12-bookworm-slim
+    working_dir: /app/services/shop-mcp
+    command: sh -c "uv sync && uv run shop-http"
+    environment:
+      SEARCH_SVC_URL: http://search-svc:8801
+      SHOP_HTTP_HOST: 0.0.0.0
+    volumes: [".:/app"]
+    ports: ["8802:8802"]
+    depends_on: [search-svc]

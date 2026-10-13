@@ -1,0 +1,72 @@
+{
+  "name": "ctx_baby",
+  "technique": 8,
+  "technique_name": "Contextual retrieval",
+  "generated_at": "2026-09-16T02:36:16Z",
+  "slice": {
+    "category": "baby",
+    "products_in_slice": 948,
+    "attempted": 948,
+    "catalogue_size": 25003,
+    "candidate_pool": {
+      "basis": "union of baseline BM25+dense RRF(k=60) top-K over the held-out queries of this category",
+      "split": "test",
+      "n_queries_scanned": 200,
+      "queries_in_category": 67,
+      "pool_depth": 20,
+      "pool_size": 1080,
+      "in_category_pool_size": 948
+    },
+    "why": "largest share of the 200 held-out ESCI test queries used by the existing eval",
+    "conservative_bias": "documents outside the baseline candidate pool are not enriched, so a document that only enrichment would have surfaced cannot gain; the design can under-state a positive effect, never manufacture one"
+  },
+  "generator": {
+    "model": "haiku",
+    "cli": "claude -p, 1 turn, no tools",
+    "batch_size": 40,
+    "parallel": 8,
+    "prompt_hash": "7649f6c6abf9"
+  },
+  "verification": {
+    "max_words": 55,
+    "checks": [
+      "schema: one object per requested id",
+      "length <= 55 words",
+      "entity: every number and non-leading capitalised token must occur in the real product text"
+    ],
+    "rejected_reasons": {
+      "number not in product text": 39,
+      "capitalised token not in product text": 26
+    }
+  },
+  "results": {
+    "attempted": 948,
+    "accepted": 892,
+    "acceptance_rate": 0.9409,
+    "enriched_share_of_catalogue": 0.0357
+  },
+  "cost": {
+    "claude_calls": 25,
+    "failed_calls": 0,
+    "total_usd": 1.9094,
+    "budget_usd": 1.5,
+    "stopped_on_budget": false,
+    "usd_per_accepted_context": 0.002141
+  },
+  "seconds_generation": 516.1,
+  "index": {
+    "embed_seconds": 273.6,
+    "bm25_seconds": 0.6,
+    "embedding_model": "BAAI/bge-small-en-v1.5",
+    "n_texts": 25003,
+    "emb_shape": [
+      25003,
+      384
+    ]
+  },
+  "files": {
+    "emb": "emb.npy",
+    "bm25": "bm25/",
+    "contexts": "contexts.json"
+  }
+}

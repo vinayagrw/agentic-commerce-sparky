@@ -1,0 +1,35 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "web",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--workspace", "web"],
+      "port": 5173
+    },
+    {
+      "name": "bff",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--workspace", "bff"],
+      "port": 8787
+    },
+    {
+      "name": "search-svc",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["--directory", "services/search-svc", "run", "uvicorn", "app:app", "--host", "127.0.0.1", "--port", "8801"],
+      "port": 8801
+    },
+    {
+      "name": "shop-http",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["--directory", "services/shop-mcp", "run", "shop-http"],
+      "port": 8802
+    },
+    {
+      "name": "ops-http",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["--directory", "services/ops-mcp", "run", "ops-http"],
+      "port": 8803
+    }
+  ]
+}

@@ -1,0 +1,404 @@
+{
+  "label": "before",
+  "started_at": "2026-09-17T05:49:09.575Z",
+  "finished_at": "2026-09-17T06:05:48.074Z",
+  "bff": "http://127.0.0.1:8787",
+  "shopper": {
+    "turns": 10,
+    "model_calls": 44,
+    "input_tokens_total": 172417,
+    "uncached_input_tokens": 20267,
+    "cache_read_input_tokens": 101839,
+    "cache_creation_input_tokens": 50311,
+    "output_tokens": 69718,
+    "cost_usd": 0.63448,
+    "cache_hit_ratio": 0.591,
+    "first_token_p50_ms": 20485,
+    "total_p50_ms": 45301,
+    "checks_passed": 14,
+    "checks_total": 14,
+    "by_role": {
+      "Planner": {
+        "calls": 10,
+        "cost_usd": 0.0727,
+        "output_tokens": 13724
+      },
+      "Shopper": {
+        "calls": 9,
+        "cost_usd": 0.24225,
+        "output_tokens": 6568
+      },
+      "Critic": {
+        "calls": 10,
+        "cost_usd": 0.11057,
+        "output_tokens": 20322
+      },
+      "followups": {
+        "calls": 10,
+        "cost_usd": 0.14158,
+        "output_tokens": 26880
+      },
+      "Shopper revision": {
+        "calls": 4,
+        "cost_usd": 0.03318,
+        "output_tokens": 1297
+      },
+      "Checkout": {
+        "calls": 1,
+        "cost_usd": 0.03421,
+        "output_tokens": 927
+      }
+    }
+  },
+  "ops": {
+    "turns": 5,
+    "model_calls": 5,
+    "input_tokens_total": 74947,
+    "uncached_input_tokens": 22,
+    "cache_read_input_tokens": 42047,
+    "cache_creation_input_tokens": 32878,
+    "output_tokens": 3003,
+    "cost_usd": 0.17,
+    "cache_hit_ratio": 0.561,
+    "first_token_p50_ms": 3646,
+    "total_p50_ms": 11970,
+    "checks_passed": 5,
+    "checks_total": 5,
+    "by_role": {
+      "Ops Copilot": {
+        "calls": 5,
+        "cost_usd": 0.17,
+        "output_tokens": 3003
+      }
+    }
+  },
+  "turns": [
+    {
+      "plane": "shopper",
+      "n": 1,
+      "prompt": "Coffee plus filters bundle: one bag of ground coffee and a pack of #4 cone coffee filters, under $25 total.",
+      "runId": "c53253f6-a3da-48d3-af1b-b0573420a56c",
+      "first_token_ms": 24232,
+      "total_ms": 45301,
+      "tools": [
+        "search_products",
+        "search_products",
+        "add_to_cart",
+        "add_to_cart"
+      ],
+      "answer": "**Picks (within $25 budget):**\n- Ground coffee: **Gevalia French Roast Ground Coffee, 12 oz** — $1.88, in stock (21 at store 4108)\n- Filters: **Melitta #4 Cone Coffee Filters, 100 Count (Pack of 6)** — $15.97, in stock (20 at store 4108) — matches \"#4 cone\" constraint\n\nEstimated total: **$17.85** (under $25) ✅\n\nAdding both to cart now.**Proposed additions (awaiting your approval — nothing added yet):**\n\n| Item | Qty | Price |\n|---|---|---|\n| Gevalia French Roast Ground Coffee, 12 oz | 1 | $1.88 |\n| Melitta #4 Cone Coffee Filters, 100 Ct (Pack of 6) | 1 | $15.97 |\n| **Estimated total** | | **$1",
+      "approved": 2,
+      "checks": [
+        {
+          "name": "cart has ground coffee",
+          "pass": true,
+          "detail": "Melitta #4 Cone Coffee Filters, Natural Brown, 100 Count (Pack of 6) | Gevalia French Roast Ground Coffee (12 oz Bag)"
+        },
+        {
+          "name": "cart has #4 filters",
+          "pass": true,
+          "detail": "Melitta #4 Cone Coffee Filters, Natural Brown, 100 Count (Pack of 6) | Gevalia French Roast Ground Coffee (12 oz Bag)"
+        },
+        {
+          "name": "total <= $25",
+          "pass": true,
+          "detail": "17.85"
+        }
+      ]
+    },
+    {
+      "plane": "shopper",
+      "n": 2,
+      "prompt": "What is in my cart right now and what is the total?",
+      "runId": "68d9a099-a900-4464-ab1c-e34045860978",
+      "first_token_ms": 46645,
+      "total_ms": 61035,
+      "tools": [
+        "get_cart"
+      ],
+      "answer": "**Your cart (2 items) — Total: $17.85 of $25.00 budget ($7.15 remaining)**\n\n- Melitta #4 Cone Coffee Filters, Natural Brown, 100 Count (Pack of 6) — qty 1 — $15.97\n- Gevalia French Roast Ground Coffee (12 oz Bag) — qty 1 — $1.88\n\n**Ledger status:**\n- Budget: ✅ within $25 ($17.85 spent)\n- #4 cone filters requirement: ✅ met (Melitta #4 cone filters are in cart)\n\nNo omissions so far — let me know if you'd like to add/change anything.",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "answer states the real cart total",
+          "pass": true,
+          "detail": "total 17.85; answer $ 17.85,25,7.15,15.97,1.88,25,17.85"
+        }
+      ]
+    },
+    {
+      "plane": "shopper",
+      "n": 3,
+      "prompt": "Compare the top 3 #4 cone coffee filters and explain why each ranks where it does.",
+      "runId": "9bb3263b-7b25-43e4-9e24-954ca3cf08ea",
+      "first_token_ms": 36534,
+      "total_ms": 73594,
+      "tools": [
+        "search_products",
+        "search_products",
+        "compare_products"
+      ],
+      "answer": "**Heads-up first:** the catalog only has **one true #4 cone filter** — Melitta #4 (already in your cart). The next-best hybrid-RRF matches are actually **#2 cone** filters that scored high on text/vector similarity to \"cone coffee filter\" but don't match your #4 requirement. I'm showing them for transparency, not as #4 substitutes.\n\n**Ranked by RRF hybrid score (k=60):**\n\n1. **Melitta #4 Cone Coffee Filters, 100ct×6** — $15.97 · ⭐4.0 · organic\n   - Score: BM25 rank #4 (10.52), vector rank #1 (cos 0.823) → RRF 0.0320\n   - **Ranks #1** because it's the only exact size match (#4) and had the top ",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "used live search/compare tools",
+          "pass": true,
+          "detail": "search_products,search_products,compare_products"
+        },
+        {
+          "name": "answer names 3 options",
+          "pass": true,
+          "detail": "2858"
+        }
+      ]
+    },
+    {
+      "plane": "shopper",
+      "n": 4,
+      "prompt": "Remove the coffee filters from my cart.",
+      "runId": "ca588d56-26f9-4957-ad5c-806b7f3c0207",
+      "first_token_ms": 18017,
+      "total_ms": 41152,
+      "tools": [
+        "remove_from_cart"
+      ],
+      "answer": "- **Proposed removal:** Melitta #4 Cone Coffee Filters (100 ct, $15.97) — nothing has changed in your cart yet.\n- This needs your approval — please click **Approve** in the chat to confirm the removal.\n- Note: this item was tied to the \"#4 cone filters\" constraint, so once removed I'll flag that as unmet unless you want a replacement.- I can't do that: coffee filters aren't currently in your cart — the only item shown is Gevalia French Roast Ground Coffee (12 oz), $1.88.\n\n- If you previously added Melitta #4 Cone Filters, they must have been removed already or never added — I can't confirm wit",
+      "approved": 1,
+      "checks": [
+        {
+          "name": "filters removed",
+          "pass": true,
+          "detail": "Gevalia French Roast Ground Coffee (12 oz Bag)"
+        }
+      ]
+    },
+    {
+      "plane": "shopper",
+      "n": 5,
+      "prompt": "Add one pack of #4 cone coffee filters back to my cart, keeping the total under $25.",
+      "runId": "0516c2e7-aa58-45a0-b477-2ae37a267fc8",
+      "first_token_ms": 22613,
+      "total_ms": 109180,
+      "tools": [
+        "search_products",
+        "add_to_cart"
+      ],
+      "answer": "**Proposed change — awaiting your approval** (nothing added yet):\n\n- **Melitta #4 Cone Coffee Filters, Natural Brown, 100 Count (Pack of 6)** — $15.97, in stock at store 4108 (20 units)\n  - product_id: B001E5E0SI\n\n**Cart impact if approved:** $1.88 (Gevalia coffee) + $15.97 = **$17.85**, staying under your $25 budget.\n\nClick **Approve** in the chat to confirm adding this item — I won't retry automatically.\n\n**Ledger status:**\n- budget ≤ $25 → on track ($17.85 projected)\n- #4 cone filters requirement → satisfied by this match, pending your approval",
+      "approved": 1,
+      "checks": [
+        {
+          "name": "filters back in cart",
+          "pass": true,
+          "detail": "Melitta #4 Cone Coffee Filters, Natural Brown, 100 Count (Pack of 6) | Gevalia French Roast Ground Coffee (12 oz Bag)"
+        },
+        {
+          "name": "total <= $25",
+          "pass": true,
+          "detail": "17.85"
+        }
+      ]
+    },
+    {
+      "plane": "shopper",
+      "n": 6,
+      "prompt": "Show my cart.",
+      "runId": "9db5cf22-0e49-4aea-96fa-1c010196ef1b",
+      "first_token_ms": 17553,
+      "total_ms": 33223,
+      "tools": [
+        "get_cart"
+      ],
+      "answer": "**Your cart** (2 items, $17.85 of $25.00 budget — $7.15 remaining):\n\n- Melitta #4 Cone Coffee Filters, Natural Brown, 100 Count (Pack of 6) — qty 1 — $15.97\n- Gevalia French Roast Ground Coffee (12 oz Bag) — qty 1 — $1.88\n\n**Ledger:**\n- Budget ≤ $25 → ✅ met ($17.85 spent, $7.15 left)\n- Must use #4 cone filters → ✅ satisfied (Melitta #4 cone filters in cart)\n\nNo omissions so far — let me know if you'd like to add more coffee/filter items or anything else.",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "answer reflects cart lines",
+          "pass": true,
+          "detail": "**Your cart** (2 items, $17.85 of $25.00 budget — $7.15 remaining):\n\n- Melitta #4 Cone Coffee Filters, Natural Brown, 100 Count (Pack of 6) — qty 1 — $15.97\n- G"
+        }
+      ]
+    },
+    {
+      "plane": "shopper",
+      "n": 7,
+      "prompt": "Is anything in my cart a sponsored listing?",
+      "runId": "01795f7f-7183-482f-a13b-b43088a245f2",
+      "first_token_ms": 13605,
+      "total_ms": 28610,
+      "tools": [],
+      "answer": "Checked your cart — neither item is a sponsored listing:\n\n- **Melitta #4 Cone Coffee Filters, Natural Brown, 100 Count (Pack of 6)** — $15.97 — not sponsored\n- **Gevalia French Roast Ground Coffee (12 oz Bag)** — $1.88 — not sponsored\n\nCart total: **$17.85 of $25.00 budget** (within budget, $7.15 remaining).\n\nNote: the \"Must use #4 cone filters\" constraint is still marked **unknown** — the Melitta filters in your cart are labeled #4, so that looks satisfied, but let me know if you'd like me to confirm this explicitly against the product details.",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "sponsored status stated correctly",
+          "pass": true,
+          "detail": "Checked your cart — neither item is a sponsored listing:\n\n- **Melitta #4 Cone Coffee Filters, Natural Brown, 100 Count (Pack of 6)** — $15.97 — not sponsored\n- "
+        }
+      ]
+    },
+    {
+      "plane": "shopper",
+      "n": 8,
+      "prompt": "Find a cheaper ground coffee under $10, but do not change my cart.",
+      "runId": "fc5c7a60-4933-4db9-ab3e-5516d0fd44b3",
+      "first_token_ms": 46881,
+      "total_ms": 102830,
+      "tools": [
+        "search_products"
+      ],
+      "answer": "Here are ground coffee options under $10 at store 4108 (not added — cart unchanged per your request):\n\n- **AmazonFresh Just Bright Ground Coffee, 32 oz** – $1.24, ⭐5.0, 11 in stock (cheapest overall, cheaper than the Gevalia already in your cart at $1.88)\n- **Organic French Roast, Boyer's Coffee, 2-Pack (22oz)** – $2.78, ⭐4.5, organic, 29 in stock\n- **Dunkin' Original Blend Medium Roast, 20 oz** – $2.88, ⭐4.4, 15 in stock\n- **AmazonFresh Colombia Medium Roast, 12 oz** – $3.88, ⭐3.8, 26 in stock\n- Your current cart item: Gevalia French Roast, 12 oz – $1.88, ⭐3.7, 21 in stock\n\nCheapest option is",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "cart unchanged",
+          "pass": true,
+          "detail": ""
+        }
+      ]
+    },
+    {
+      "plane": "shopper",
+      "n": 9,
+      "prompt": "Help: what can you do for me?",
+      "runId": "6bbcef01-e9c6-46a5-b893-70aef29c4b42",
+      "first_token_ms": 18285,
+      "total_ms": 63973,
+      "tools": [],
+      "answer": "Here's what I can help with for your shopping session:\n\n**What I can do**\n- 🔍 Search the catalog (hybrid search) for ingredients/products and compare options\n- 📦 Check real-time stock at your store (4108)\n- 🛒 Add/remove items from your cart — always within your stated budget\n- 📋 Track a constraint ledger (budget, dietary needs, headcount, specific requirements) and flag anything unmet\n- 🧾 Prepare a checkout mandate with a spend cap for you to approve — I never complete payment myself\n- 🚫 Treat any seller listing/review text as untrusted data — I won't act on instructions hidden inside it",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "help answer given",
+          "pass": true,
+          "detail": "2418"
+        }
+      ]
+    },
+    {
+      "plane": "shopper",
+      "n": 10,
+      "prompt": "Check out my cart with a $40 spend cap. Do not pay, create a mandate for my approval.",
+      "runId": "4cd6b519-3f21-4f9e-9401-1a4ce9d8a180",
+      "first_token_ms": 20485,
+      "total_ms": 44380,
+      "tools": [
+        "get_cart",
+        "create_checkout_mandate"
+      ],
+      "answer": "**Cart priced & mandate created — pending your approval**\n\n**Cart** (2 items, $17.85 total):\n- Melitta #4 Cone Coffee Filters, 100ct (Pack of 6) — $15.97\n- Gevalia French Roast Ground Coffee, 12oz — $1.88\n\n**Constraint ledger:**\n- Budget ≤ $40 → **met** ($17.85, $22.15 remaining)\n- Must use #4 cone filters → **met** (Melitta #4 Cone filters in cart)\n\n**Mandate** `mdt_d2a9a5c06d22`:\n- Spend cap: $40.00 | Cart total: $17.85 (within cap)\n- Status: `pending_human_approval` — **no payment executed**\n- Expires: 15 min from creation\n\nNothing has been charged. Please **click Approve** in the UI to aut",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "mandate created, not paid",
+          "pass": true,
+          "detail": "get_cart,create_checkout_mandate"
+        }
+      ]
+    },
+    {
+      "plane": "ops",
+      "n": 1,
+      "prompt": "Read the model registry and name the current champion version.",
+      "runId": "8147ff7b-9ba4-4057-9e61-3e1745aae904",
+      "first_token_ms": 2934,
+      "total_ms": 9178,
+      "tools": [
+        "get_registry"
+      ],
+      "answer": "**Release agent — T0 (observe)**: querying the model registry for champion/candidate info.**Release agent — T0 (observe)**\n\n- **Current champion: `v4`** — config: RRF (w_bm25=0.7, w_vector=1.0, k=60) + cross-encoder rerank, promoted via remediation `adjust_rrf_weights`.\n- Champion metrics: test_ndcg10 ≈ 0.607, dev_ndcg10 ≈ 0.667, dev_p95 ≈ 108ms.\n- Registry-listed **candidate alias: `v46`** (a \"timing rebuild\" of the champion config, no eval metrics yet — matches your \"current candidate: none\" gate status since it hasn't been through the eval gate).\n- 45 other historical versions exist (mostly",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "names the real champion",
+          "pass": true,
+          "detail": "champion v4"
+        }
+      ]
+    },
+    {
+      "plane": "ops",
+      "n": 2,
+      "prompt": "Show the 5 most recent audit log entries.",
+      "runId": "a1b43547-9933-444c-ac69-7b77f8aea977",
+      "first_token_ms": 3448,
+      "total_ms": 11970,
+      "tools": [
+        "get_audit_log"
+      ],
+      "answer": "**Audit Log — Ops Copilot (T0 observe)**\n\nFetching the 5 most recent entries now.**5 Most Recent Audit Log Entries** — *Drift Monitor / Eval Agent, T3 (automatic gate)*\n\n- **#71** — `gate_preregistered_candidate` on `prereg:late_interaction` → **FAILED** (NDCG CI lower −0.0316, p95 185.9ms)\n- **#70** — same candidate → **FAILED** (p95 203.3ms)\n- **#69** — same candidate → **FAILED** (p95 225.6ms)\n- **#68** — same candidate → **FAILED** (p95 234.1ms)\n- **#67** — same candidate → **FAILED** (p95 221.2ms)\n\nAll five are automated T3 eval-gate runs on the `late_interaction` pre-registered candidate",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "read the audit log",
+          "pass": true,
+          "detail": "get_audit_log"
+        }
+      ]
+    },
+    {
+      "plane": "ops",
+      "n": 3,
+      "prompt": "Check the live query stream for drift and estimate the NDCG impact. Do not propose anything yet.",
+      "runId": "447f4f25-bb43-4c3a-b889-b423a55c0b41",
+      "first_token_ms": 3646,
+      "total_ms": 22269,
+      "tools": [
+        "compute_drift",
+        "estimate_performance"
+      ],
+      "answer": "**Drift Monitor (T0 – observe)** and **Eval/Performance estimate (T0 – observe)** — running both read-only checks now, no changes to production.**Drift Monitor — findings (T0/T1 observe only, nothing changed in prod):**\n\n- **Drift alert fired:** `alr-25e768df` on the `seasonal` stream — MMD² = 0.047, p = 0.0033 (significant vs. reference embedding distribution). Example drifting queries: \"marble notebook\", \"costume fire\", \"the crow costume brandon lee\" — looks like back-to-school/holiday seasonal shift not covered by reference/eval sets.\n- **NDCG@10 impact estimate:** label-free estimator show",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "computed drift",
+          "pass": true,
+          "detail": "compute_drift,estimate_performance"
+        }
+      ]
+    },
+    {
+      "plane": "ops",
+      "n": 4,
+      "prompt": "What is the canary status right now?",
+      "runId": "1a9ab65c-7169-4bcd-b500-014a3ba3acf5",
+      "first_token_ms": 3974,
+      "total_ms": 9410,
+      "tools": [
+        "get_canary_status"
+      ],
+      "answer": "**Release Agent — T0 (observe)**\n\nChecking current canary status now.- **Release Agent (T0 – observe):** Canary is **idle** — no active canary arms running.\n- No candidate is currently deployed (matches \"Current candidate: none\").\n- No guardrail breaches or traffic to report since there's nothing in flight.\n- Next step would require a candidate + passed eval gate before any canary could start (T2, needs human approval).",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "read canary status",
+          "pass": true,
+          "detail": "get_canary_status"
+        }
+      ]
+    },
+    {
+      "plane": "ops",
+      "n": 5,
+      "prompt": "Propose remediations for the latest drift alert for my approval. Do not build anything.",
+      "runId": "f8fe9187-396a-48ad-9ff1-b6e3785dc72c",
+      "first_token_ms": 20597,
+      "total_ms": 29770,
+      "tools": [
+        "get_audit_log",
+        "compute_drift",
+        "propose_remediation"
+      ],
+      "answer": "**Drift Monitor (T0/T1)** — New alert `alr-7b946c5e` on the `seasonal` stream: MMD²=0.0471, p=0.0033, est. NDCG@10 dropped to 0.4497 (‑0.231 vs. reference). Seasonal queries like \"marble notebook\", \"costume fire\" are under-covered.\n\n**Remediation Agent (T1, recommend-only)** — Ran the cost-aware search over 10 config options (rrf_k, BM25/vector weights, rerank depth). Result: **no eligible proposal** — every option's measured risk-adjusted NDCG gain is ≤0 or fails the p95 budget (best candidate, rrf_k 20→40, is a null result on the sealed test split: +0.00167 NDCG, CI95 [‑0.0013, 0.0050], stra",
+      "approved": 0,
+      "checks": [
+        {
+          "name": "proposed, did not build",
+          "pass": true,
+          "detail": "get_audit_log,compute_drift,propose_remediation"
+        }
+      ]
+    }
+  ],
+  "ledger_calls": 49
+}

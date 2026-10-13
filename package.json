@@ -1,0 +1,19 @@
+{
+  "name": "agentic-commerce-sparky",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sparky Next: agentic shopping + future-of-search pre-sales demo (synthetic data, public ESCI).",
+  "workspaces": ["shared", "bff", "web"],
+  "scripts": {
+    "dev:bff": "npm run dev --workspace bff",
+    "dev:web": "npm run dev --workspace web",
+    "dev": "concurrently -n bff,web -c blue,green \"npm:dev:bff\" \"npm:dev:web\"",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test:unit": "npm run test:unit --workspace bff"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  },
+  "engines": { "node": ">=20" }
+}

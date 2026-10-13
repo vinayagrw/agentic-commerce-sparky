@@ -1,0 +1,34 @@
+{
+ "capability": 2,
+ "slug": "cuped_msprt",
+ "generated_at": "2026-09-29T20:25:58Z",
+ "n_sessions": 400,
+ "n_control": 193,
+ "n_treatment": 207,
+ "unique_queries": 40,
+ "theta": 0.8091,
+ "variance_reduction": 0.6472,
+ "delta_raw": 0.00543,
+ "ci95_raw": [
+  -0.04347,
+  0.05433
+ ],
+ "p_fixed_raw": 0.827735,
+ "delta_cuped": -0.00651,
+ "ci95_cuped": [
+  -0.03556,
+  0.02254
+ ],
+ "p_fixed_cuped": 0.660383,
+ "msprt": {
+  "tau": 0.05,
+  "alpha": 0.05,
+  "stop_at_raw": null,
+  "stop_at_cuped": null,
+  "final_always_valid_p_raw": 0.674383,
+  "final_always_valid_p_cuped": 1.0
+ },
+ "assignment": "re-randomised: sha256(trace_id+seed) % 2 over logged sessions (the router's own arms are NOT randomised)",
+ "outcome": "NDCG@10 of the arm's live ranking against ESCI judgments (offline proxy, not conversion)",
+ "covariate": "pre-period NDCG@10 of the product_ids the router actually served and logged"
+}

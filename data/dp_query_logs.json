@@ -1,0 +1,327 @@
+{
+  "generated_at": "2026-09-16T01:54:35Z",
+  "seconds": 0.11,
+  "inputs": {
+    "source": "data/queries.parquet",
+    "real_queries": 1644,
+    "sample": null,
+    "seed": 42,
+    "clip_l": 3,
+    "buckets": 2539,
+    "bucket_scheme": "(category, content token), stopwords removed, first L distinct tokens per query"
+  },
+  "sensitivity": {
+    "privacy_unit": "one query event (one real ESCI query)",
+    "clip_l": 3,
+    "l1": 3.0,
+    "l2": 1.73205,
+    "argument": "clipping each record to L distinct tokens means one record changes at most L bucket counts by 1, so Delta_1 = L and Delta_2 = sqrt(L)"
+  },
+  "released_log": {
+    "epsilon": 1.0,
+    "delta": 1e-06,
+    "mechanism": "gaussian",
+    "noise_param": 9.1778,
+    "events": 2000,
+    "unique_queries": 2000,
+    "verbatim_real_queries": 0,
+    "verbatim_rate": 0.0,
+    "sample": [
+      {
+        "category": "pet",
+        "query": "wagging glandex per"
+      },
+      {
+        "category": "grocery",
+        "query": "protein bake chocolate"
+      },
+      {
+        "category": "health_household",
+        "query": "countertop nourish fast"
+      },
+      {
+        "category": "pet",
+        "query": "squeakers hose robotic"
+      },
+      {
+        "category": "electronics_accessories",
+        "query": "jlab cameras thunderbolt"
+      },
+      {
+        "category": "home_kitchen",
+        "query": "vac trtl wedge"
+      },
+      {
+        "category": "electronics_accessories",
+        "query": "usb micro hard"
+      },
+      {
+        "category": "health_household",
+        "query": "eye dishwasher cpap"
+      },
+      {
+        "category": "baby",
+        "query": "liner stroller organics"
+      },
+      {
+        "category": "health_household",
+        "query": "garden hefty computer"
+      },
+      {
+        "category": "home_kitchen",
+        "query": "comforter sheets smeg"
+      },
+      {
+        "category": "health_household",
+        "query": "supplement dishwashers thorne"
+      },
+      {
+        "category": "home_kitchen",
+        "query": "stationary refridgerator toaster"
+      },
+      {
+        "category": "pet",
+        "query": "golden small puppy"
+      },
+      {
+        "category": "grocery",
+        "query": "utz harry mr"
+      }
+    ]
+  },
+  "utility_curve": [
+    {
+      "mechanism": "gaussian",
+      "epsilon": 0.1,
+      "delta": 1e-06,
+      "noise_scale": 91.77795,
+      "tv_distance": 0.6485,
+      "top10_overlap": 0.0,
+      "top50_overlap": 0.02,
+      "l1_error_per_bucket": 37.1457,
+      "buckets_zeroed": 1283,
+      "spurious_mass_frac": 0.0
+    },
+    {
+      "mechanism": "gaussian",
+      "epsilon": 0.5,
+      "delta": 1e-06,
+      "noise_scale": 18.35559,
+      "tv_distance": 0.598,
+      "top10_overlap": 0.2,
+      "top50_overlap": 0.08,
+      "l1_error_per_bucket": 7.9744,
+      "buckets_zeroed": 1215,
+      "spurious_mass_frac": 0.0
+    },
+    {
+      "mechanism": "gaussian",
+      "epsilon": 1.0,
+      "delta": 1e-06,
+      "noise_scale": 9.1778,
+      "tv_distance": 0.557,
+      "top10_overlap": 0.4,
+      "top50_overlap": 0.16,
+      "l1_error_per_bucket": 4.2592,
+      "buckets_zeroed": 1188,
+      "spurious_mass_frac": 0.0
+    },
+    {
+      "mechanism": "gaussian",
+      "epsilon": 2.0,
+      "delta": 1e-06,
+      "noise_scale": 3.8633,
+      "tv_distance": 0.4381,
+      "top10_overlap": 0.9,
+      "top50_overlap": 0.64,
+      "l1_error_per_bucket": 2.113,
+      "buckets_zeroed": 995,
+      "spurious_mass_frac": 0.0
+    },
+    {
+      "mechanism": "gaussian",
+      "epsilon": 5.0,
+      "delta": 1e-06,
+      "noise_scale": 1.69749,
+      "tv_distance": 0.2962,
+      "top10_overlap": 1.0,
+      "top50_overlap": 0.88,
+      "l1_error_per_bucket": 1.1024,
+      "buckets_zeroed": 795,
+      "spurious_mass_frac": 0.0
+    },
+    {
+      "mechanism": "laplace",
+      "epsilon": 0.1,
+      "delta": 0.0,
+      "noise_scale": 30.0,
+      "tv_distance": 0.6519,
+      "top10_overlap": 0.1,
+      "top50_overlap": 0.04,
+      "l1_error_per_bucket": 14.9035,
+      "buckets_zeroed": 1274,
+      "spurious_mass_frac": 0.0
+    },
+    {
+      "mechanism": "laplace",
+      "epsilon": 0.5,
+      "delta": 0.0,
+      "noise_scale": 6.0,
+      "tv_distance": 0.5219,
+      "top10_overlap": 0.4,
+      "top50_overlap": 0.22,
+      "l1_error_per_bucket": 3.7145,
+      "buckets_zeroed": 1059,
+      "spurious_mass_frac": 0.0
+    },
+    {
+      "mechanism": "laplace",
+      "epsilon": 1.0,
+      "delta": 0.0,
+      "noise_scale": 3.0,
+      "tv_distance": 0.4397,
+      "top10_overlap": 0.7,
+      "top50_overlap": 0.44,
+      "l1_error_per_bucket": 2.0059,
+      "buckets_zeroed": 984,
+      "spurious_mass_frac": 0.0
+    },
+    {
+      "mechanism": "laplace",
+      "epsilon": 2.0,
+      "delta": 0.0,
+      "noise_scale": 1.5,
+      "tv_distance": 0.2979,
+      "top10_overlap": 1.0,
+      "top50_overlap": 0.74,
+      "l1_error_per_bucket": 1.1115,
+      "buckets_zeroed": 766,
+      "spurious_mass_frac": 0.0
+    },
+    {
+      "mechanism": "laplace",
+      "epsilon": 5.0,
+      "delta": 0.0,
+      "noise_scale": 0.6,
+      "tv_distance": 0.1485,
+      "top10_overlap": 1.0,
+      "top50_overlap": 0.94,
+      "l1_error_per_bucket": 0.5014,
+      "buckets_zeroed": 419,
+      "spurious_mass_frac": 0.0
+    }
+  ],
+  "privacy_ledger": {
+    "entries": [
+      {
+        "purpose": "utility curve point (gaussian, eps=0.1)",
+        "mechanism": "gaussian",
+        "sigma": 91.77795,
+        "sensitivity_l2": 1.73205,
+        "delta": 1e-06,
+        "analysis": "classical",
+        "epsilon": 0.1,
+        "buckets": 2539
+      },
+      {
+        "purpose": "utility curve point (gaussian, eps=0.5)",
+        "mechanism": "gaussian",
+        "sigma": 18.35559,
+        "sensitivity_l2": 1.73205,
+        "delta": 1e-06,
+        "analysis": "classical",
+        "epsilon": 0.5,
+        "buckets": 2539
+      },
+      {
+        "purpose": "utility curve point (gaussian, eps=1.0)",
+        "mechanism": "gaussian",
+        "sigma": 9.1778,
+        "sensitivity_l2": 1.73205,
+        "delta": 1e-06,
+        "analysis": "classical",
+        "epsilon": 1.0,
+        "buckets": 2539
+      },
+      {
+        "purpose": "utility curve point (gaussian, eps=2.0)",
+        "mechanism": "gaussian",
+        "sigma": 3.8633,
+        "sensitivity_l2": 1.73205,
+        "delta": 1e-06,
+        "analysis": "analytic (Balle & Wang 2018)",
+        "epsilon": 2.0,
+        "buckets": 2539
+      },
+      {
+        "purpose": "utility curve point (gaussian, eps=5.0)",
+        "mechanism": "gaussian",
+        "sigma": 1.69749,
+        "sensitivity_l2": 1.73205,
+        "delta": 1e-06,
+        "analysis": "analytic (Balle & Wang 2018)",
+        "epsilon": 5.0,
+        "buckets": 2539
+      },
+      {
+        "purpose": "utility curve point (laplace, eps=0.1)",
+        "mechanism": "laplace",
+        "scale_b": 30.0,
+        "sensitivity_l1": 3.0,
+        "delta": 0.0,
+        "epsilon": 0.1,
+        "buckets": 2539
+      },
+      {
+        "purpose": "utility curve point (laplace, eps=0.5)",
+        "mechanism": "laplace",
+        "scale_b": 6.0,
+        "sensitivity_l1": 3.0,
+        "delta": 0.0,
+        "epsilon": 0.5,
+        "buckets": 2539
+      },
+      {
+        "purpose": "utility curve point (laplace, eps=1.0)",
+        "mechanism": "laplace",
+        "scale_b": 3.0,
+        "sensitivity_l1": 3.0,
+        "delta": 0.0,
+        "epsilon": 1.0,
+        "buckets": 2539
+      },
+      {
+        "purpose": "utility curve point (laplace, eps=2.0)",
+        "mechanism": "laplace",
+        "scale_b": 1.5,
+        "sensitivity_l1": 3.0,
+        "delta": 0.0,
+        "epsilon": 2.0,
+        "buckets": 2539
+      },
+      {
+        "purpose": "utility curve point (laplace, eps=5.0)",
+        "mechanism": "laplace",
+        "scale_b": 0.6,
+        "sensitivity_l1": 3.0,
+        "delta": 0.0,
+        "epsilon": 5.0,
+        "buckets": 2539
+      },
+      {
+        "purpose": "released synthetic query log (eps=1.0)",
+        "mechanism": "gaussian",
+        "sigma": 9.1778,
+        "sensitivity_l2": 1.73205,
+        "delta": 1e-06,
+        "analysis": "classical",
+        "epsilon": 1.0,
+        "buckets": 2539
+      }
+    ],
+    "composition": "basic sequential composition over all releases",
+    "total_epsilon": 18.2,
+    "total_delta": 6e-06,
+    "note": "the utility curve itself spends budget: every point is a separate release of the same histogram. In production you publish ONE epsilon; the curve is a design-time study and would be run on a public or held-out proxy dataset."
+  }
+}

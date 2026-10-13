@@ -1,0 +1,33 @@
+%%{init: {"themeVariables": {"fontSize": "48px"}}}%%
+flowchart LR
+  web["web<br/>CUSTOM trace event<br/>POST /api/traces/web (ui)"]
+  subgraph bff ["bff :8787"]
+    turn["turn root span"]
+    router["router"]
+    llm["llm (runClaudeCode)"]
+    tool["tool"]
+    misc["state · verifier · budget · error"]
+  end
+  cli["claude CLI"]
+  policy["policy-mcp<br/>policy span"]
+  search["search-svc<br/>retrieval span"]
+  hitl["HITL decision<br/>hitl span"]
+  fb["thumbs feedback<br/>feedback span"]
+  store[("data/traces/YYYY-MM-DD.jsonl")]
+  api["GET /api/traces/:traceId<br/>trace_summary (Ops Copilot)"]
+  web -->|"POST /api/agui"| turn
+  turn --> router
+  turn --> llm
+  llm --> tool
+  turn --> misc
+  llm -->|"TRACEPARENT env in MCP config"| cli
+  cli -->|"stdio MCP"| policy
+  policy -->|"traceparent header"| search
+  turn -.->|"run index"| hitl
+  turn -.->|"run_id"| fb
+  bff --> store
+  policy --> store
+  search --> store
+  hitl --> store
+  fb --> store
+  store --> api

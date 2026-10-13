@@ -1,0 +1,34 @@
+# Vertex AI CustomJob for technique 23: PagedAttention + automatic prefix caching (vLLM)
+# Submit with ONE command from this directory:
+#     gcloud ai custom-jobs create --region=us-central1 \
+#         --display-name=sota-23-prefix-caching --config=job.yaml
+#
+# Prerequisites: a container image in Artifact Registry built from requirements.txt, and the
+# ESCI parquet files in GCS at gs://<bucket>/sparky/data (scripts/fetch_data.py produces them).
+workerPoolSpecs:
+  - machineSpec:
+      machineType: g2-standard-8
+      acceleratorType: NVIDIA_L4
+      acceleratorCount: 1
+    replicaCount: 1
+    diskSpec:
+      bootDiskType: pd-ssd
+      bootDiskSizeGb: 500
+    containerSpec:
+      imageUri: us-central1-docker.pkg.dev/PROJECT_ID/sparky/sota-23:latest
+      command: ["python", "serving/23_prefix_caching/serve_prefix_cache.py"]
+      args:
+        - "--serve"
+        - "--model"
+        - "/models/qu-rewriter-8b-lora-fp8"
+        # this entrypoint writes no output artefact; it starts a server
+      env:
+        - name: SPARKY_DATA_DIR
+          value: "/gcs/BUCKET/sparky/data"
+        - name: MLFLOW_EXPERIMENT_NAME
+          value: "sparky-sota-23"
+
+baseOutputDirectory:
+  outputUriPrefix: gs://BUCKET/sparky/out/sota-23-prefix-caching
+
+# SKU: 1x NVIDIA L4 (GCP g2-standard-8) / 1x A10 (Azure Standard_NV36ads_A10_v5) for the 8B FP8 tail-QU rewriter

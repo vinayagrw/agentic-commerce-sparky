@@ -1,0 +1,44 @@
+{
+ "capability": 1,
+ "slug": "interleaving",
+ "generated_at": "2026-09-29T20:25:43Z",
+ "n_queries": 200,
+ "wins_a": 78,
+ "wins_b": 65,
+ "ties": 57,
+ "preference_a": 0.065,
+ "preference_ci95": [
+  -0.05,
+  0.18
+ ],
+ "sign_test_p": 0.315625,
+ "ndcg10_a": 0.6027,
+ "ndcg10_b": 0.5725,
+ "sensitivity": [
+  {
+   "n": 25,
+   "interleave_p": 0.0075,
+   "split_ab_p": 0.1517
+  },
+  {
+   "n": 50,
+   "interleave_p": 0.0351,
+   "split_ab_p": 0.4946
+  },
+  {
+   "n": 100,
+   "interleave_p": 0.0817,
+   "split_ab_p": 0.6928
+  },
+  {
+   "n": 200,
+   "interleave_p": 0.3156,
+   "split_ab_p": 0.1538
+  }
+ ],
+ "rankers": [
+  "rrf_rerank",
+  "rrf"
+ ],
+ "click_model": "simulated: a click on every interleaved result with ESCI gain >= 3; no real users"
+}
