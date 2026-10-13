@@ -6,7 +6,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-23a?style=flat-square)](LICENSE)
 ![React 18.3](https://img.shields.io/badge/react-18.3-087ea4?style=flat-square&logo=react&logoColor=white)
-![Fastify 5](https://img.shields.io/badge/fastify-5-000?style=flat-square&logo=fastify&logoColor=white)
+![Fastify 5](https://img.shields.io/badge/fastify-5-6c7781?style=flat-square&logo=fastify&logoColor=white)
 ![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776ab?style=flat-square&logo=python&logoColor=white)
 [![Catalogue: 25,003 real ESCI products](https://img.shields.io/badge/catalogue-25%2C003%20real%20ESCI%20products-555?style=flat-square)](#1-what-this-is)
 [![NDCG@10 measured at 0.603](https://img.shields.io/badge/NDCG%4010-0.603%20measured-555?style=flat-square)](#6-measured-numbers)
@@ -532,6 +532,10 @@ Filters are applied before ranking (full-corpus masked scoring), so filtered que
 
 ## Appendix B. `services/ops-mcp` and `ops-http`
 
+<details>
+<summary>Endpoints, the approval routes and the lifecycle commands</summary>
+
+
 This package holds the agents that run the search-model lifecycle on the **real ESCI search models**. It has two parts:
 - **`ops-mcp`**: a FastMCP stdio server. The "Ops Copilot" model calls its tools.
 - **`ops-http`** (:8803): the only place a **human** approves anything. It also exposes the audit log and runs the **guardrail watcher**, which rolls back a bad canary automatically.
@@ -716,3 +720,5 @@ The menu lists CPU-min, $, the expected gain × confidence, and the latency risk
 
 > [!NOTE]
 > **pass^k scoring is state-based** (tau-bench style): a run passes when the final cart satisfies every constraint. Hitting `--max-turns 8` is not a failure by itself, but a crash or timeout is. `results.json` also reports the strict variant, which additionally requires finishing within the turn cap: **strict pass^3 = 0.4**, with 53% of runs finishing inside 8 turns. Only `pass_hat_k` gates. Re-score recorded runs without calling the model: `run_evals.py --rescore evals/results.json`.
+
+</details>
